@@ -1,0 +1,6 @@
+image: "kaiwinter/docker-java8-maven"
+
+build:
+  stage: build
+  script:
+    - "mvn verify"
