@@ -4,6 +4,9 @@ build:
   stage: build
   script:
     - "mvn verify"
+  only:
+    - master
+    - merge_requests
 
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -16,7 +19,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - mvn sonar:sonar -Dsonar.qualitygate.wait=true
+    - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
   only:
     - master
     - merge_requests

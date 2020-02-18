@@ -1,0 +1,4 @@
+server:
+  servlet:
+    context-path: /api/bank
+  port: 8081

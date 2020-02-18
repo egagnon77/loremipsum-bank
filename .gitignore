@@ -81,3 +81,4 @@ nb-configuration.xml
 ## Vs Code
 ##############################
 .vscode/
+*.orig
