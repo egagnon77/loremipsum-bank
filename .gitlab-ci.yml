@@ -16,6 +16,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
+    - mvn sonar:sonar -Dsonar.qualitygate.wait=true
   only:
     - master
+    - merge_requests
