@@ -2,3 +2,13 @@ server:
   servlet:
     context-path: /api/bank
   port: 8081
+spring:
+  datasource:
+    username: root
+    password: bankpassword
+    url: jdbc:mysql://localhost:3308/bankBD
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true

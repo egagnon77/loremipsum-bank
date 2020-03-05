@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1")
@@ -22,7 +26,12 @@ public class BankController {
     @GetMapping(value = "/client/{clientId}")
     public ResponseEntity<Client> getClient(@PathVariable("clientId") String clientId) {
         Client client = bankService.getClient(HtmlUtils.htmlEscape(clientId));
-        return new ResponseEntity<>(client, HttpStatus.OK);
-    }
 
+        if (client == null) {
+            return new ResponseEntity<>(client, HttpStatus.NOT_FOUND);
+        } else {
+          return new ResponseEntity<>(client, HttpStatus.OK);
+        }
+
+    }
 }
