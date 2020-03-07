@@ -1,21 +1,12 @@
-package bank.domain.model;
+package bank.api.v1.dto;
 
 import java.time.LocalDate;
 
-public class Client {
+public class ClientDto {
 
-    private ClientId id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
-
-    public ClientId getClientId() {
-        return id;
-    }
-
-    public void setClientId(ClientId id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
