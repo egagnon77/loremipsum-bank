@@ -56,7 +56,7 @@ public class ErrorHandlerTest {
 
         ResponseEntity<ErrorDto> result = testedClass.handleMethodArgumentTypeMismatch(ex);
 
-        assertEquals("Failed to convert value of type 'null'", result.getBody().message);
+        assertEquals("Failed to convert value of type 'null'", result.getBody().getMessage());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ErrorHandlerTest {
 
         ResponseEntity<ErrorDto> result = testedClass.handleAlreadyExist(ex);
 
-        assertEquals(ALREADY_EXIST_EXCEPTION_MESSAGE, result.getBody().message);
+        assertEquals(ALREADY_EXIST_EXCEPTION_MESSAGE, result.getBody().getMessage());
     }
 
     @Test
@@ -74,6 +74,6 @@ public class ErrorHandlerTest {
 
         ResponseEntity<ErrorDto> result = testedClass.handleNotFound(ex);
 
-        assertEquals(NOT_FOUND_EXCEPTION, result.getBody().message);
+        assertEquals(NOT_FOUND_EXCEPTION, result.getBody().getMessage());
     }
 }

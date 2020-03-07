@@ -2,9 +2,13 @@ package bank.api.v1.dto;
 
 public class ErrorDto {
 
-    public String message;
+    private String message;
 
     public ErrorDto(String message) {
         this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
