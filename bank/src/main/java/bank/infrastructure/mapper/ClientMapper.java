@@ -17,12 +17,12 @@ public class ClientMapper {
             Client client = new Client();
 
             ClientId clientId = new ClientId();
-            clientId.setUuid(clientDto.get().id);
+            clientId.setUuid(clientDto.get().getId());
 
             client.setClientId(clientId);
-            client.setFirstName(clientDto.get().firstName);
-            client.setLastName(clientDto.get().lastName);
-            client.setBirthDate(clientDto.get().birthDate);
+            client.setFirstName(clientDto.get().getFirstName());
+            client.setLastName(clientDto.get().getLastName());
+            client.setBirthDate(clientDto.get().getBirthDate());
 
             return Optional.of(client);
         }
@@ -35,12 +35,12 @@ public class ClientMapper {
         Client client = new Client();
 
         ClientId clientId = new ClientId();
-        clientId.setUuid(clientDto.id);
+        clientId.setUuid(clientDto.getId());
 
         client.setClientId(clientId);
-        client.setFirstName(clientDto.firstName);
-        client.setLastName(clientDto.lastName);
-        client.setBirthDate(clientDto.birthDate);
+        client.setFirstName(clientDto.getFirstName());
+        client.setLastName(clientDto.getLastName());
+        client.setBirthDate(clientDto.getBirthDate());
 
         return client;
     }
@@ -49,10 +49,10 @@ public class ClientMapper {
 
         ClientDto clientDto = new ClientDto();
 
-        clientDto.id = client.getClientId().getId();
-        clientDto.firstName = client.getFirstName();
-        clientDto.lastName = client.getLastName();
-        clientDto.birthDate = client.getBirthDate();
+        clientDto.setId(client.getClientId().getId());
+        clientDto.setFirstName(client.getFirstName());
+        clientDto.setLastName(client.getLastName());
+        clientDto.setBirthDate(client.getBirthDate());
 
         return clientDto;
     }

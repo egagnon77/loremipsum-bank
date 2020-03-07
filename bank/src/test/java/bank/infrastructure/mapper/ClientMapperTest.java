@@ -31,10 +31,10 @@ public class ClientMapperTest {
     @Before
     public void initializeClientDto() {
         clientDto = new ClientDto();
-        clientDto.id = AN_ID;
-        clientDto.firstName = A_FIRST_NAME;
-        clientDto.lastName = A_LAST_NAME;
-        clientDto.birthDate = A_BIRTH_DATE;
+        clientDto.setId(AN_ID);
+        clientDto.setFirstName(A_FIRST_NAME);
+        clientDto.setLastName(A_LAST_NAME);
+        clientDto.setBirthDate(A_BIRTH_DATE);
     }
 
     @Before
@@ -124,7 +124,7 @@ public class ClientMapperTest {
 
         ClientDto clientDto = testedClass.toDto(client);
 
-        assertEquals(AN_ID, clientDto.id);
+        assertEquals(AN_ID, clientDto.getId());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class ClientMapperTest {
 
         ClientDto clientDto = testedClass.toDto(client);
 
-        assertEquals(A_FIRST_NAME, clientDto.firstName);
+        assertEquals(A_FIRST_NAME, clientDto.getFirstName());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class ClientMapperTest {
 
         ClientDto clientDto = testedClass.toDto(client);
 
-        assertEquals(A_LAST_NAME, clientDto.lastName);
+        assertEquals(A_LAST_NAME, clientDto.getLastName());
     }
 
     @Test
@@ -148,6 +148,6 @@ public class ClientMapperTest {
 
         ClientDto clientDto = testedClass.toDto(client);
 
-        assertEquals(A_BIRTH_DATE, clientDto.birthDate);
+        assertEquals(A_BIRTH_DATE, clientDto.getBirthDate());
     }
 }
