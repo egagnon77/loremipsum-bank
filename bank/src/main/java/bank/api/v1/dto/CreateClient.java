@@ -4,6 +4,9 @@ public class CreateClient {
 
     private String name;
 
+    public CreateClient() {
+    }
+
     public CreateClient(String name) {
         this.name = name;
     }
