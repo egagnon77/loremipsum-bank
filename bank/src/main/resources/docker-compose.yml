@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  mysql-develpment:
+    image: mysql:8.0.19
+    environment:
+      MYSQL_ROOT_PASSWORD: bankpassword
+      MYSQL_DATABASE: bankBD
+    ports:
+      - "3308:3306"
