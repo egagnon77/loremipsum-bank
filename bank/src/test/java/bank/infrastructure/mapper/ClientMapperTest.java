@@ -20,13 +20,13 @@ public class ClientMapperTest {
 
     @Before
     public void setUp() {
-        testedClass = new ClientMapper();
+        testedClass = new ClientMapper(new ProductMapper());
     }
 
     @Before
     public void initializeClientDto() {
         clientDto = new ClientDto();
-        clientDto.setName(A_NAME);
+        clientDto.setId(A_NAME);
     }
 
     @Before
@@ -63,6 +63,6 @@ public class ClientMapperTest {
 
         ClientDto clientDto = testedClass.toDto(client);
 
-        assertEquals(A_NAME, clientDto.getName());
+        assertEquals(A_NAME, clientDto.getId());
     }
 }

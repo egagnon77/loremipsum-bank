@@ -2,6 +2,7 @@ package bank.api.v1.controller;
 
 import bank.api.v1.dto.CreateClient;
 import bank.domain.model.Client;
+import bank.domain.model.Product;
 import bank.api.v1.service.ClientService;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientControllerTest {
@@ -70,6 +74,34 @@ public class ClientControllerTest {
 
         ResponseEntity<CreateClient> result = testedClass.save(createClient);
 
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void givenExistingClient_whenGetProducts_thenResponseBodyShouldBeAProductsList() {
+        // Given
+        Product[] productArray = { new Product(1, "my product", 2) };
+        List<Product> products = Arrays.asList(productArray);  
+        when(clientService.getProducts(A_CLIENT_NAME)).thenReturn(products);
+
+        // When
+        ResponseEntity<List<Product>> result = testedClass.getProducts(A_CLIENT_NAME);
+
+        // Then
+        assertEquals(products, result.getBody());
+    }
+
+    @Test
+    public void givenExistingClient_whenGetProducts_thenResponseHttpStatusMustBeOk() {
+        // Given
+        Product[] productArray = { new Product(1, "my product", 2) };
+        List<Product> products = Arrays.asList(productArray);  
+        when(clientService.getProducts(A_CLIENT_NAME)).thenReturn(products);
+
+        // When
+        ResponseEntity<List<Product>> result = testedClass.getProducts(A_CLIENT_NAME);
+
+        // Then
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 }

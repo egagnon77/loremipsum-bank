@@ -1,3 +1,5 @@
+[![pipeline status](https://gitlab.com/eric.c.gagnon/bank/badges/master/pipeline.svg)](https://gitlab.com/eric.c.gagnon/bank/-/commits/master)
+
 # Bank
 
 ## How to link commit with GitLab issue
@@ -13,6 +15,10 @@
 3- Open this file from a browser...
 
 ## Run bank server : 
+Cmd line
+```bash
+λ mvn spring-boot:run -pl bank 
+```
 On Application class with IntelliJ you can simply right click and "Run Application"
 Bank server will run on : http://localhost:8081/api/bank/
 
