@@ -41,3 +41,16 @@ Bank server will run on : http://localhost:8081/api/bank/v1
     username: root
     password: bankpassword (store in Keychain)
     Default Shema: bankBD
+
+
+#### Launch employee module from command line
+##### On Windows
+    Be sure to have Git Bash that will install the command-line shell
+    You can launch the script "employee.sh" that is at the root of the project folder
+    In Windows cmd prompt or powershell you have to specify the .sh extension.
+    Ex: employee.sh --list Test
+    In Linux or in Git Bash just type
+   
+        
+    Will eventually list products of the "Test" custumer
+
