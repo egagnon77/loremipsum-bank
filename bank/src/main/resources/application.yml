@@ -8,6 +8,7 @@ spring:
     password: bankpassword
     url: jdbc:mysql://localhost:3308/bankBD
     driverClassName: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
