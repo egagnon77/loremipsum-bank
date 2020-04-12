@@ -47,11 +47,7 @@ integration-tests:
     - mvn compile
     - mvn spring-boot:start -pl bank -Dspring-boot.run.profiles=test
     - echo "--- Server started ---"
-    - ./employee.sh --add CLIENT_NAME
-    - ./client.sh -n CLIENT_NAME --status
-    - ./client.sh -n CLIENT_NAME --avail
-    - ./employee.sh --upgrade CLIENT_NAME
-    - ./employee.sh --downgrade CLIENT_NAME
+    - ./integration-tests.sh
   only:
     - master
     - merge_requests

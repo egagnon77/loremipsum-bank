@@ -1,9 +1,17 @@
-[![pipeline status](https://gitlab.com/eric.c.gagnon/bank/badges/master/pipeline.svg)](https://gitlab.com/eric.c.gagnon/bank/-/commits/master)
+[![GitlabCI Build Status](https://gitlab.com/eric.c.gagnon/bank/badges/master/pipeline.svg)](https://gitlab.com/eric.c.gagnon/bank/-/commits/master)
+[![TravisCI Build Status](https://travis-ci.com/egagnon77/loremipsum-bank.svg?branch=master)](https://travis-ci.com/egagnon77/loremipsum-bank)
 
 # Bank
 
 ## Reports
 [Rapport MVP](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrable1.pdf)
+
+## Mirror Repository
+[Github](https://github.com/egagnon77/loremipsum-bank)
+
+## CI/CD
+* [Gitlab-CI](https://gitlab.com/eric.c.gagnon/bank/pipelines)
+* [Travis-CI](https://travis-ci.com/github/egagnon77/loremipsum-bank)
 
 ## Prerequisites
 

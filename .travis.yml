@@ -1,0 +1,36 @@
+dist: bionic
+language: java
+jdk:
+  - openjdk8
+
+addons:
+  sonarcloud:
+    organization: "school-project-uqam"
+
+stages:
+  - tests
+  - name: deploy
+    if: branch = master 
+
+jobs:
+  include:
+    - stage: tests
+      name: Unit & Acceptation Tests
+      script: 
+        - mvn verify sonar:sonar -Dsonar.projectKey=loremipsum-bank -Dsonar.projectName=loremipsum-bank -Dsonar.qualitygate.wait=true
+
+    - stage: tests
+      name: Integration Tests
+      script:
+        - docker build -t loremipsumbank/server:rc .
+        - cd travis-docker
+        - docker-compose up --detach
+        - cd ..
+        - ./integration-tests.sh
+
+    - stage: deploy
+      name: Deploy to Docker Hub
+      script:
+        - docker build -t loremipsumbank/server:travis-latest .
+        - docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+        - docker push loremipsumbank/server:travis-latest
