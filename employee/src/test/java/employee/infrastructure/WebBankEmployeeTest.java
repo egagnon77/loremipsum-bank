@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import employee.cli.exception.DataSourceBadResponseException;
 import employee.domain.model.AddClient;
+import employee.domain.model.Client;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ public class WebBankEmployeeTest {
   private ResponseBuilder responseBuilder;
 
   private AddClient addClient;
+  private Client client;
 
   private WebBankEmployee testedClass;
 
@@ -32,12 +34,22 @@ public class WebBankEmployeeTest {
   public void initClient() {
     addClient = new AddClient();
     addClient.setName(A_NAME);
+    client = new Client();
+    client.setName(A_NAME);
   }
 
   @Test(expected = DataSourceBadResponseException.class)
-  public void whenAddProductsFail_thenADataSourceBadResponseExceptionIsThrown() {
+  public void whenAddClientFail_thenADataSourceBadResponseExceptionIsThrown() {
     when(responseBuilder.addClient(any(AddClient.class))).thenThrow(Exception.class);
 
     testedClass.addClient(addClient);
   }
+
+  @Test(expected = DataSourceBadResponseException.class)
+  public void whenGetProductsFail_thenADataSourceBadResponseExceptionIsThrown() {
+    when(responseBuilder.listProducts(any(Client.class))).thenThrow(Exception.class);
+
+    testedClass.getProducts(client);
+  }
+
 }

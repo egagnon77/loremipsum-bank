@@ -41,7 +41,7 @@ public class CommandLineProcessor {
                 processListClient(commandLine.getOptionValue(CliOptions.LIST.getValue()));
             }
         } catch (CommandLineException e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
         }
 
     }

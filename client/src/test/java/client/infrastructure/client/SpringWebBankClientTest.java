@@ -48,6 +48,8 @@ public class SpringWebBankClientTest {
         client.setName(A_NAME);
     }
 
+
+
     @Test
     public void givenAClient_whenGetProducts_thenProductsMustBeReturned() {
         when(bankSystemUrlBuilder.buildGetProductsUrl(client)).thenReturn(A_GET_PRODUCTS_URL);

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import employee.cli.exception.CommandLineException;
 import employee.cli.exception.DataSourceBadResponseException;
 import employee.domain.factory.ClientFactory;
 import employee.domain.model.AddClient;
@@ -14,6 +15,7 @@ import employee.domain.service.EmployeeService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -122,6 +124,15 @@ public class CommandLineProcessorTest {
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
         doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).getProducts(client);
+        testedClass.process(commandLine);
+
+        verify(logger).error(AN_EXCEPTION_MESSAGE);
+    }
+
+    @Test
+    public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldLogTheException() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator).process(commandLine);
         testedClass.process(commandLine);
 
         verify(logger).error(AN_EXCEPTION_MESSAGE);

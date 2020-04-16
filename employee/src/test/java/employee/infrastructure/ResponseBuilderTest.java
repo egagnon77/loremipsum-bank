@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import employee.domain.model.AddClient;
+import employee.domain.model.Client;
+import employee.domain.model.Product;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -19,6 +22,7 @@ public class ResponseBuilderTest {
 
     private static final String A_NAME = "aName";
     private static final String AN_ADD_CLIENT_URL = "anAddClientUrl";
+    private static final String A_LIST_PRODUCT_URL = "aListProductUrl";
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -30,10 +34,18 @@ public class ResponseBuilderTest {
     private WebClient.RequestBodySpec requestBody;
     @Mock
     private WebClient.RequestBodyUriSpec requestBodyUri;
+
+    @Mock
+    private WebClient.RequestHeadersUriSpec requestHeadersUriSpec;
+
+    @Mock
+    private WebClient.RequestHeadersSpec requestHeadersSpec;
+
     @Mock
     private WebClient.ResponseSpec response;
 
     private AddClient addClient;
+    private Client client;
     private ResponseBuilder testedClass;
 
     @Before
@@ -42,13 +54,20 @@ public class ResponseBuilderTest {
     }
 
     @Before
-    public void initClient() {
+    public void initClients() {
         addClient = new AddClient();
         addClient.setName(A_NAME);
+        client = new Client();
+        client.setName(A_NAME);
+    }
+
+    @Before
+    public void initClient() {
+        ;
     }
 
     @Test
-    public void givenAnAddClientObject_whenAddClient_thenAFluxAddClientMustBeReturned() {
+    public void givenAnAddClientObject_whenAddClient_thenAMonoAddClientMustBeReturned() {
 
         Mono<AddClient> expected = Mockito.mock(Mono.class);
         when(bankSystemUrlBuilder.buildAddClientUrl()).thenReturn(AN_ADD_CLIENT_URL);
@@ -62,5 +81,22 @@ public class ResponseBuilderTest {
         Mono<AddClient> result = testedClass.addClient(addClient);
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void givenClientObject_whenGetProduct_thenAFluxProductMustBeReturned() {
+//        Flux<Product> expected = Mockito.mock(Flux.class);
+//        when(bankSystemUrlBuilder.buildGetProductsUrl(client)).thenReturn(A_LIST_PRODUCT_URL);
+//        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+//        when(requestHeadersUriSpec.uri(A_LIST_PRODUCT_URL)).thenReturn(requestHeadersSpec);
+//        when(requestHeadersUriSpec.accept(MediaType.APPLICATION_JSON)).thenReturn(requestHeadersSpec);
+//        when(requestHeadersSpec.retrieve()).thenReturn(response);
+//        when(response.bodyToFlux(Product.class)).thenReturn(expected);
+//
+//
+//        Flux<Product> result = testedClass.listProducts(client);
+//
+//        assertEquals(expected, result);
+
     }
 }
