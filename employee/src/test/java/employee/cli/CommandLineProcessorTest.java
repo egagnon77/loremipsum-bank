@@ -84,8 +84,8 @@ public class CommandLineProcessorTest {
         verify(logger).info(THE_COMPLETED_MESSAGE, addClient.getName());
     }
 
-    @Test
-    public void givenACommandLineWithAddOption_whenException_thenLoggerShouldLogTheException() {
+    @Test(expected = DataSourceBadResponseException.class)
+    public void givenACommandLineWithAddOption_whenException_thenExceptionIsNotCatched() {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
 
@@ -95,8 +95,6 @@ public class CommandLineProcessorTest {
             .addClient(any(AddClient.class));
 
         testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -114,8 +112,8 @@ public class CommandLineProcessorTest {
         verify(logger).info(client.toString());
     }
 
-    @Test
-    public void givenACommandLineWithListOption_whenException_thenLoggerShouldLogTheException() {
+    @Test(expected = DataSourceBadResponseException.class)
+    public void givenACommandLineWithListOption_whenException_thenLoggerShouldNotCatchTheException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
 
         when(commandLine.hasOption(CliOptions.LIST.getValue())).thenReturn(true);
@@ -126,8 +124,6 @@ public class CommandLineProcessorTest {
         doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService)
             .getProducts(client);
         testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -148,8 +144,8 @@ public class CommandLineProcessorTest {
         verify(logger).info(upgradedClient.toString());
     }
 
-    @Test
-    public void givenACommandLineWithUpgradeOption_whenException_thenLoggerShouldLogTheException() {
+    @Test(expected = DataSourceBadResponseException.class)
+    public void givenACommandLineWithUpgradeOption_whenException_thenLoggerShouldNotCatchTheException() {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.UPGRADE.getValue())).thenReturn(true);
@@ -160,8 +156,6 @@ public class CommandLineProcessorTest {
         doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).upgradeClient(client);
 
         testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -182,8 +176,8 @@ public class CommandLineProcessorTest {
         verify(logger).info(downgradedClient.toString());
     }
 
-    @Test
-    public void givenACommandLineWithDowngradeOption_whenException_thenLoggerShouldLogTheException() {
+    @Test(expected = DataSourceBadResponseException.class)
+    public void givenACommandLineWithDowngradeOption_whenException_thenLoggerShouldNotCatchTheException() {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.DOWNGRADE.getValue())).thenReturn(true);
@@ -194,36 +188,15 @@ public class CommandLineProcessorTest {
         doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).downgradeClient(client);
 
         testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
 
-    @Test
-    public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldLogTheException() {
+    @Test(expected = CommandLineException.class)
+    public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldNotCatchException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator)
             .process(commandLine);
         testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
-
-    @Test
-    public void givenACommandLineWithStatusOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
-        CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.LIST.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptions.LIST.getValue())).thenReturn(A_CLIENT_NAME);
-        Client client = new Client();
-        client.setName(A_CLIENT_NAME);
-        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
-        when(employeeService.getProducts(client))
-            .thenThrow(new NotFoundException(AN_EXCEPTION_MESSAGE));
-
-        testedClass.process(commandLine);
-
-        verify(logger).error(AN_EXCEPTION_MESSAGE);
-    }
-
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();

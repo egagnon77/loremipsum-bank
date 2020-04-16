@@ -30,10 +30,12 @@ public class EmployeeApplication implements CommandLineRunner {
     private Logger logger;
 
     @Autowired
-    public EmployeeApplication(Options options,
+    public EmployeeApplication(
+        Options options,
         CommandLineParser commandLineParser,
         CommandLineProcessor commandLineProcessor,
-        @Qualifier("employeeApplicationLogger") Logger logger) {
+        @Qualifier("employeeApplicationLogger") Logger logger
+    ) {
         this.options = options;
         this.commandLineParser = commandLineParser;
         this.commandLineProcessor = commandLineProcessor;
@@ -42,8 +44,7 @@ public class EmployeeApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         try {
-            SpringApplication employeeApplication = new SpringApplication(
-                EmployeeApplication.class);
+            SpringApplication employeeApplication = new SpringApplication(EmployeeApplication.class);
             employeeApplication.setAddCommandLineProperties(false);
             employeeApplication.setWebApplicationType(WebApplicationType.NONE);
 
@@ -51,31 +52,26 @@ public class EmployeeApplication implements CommandLineRunner {
 
             employeeApplication.run(cleanedArgs);
 
-        } catch (Exception ex) {
-            LOGGER.error("Technical Error during Employee execution : " + ex.getMessage(),
-                ex);
+        }
+        catch (Exception ex) {
+            LOGGER.error("Technical Error : " + ex.getMessage());
             System.exit(EXIT_FAILURE);
         }
     }
 
     @Override
     public void run(String... args) throws Exception {
-        CommandLine commandLine;
         try {
             if (args.length == 0) {
-                logger.info(getHelpFormatted());
-                return;
+                throw new ParseException("Empty arguments.");
             } else {
-                commandLine = commandLineParser.parse(options, args);
+                CommandLine commandLine = commandLineParser.parse(options, args);
+                commandLineProcessor.process(commandLine);
             }
-
         } catch (ParseException parse) {
-            logger.error(parse.getMessage());
             logger.info(getHelpFormatted());
-
-            return;
+            throw parse;
         }
-        commandLineProcessor.process(commandLine);
     }
 
     private String getHelpFormatted() {
@@ -83,14 +79,23 @@ public class EmployeeApplication implements CommandLineRunner {
 
         StringWriter out = new StringWriter();
         PrintWriter printWriter = new PrintWriter(out);
-        // formatter.printHelp("java -jar employee.jar", options, true);
-        formatter.printHelp(printWriter, 80, CMD_LINE_SYNTAX,"", options, formatter.getLeftPadding(),formatter.getDescPadding(),"", true);
+        
+        formatter.printHelp(
+            printWriter,
+            80,
+            CMD_LINE_SYNTAX,
+            "",
+            options,
+            formatter.getLeftPadding(),
+            formatter.getDescPadding(),
+            "",
+            true
+        );
 
         printWriter.flush();
 
         return out.toString();
     }
-
 }
 
 

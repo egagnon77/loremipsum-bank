@@ -4,6 +4,7 @@ import client.cli.CommandLineProcessor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,13 +51,10 @@ public class ClientApplicationTest {
         verify(commandLineProcessor).process(commandLine);
     }
 
-    @Test
-    public void ifAnExceptionIsThrownByTheCommandLineParserThenAnExceptionShouldBeLogged() throws Exception {
+    @Test(expected = ParseException.class)
+    public void ifAnExceptionIsThrownByTheCommandLineParserThenAnException() throws Exception {
 
-        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT})).thenThrow(new RuntimeException(A_MESSAGE));
-
+        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT})).thenThrow(new ParseException(A_MESSAGE));
         testedClass.run(AN_ARGUMENT);
-
-        verify(logger).error(eq(A_MESSAGE), any(Exception.class));
     }
 }

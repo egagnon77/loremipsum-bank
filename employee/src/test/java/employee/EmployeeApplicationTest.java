@@ -64,26 +64,12 @@ public class EmployeeApplicationTest {
         testedClass.run(AN_ARGUMENT);
     }
 
-    @Test
+    @Test(expected = ParseException.class)
     public void ifAnExceptionIsThrownByTheCommandLineParserThenAnExceptionShouldBeLogged()
         throws Exception {
 
-        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT}))
-            .thenThrow(new ParseException(A_MESSAGE));
+        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT})).thenThrow(new ParseException(A_MESSAGE));
 
         testedClass.run(AN_ARGUMENT);
-
-        verify(logger).error(eq(A_MESSAGE));
     }
-
-    @Test
-    public void ifNoArgumentArePassedToCommandLineParserThenHelpMessageShouldBeLogged()
-        throws Exception {
-
-        testedClass.run();
-
-        verify(logger).info(startsWith(CMD_LINE_SYNTAX));
-    }
-
-
 }

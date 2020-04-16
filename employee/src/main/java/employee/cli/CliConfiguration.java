@@ -31,14 +31,14 @@ public class CliConfiguration {
             .build());
 
         options.addOption(Option.builder().required(false).hasArg(true)
-                .longOpt(CliOptions.UPGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
-                .desc(UPGRADE_DESCRIPTION)
-                .build());
+            .longOpt(CliOptions.UPGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
+            .desc(UPGRADE_DESCRIPTION)
+            .build());
 
         options.addOption(Option.builder().required(false).hasArg(true)
-                .longOpt(CliOptions.DOWNGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
-                .desc(DOWNGRADE_DESCRIPTION)
-                .build());
+            .longOpt(CliOptions.DOWNGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
+            .desc(DOWNGRADE_DESCRIPTION)
+            .build());
 
         return options;
     }

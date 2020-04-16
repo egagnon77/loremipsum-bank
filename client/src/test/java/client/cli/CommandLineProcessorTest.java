@@ -63,22 +63,7 @@ public class CommandLineProcessorTest {
 
         verify(logger).info(client.toString());
     }
-
-    @Test
-    public void givenACommandLineWithStatusOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
-        CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.Status.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
-        Client client = new Client();
-        client.setName(A_CLIENT_NAME);
-        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
-        when(clientService.getProducts(client)).thenThrow(new NotFoundException(A_MESSAGE));
-
-        testedClass.process(commandLine);
-
-        verify(logger).error(A_MESSAGE);
-    }
-
+    
     @Test
     public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
@@ -94,8 +79,8 @@ public class CommandLineProcessorTest {
         verify(logger).info(client.toString());
     }
 
-    @Test
-    public void givenACommandLineWithAvailableOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
+    @Test(expected = NotFoundException.class)
+    public void givenACommandLineWithAvailableOption_whenAnNotFoundExceptionOccursDuringProcess_thenShouldNOtCatchException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.Available.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
@@ -105,8 +90,6 @@ public class CommandLineProcessorTest {
         when(clientService.getAvailableProducts(client)).thenThrow(new NotFoundException(A_MESSAGE));
 
         testedClass.process(commandLine);
-
-        verify(logger).error(A_MESSAGE);
     }
 
     private Product createProduct(Integer category, Integer id, String name) {

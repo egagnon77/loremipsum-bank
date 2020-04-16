@@ -1,20 +1,22 @@
-echo "Starting client script."
+arg1=$1
+arg2=$2
+arg3=$3
+arg4=$4
 
-argc="$@"
-x=0
+COMMANDS=$arg1
 
-for arg in $argc
-do
-   case $x in
-        "-n")
-          CLIENT_NAME="$x $arg" ;;
-   esac
-   x=$arg
+if [ "$arg2" ];
+  then COMMANDS="$COMMANDS=$arg2"; 
+fi
 
-   case $arg in
-    "--status")
-      OPERATION="$arg" ;;
-   esac
-done
+if [ "$arg3" ];
+  then COMMANDS="$COMMANDS $arg3";
+fi
 
-mvn install exec:java -pl client -Dexec.mainClass=client.ClientApplication -Dexec.args="${CLIENT_NAME} ${OPERATION}" -Dexec.cleanupDaemonThreads=false
+if [ "$arg4" ];
+  then COMMANDS="$COMMANDS=$arg4";
+fi
+
+echo "Evaluated arguments: ${COMMANDS}"
+
+mvn exec:java -pl client -Dexec.mainClass=client.ClientApplication -Dexec.args="${COMMANDS}" -Dexec.cleanupDaemonThreads=false

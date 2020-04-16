@@ -22,10 +22,12 @@ public class CommandLineProcessor {
     private CommandLineValidator commandLineValidator;
 
     @Autowired
-    public CommandLineProcessor(EmployeeService employeeService,
+    public CommandLineProcessor(
+        EmployeeService employeeService,
         CommandLineValidator commandLineValidator,
         ClientFactory clientFactory,
-        @Qualifier("commandLineProcessorLogger") Logger logger) {
+        @Qualifier("commandLineProcessorLogger") Logger logger
+    ) {
         this.employeeService = employeeService;
         this.clientFactory = clientFactory;
         this.commandLineValidator = commandLineValidator;
@@ -33,66 +35,39 @@ public class CommandLineProcessor {
     }
 
     public void process(CommandLine commandLine) {
-        try {
-            commandLineValidator.process(commandLine);
+        commandLineValidator.process(commandLine);
 
-            if (commandLine.hasOption(CliOptions.ADD.getValue())) {
-                processAddClient(commandLine.getOptionValue(CliOptions.ADD.getValue()));
-            } else if (commandLine.hasOption(CliOptions.LIST.getValue())) {
-                processListClient(commandLine.getOptionValue(CliOptions.LIST.getValue()));
-            } else if (commandLine.hasOption(CliOptions.UPGRADE.getValue())) {
-                processUpgradeClient(commandLine.getOptionValue(CliOptions.UPGRADE.getValue()));
-            } else if (commandLine.hasOption(CliOptions.DOWNGRADE.getValue())) {
-                processDowngradeClient(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue()));
-            }
-        } catch (CommandLineException e) {
-            logger.error(e.getMessage());
+        if (commandLine.hasOption(CliOptions.ADD.getValue())) {
+            processAddClient(commandLine.getOptionValue(CliOptions.ADD.getValue()));
+        } else if (commandLine.hasOption(CliOptions.LIST.getValue())) {
+            processListClient(commandLine.getOptionValue(CliOptions.LIST.getValue()));
+        } else if (commandLine.hasOption(CliOptions.UPGRADE.getValue())) {
+            processUpgradeClient(commandLine.getOptionValue(CliOptions.UPGRADE.getValue()));
+        } else if (commandLine.hasOption(CliOptions.DOWNGRADE.getValue())) {
+            processDowngradeClient(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue()));
         }
-
     }
 
     private void processUpgradeClient(String clientName) {
-        try {
-            Client upgradedClient = employeeService.upgradeClient(clientFactory.create(clientName));
-            logger.info(upgradedClient.toString());
-        } catch (DataSourceBadResponseException e) {
-            logger.error(e.getMessage());
-        }
+        Client upgradedClient = employeeService.upgradeClient(clientFactory.create(clientName));
+        logger.info(upgradedClient.toString());
     }
 
     private void processDowngradeClient(String clientName) {
-        try {
-            Client downgradedClient = employeeService.downgradeClient(clientFactory.create(clientName));
-            logger.info(downgradedClient.toString());
-        } catch (DataSourceBadResponseException e) {
-            logger.error(e.getMessage());
-        }
+        Client downgradedClient = employeeService.downgradeClient(clientFactory.create(clientName));
+        logger.info(downgradedClient.toString());       
     }
 
     private void processAddClient(String clientName) {
         AddClient addClient = new AddClient();
         addClient.setName(clientName);
-        try {
-            AddClient addedClient = employeeService.addClient(addClient);
-            logger.info("Add Client '{}' Completed.", addedClient.getName());
-        } catch (DataSourceBadResponseException e) {
-            logger.error(e.getMessage());
-        }
+        AddClient addedClient = employeeService.addClient(addClient);
+        logger.info("Add Client '{}' Completed.", addedClient.getName());
     }
 
     private void processListClient(String clientName) {
-
         Client client = clientFactory.create(clientName);
-
-        try {
-            client.setProducts(employeeService.getProducts(client));
-            logger.info(client.toString());
-        } catch (DataSourceBadResponseException e) {
-            logger.error(e.getMessage());
-        } catch (NotFoundException e) {
-            logger.error(e.getMessage());
-        }
-
+        client.setProducts(employeeService.getProducts(client));
+        logger.info(client.toString());
     }
-
 }

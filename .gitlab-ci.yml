@@ -9,10 +9,12 @@ stages:
 build:
   stage: build
   script:
-    - "mvn verify"
+    - mvn verify
   artifacts:
     paths:
-      - bank/target/ 
+      - bank/target/
+      - client/target/
+      - employee/target/
   only:
     - master
     - merge_requests
@@ -30,6 +32,27 @@ sonarcloud-check:
     - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
   only:
     - master
+
+integration-tests:
+  stage: test
+  services:
+    - postgres:9.6.17  
+  variables:
+    POSTGRES_DB: bankBD
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: bankpassword
+    POSTGRES_HOST_AUTH_METHOD: trust
+  script:
+    - mvn compile
+    - mvn spring-boot:start -pl bank -Dspring-boot.run.profiles=test
+    - echo "--- Server started ---"
+    - ./employee.sh --add CLIENT_NAME
+    - ./client.sh -n CLIENT_NAME --status
+    - ./client.sh -n CLIENT_NAME --avail
+    - ./employee.sh --upgrade CLIENT_NAME
+    - ./employee.sh --downgrade CLIENT_NAME
+  only:
+    - master
     - merge_requests
 
 docker-image:
@@ -44,3 +67,5 @@ docker-image:
     - docker push loremipsumbank/server:latest
   only:
     - master
+  except:
+    - schedules

@@ -2,18 +2,34 @@ server:
   servlet:
     context-path: /api/bank
   port: 8081
+
 spring:
-   datasource:
+  datasource:
     username: root
     password: bankpassword
     url: jdbc:postgresql://localhost:5432/bankBD
     initialization-mode: always
     hikari.connectionTimeout: 20000
-   jpa:
-     database-platform: org.hibernate.dialect.PostgreSQLDialect
-     properties:
-       hibernate.default_schema: public
-     hibernate.ddl-auto: update
-     generate-ddl: true
-     show-sql: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate.default_schema: public
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
 
+---
+
+spring: 
+  profiles: dev
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankBD
+
+---
+
+spring: 
+  profiles: test
+
+  datasource:
+    url: jdbc:postgresql://postgres/bankBD
