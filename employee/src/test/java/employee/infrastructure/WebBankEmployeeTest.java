@@ -3,7 +3,7 @@ package employee.infrastructure;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import employee.cli.DataSourceBadResponseException;
+import employee.cli.exception.DataSourceBadResponseException;
 import employee.domain.model.AddClient;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class WebBankEmployeeTest {
   private static final String A_NAME = "aName";
 
   @Mock
-  private MonoBuilder monoBuilder;
+  private ResponseBuilder responseBuilder;
 
   private AddClient addClient;
 
@@ -25,7 +25,7 @@ public class WebBankEmployeeTest {
 
   @Before
   public void setUp() throws Exception {
-    testedClass = new WebBankEmployee(monoBuilder);
+    testedClass = new WebBankEmployee(responseBuilder);
   }
 
   @Before
@@ -36,7 +36,7 @@ public class WebBankEmployeeTest {
 
   @Test(expected = DataSourceBadResponseException.class)
   public void whenAddProductsFail_thenADataSourceBadResponseExceptionIsThrown() {
-    when(monoBuilder.addClient(any(AddClient.class))).thenThrow(Exception.class);
+    when(responseBuilder.addClient(any(AddClient.class))).thenThrow(Exception.class);
 
     testedClass.addClient(addClient);
   }

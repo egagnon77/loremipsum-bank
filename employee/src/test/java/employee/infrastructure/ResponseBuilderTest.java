@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MonoBuilderTest {
+public class ResponseBuilderTest {
 
     private static final String A_NAME = "aName";
     private static final String AN_ADD_CLIENT_URL = "anAddClientUrl";
@@ -34,11 +34,11 @@ public class MonoBuilderTest {
     private WebClient.ResponseSpec response;
 
     private AddClient addClient;
-    private MonoBuilder testedClass;
+    private ResponseBuilder testedClass;
 
     @Before
     public void setUp() {
-        testedClass = new MonoBuilder(bankSystemUrlBuilder, webClient);
+        testedClass = new ResponseBuilder(bankSystemUrlBuilder, webClient);
     }
 
     @Before
