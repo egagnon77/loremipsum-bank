@@ -12,7 +12,9 @@ build:
     - "mvn verify"
   artifacts:
     paths:
-      - bank/target/ 
+      - bank/target/
+      - client/target/
+      - employee/target/
   only:
     - master
     - merge_requests
@@ -31,6 +33,20 @@ sonarcloud-check:
   only:
     - master
     - merge_requests
+
+integration-tests:
+  stage: test
+  services:
+    - postgres:9.6.17
+  
+  variables:
+    POSTGRES_DB: bankBD
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: bankpassword
+    POSTGRES_HOST_AUTH_METHOD: trust
+  
+  script:
+    - mvn spring-boot:run -pl bank -Drun.profiles=dev
 
 docker-image:
   stage: deploy
