@@ -1,14 +1,26 @@
 package bank.infrastructure.entity;
 
-import javax.persistence.*;
+import bank.domain.exception.NotFoundException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "product")
 public class ProductDto {
-    
+
     @Id
     @GeneratedValue
     private Integer id;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ClientProductsDto> clientProductsDto = new HashSet<>();
 
     private String name;
 
@@ -46,5 +58,16 @@ public class ProductDto {
 
     public void setProductType(Integer productType) {
         this.productType = productType;
+    }
+
+    public Integer getApprobationStatus() {
+        for (Iterator<ClientProductsDto> iterator = this.clientProductsDto.iterator();
+            iterator.hasNext(); ) {
+            ClientProductsDto current = iterator.next();
+            if (current.getProduct().id.equals(this.id)) {
+                return current.getApprobationStatus();
+            }
+        }
+        throw new NotFoundException("approbation Status not found.");
     }
 }
