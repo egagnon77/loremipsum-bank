@@ -80,7 +80,7 @@ public class ClientControllerTest {
     @Test
     public void givenExistingClient_whenGetProducts_thenResponseBodyShouldBeAProductsList() {
         // Given
-        Product[] productArray = { new Product(1, "my product", 2) };
+        Product[] productArray = { new Product(1, "my product", 0, 1) };
         List<Product> products = Arrays.asList(productArray);  
         when(clientService.getProducts(A_CLIENT_NAME)).thenReturn(products);
 
@@ -94,7 +94,7 @@ public class ClientControllerTest {
     @Test
     public void givenExistingClient_whenGetProducts_thenResponseHttpStatusMustBeOk() {
         // Given
-        Product[] productArray = { new Product(1, "my product", 2) };
+        Product[] productArray = { new Product(1, "my product", 0,1) };
         List<Product> products = Arrays.asList(productArray);  
         when(clientService.getProducts(A_CLIENT_NAME)).thenReturn(products);
 

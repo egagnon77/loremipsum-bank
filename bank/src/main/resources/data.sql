@@ -1,4 +1,4 @@
-INSERT INTO product (id, category, name) VALUES (1, 1, 'A');
-INSERT INTO product (id, category, name) VALUES (2, 1, 'B');
-INSERT INTO product (id, category, name) VALUES (3, 2, 'Z');
-INSERT INTO product (id, category, name) VALUES (4, 2, 'Y');
+INSERT INTO product (id, product_type, product_level, name) VALUES (1, 0, 0, 'ProduitA');
+INSERT INTO product (id, product_type, product_level, name) VALUES (2, 1, 0, 'ProduitB');
+INSERT INTO product (id, product_type, product_level, name) VALUES (3, 0, 1, 'ProduitC');
+INSERT INTO product (id, product_type, product_level, name) VALUES (4, 1, 1, 'ProduitD');

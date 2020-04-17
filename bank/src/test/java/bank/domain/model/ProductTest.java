@@ -12,24 +12,25 @@ public class ProductTest {
         // Given
         final String name = "my product";
         final Integer id = 125;
-        final Integer category = 2;
+        final Integer productLevel = 0;
+        final Integer productType =0;
 
         // When
-        Product product = new Product(id, name, category);
+        Product product = new Product(id, name, productType, productLevel);
 
         // Then
         assertEquals(name, product.getName());
         assertEquals(id, product.getId());
-        assertEquals(category, product.getCategory());
+        assertEquals(productType, product.getProductType());
     }
 
     @Test(expected = MissingParameterException.class)
     public void givenEmptyName_whenConstructProduct_thenMissingParameterMustBeThrown() {
-        new Product(1, StringUtils.EMPTY, 2);
+        new Product(1, StringUtils.EMPTY, 2, 0);
     }
 
     @Test(expected = MissingParameterException.class)
     public void givenNullName_whenConstructProduct_thenMissingParameterMustBeThrown() {
-        new Product(1, null, 2);
+        new Product(1, null, 2, 0);
     }
 }

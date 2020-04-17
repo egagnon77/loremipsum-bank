@@ -17,6 +17,8 @@ public class ClientProductsDto {
     @JoinColumn(name="product_id")
     private ProductDto product;
 
+    private Integer approbationStatus;
+
     public Integer getId() {
         return id;
     }
@@ -40,4 +42,12 @@ public class ClientProductsDto {
 	public void setProduct(ProductDto product) {
 		this.product = product;
 	}
+
+    public Integer getApprobationStatus() {
+        return approbationStatus;
+    }
+
+    public void setApprobationStatus(Integer approbationStatus) {
+        this.approbationStatus = approbationStatus;
+    }
 }

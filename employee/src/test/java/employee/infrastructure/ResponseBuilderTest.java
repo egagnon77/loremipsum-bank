@@ -85,18 +85,17 @@ public class ResponseBuilderTest {
 
     @Test
     public void givenClientObject_whenGetProduct_thenAFluxProductMustBeReturned() {
-//        Flux<Product> expected = Mockito.mock(Flux.class);
-//        when(bankSystemUrlBuilder.buildGetProductsUrl(client)).thenReturn(A_LIST_PRODUCT_URL);
-//        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-//        when(requestHeadersUriSpec.uri(A_LIST_PRODUCT_URL)).thenReturn(requestHeadersSpec);
-//        when(requestHeadersUriSpec.accept(MediaType.APPLICATION_JSON)).thenReturn(requestHeadersSpec);
-//        when(requestHeadersSpec.retrieve()).thenReturn(response);
-//        when(response.bodyToFlux(Product.class)).thenReturn(expected);
-//
-//
-//        Flux<Product> result = testedClass.listProducts(client);
-//
-//        assertEquals(expected, result);
+        Flux<Product> expected = Mockito.mock(Flux.class);
+        when(bankSystemUrlBuilder.buildGetProductsUrl(client)).thenReturn(A_LIST_PRODUCT_URL);
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(A_LIST_PRODUCT_URL)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.accept(MediaType.APPLICATION_JSON)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(response);
+        when(response.bodyToFlux(Product.class)).thenReturn(expected);
+
+        Flux<Product> result = testedClass.listProducts(client);
+
+        assertEquals(expected, result);
 
     }
 }

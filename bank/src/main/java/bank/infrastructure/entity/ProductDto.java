@@ -12,7 +12,9 @@ public class ProductDto {
 
     private String name;
 
-    private Integer category;
+    private Integer productLevel;
+
+    private Integer productType;
 
     public Integer getId() {
         return id;
@@ -30,11 +32,19 @@ public class ProductDto {
         this.name = name;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Integer getProductLevel() {
+        return productLevel;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setProductLevel(Integer productLevel) {
+        this.productLevel = productLevel;
+    }
+
+    public Integer getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Integer productType) {
+        this.productType = productType;
     }
 }

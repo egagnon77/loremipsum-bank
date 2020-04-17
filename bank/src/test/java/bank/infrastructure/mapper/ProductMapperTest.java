@@ -4,6 +4,7 @@ import bank.domain.model.Product;
 import bank.infrastructure.entity.ProductDto;
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +13,8 @@ public class ProductMapperTest {
 
     private final String NAME = "my product";
     private final Integer ID = 125;
-    private final Integer CATEGORY = 2;
+    private final Integer PRODUCT_LEVEL = 0;
+    private final  Integer PRODUCT_TYPE = 0;
 
     @Before
     public void setUp() {
@@ -24,7 +26,8 @@ public class ProductMapperTest {
         // Given
         ProductDto productDto = new ProductDto();
         productDto.setId(ID);
-        productDto.setCategory(CATEGORY);
+        productDto.setProductLevel(PRODUCT_LEVEL);
+        productDto.setProductType(PRODUCT_TYPE);
         productDto.setName(NAME);
         
         // When
@@ -33,7 +36,8 @@ public class ProductMapperTest {
         // Then
         assertEquals(product.getName(), productDto.getName());
         assertEquals(product.getId(), productDto.getId());
-        assertEquals(product.getCategory(), productDto.getCategory());
+        assertEquals(product.getProductLevel(), productDto.getProductLevel());
+        assertEquals(product.getProductType(), productDto.getProductType());
     }
 
     @Test

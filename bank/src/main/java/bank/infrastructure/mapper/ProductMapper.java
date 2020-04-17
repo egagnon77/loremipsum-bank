@@ -10,7 +10,7 @@ public class ProductMapper {
     public Product toProduct(ProductDto p) {
         Product product = null;
         if (p != null) {
-            product = new Product(p.getId(), p.getName(), p.getCategory());
+            product = new Product(p.getId(), p.getName(), p.getProductType(), p.getProductLevel());
         }
         return product;
     }
