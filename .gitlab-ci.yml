@@ -47,7 +47,7 @@ integration-tests:
   
   script:
     - mvn spring-boot:run -pl bank -Dspring-boot.run.profiles=test
-    - exec exit
+    - exit
 
 docker-image:
   stage: deploy
