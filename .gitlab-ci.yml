@@ -46,7 +46,7 @@ integration-tests:
     POSTGRES_HOST_AUTH_METHOD: trust
   
   script:
-    - mvn spring-boot:run -pl bank -Drun.profiles=test
+    - mvn spring-boot:run -pl bank -Dspring-boot.run.profiles=test
 
 docker-image:
   stage: deploy
