@@ -13,7 +13,6 @@
         <module>bank</module>
         <module>client</module>
         <module>employee</module>
-        <module>bank-acceptance-test</module>
     </modules>
 
     <properties>

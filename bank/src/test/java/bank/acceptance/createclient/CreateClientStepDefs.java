@@ -1,9 +1,9 @@
-package client;
+package bank.acceptance.createclient;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class CreateClientStepDefs {
 
-    private static final String CLIENT_URL = "http://localhost:8081/api/bank/v1/client";
+    private String CLIENT_URL = "http://localhost:8081/api/bank/v1/client";
 
     private RequestSpecification request;
     private Response response;

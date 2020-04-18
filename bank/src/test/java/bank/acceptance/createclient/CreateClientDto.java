@@ -1,4 +1,4 @@
-package client;
+package bank.acceptance.createclient;
 
 public class CreateClientDto {
 
