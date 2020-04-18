@@ -1,5 +1,7 @@
-package bank.acceptance.createclient;
+package bank.acceptance;
 
+import bank.api.v1.dto.CreateClient;
+import bank.domain.model.Product;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -8,13 +10,16 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import org.junit.Assert;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class CreateClientStepDefs {
+public class TestsStepDefs {
 
     private String CLIENT_URL = "http://localhost:8081/api/bank/v1/client";
 
@@ -24,13 +29,19 @@ public class CreateClientStepDefs {
 
     @Given("a client with a name of (.*)")
     public void a_client_with_a_name(String name) {
-        CreateClientDto createClient = new CreateClientDto(name);
+        CreateClient createClient = new CreateClient(name);
         request = given().accept(ContentType.JSON).contentType(ContentType.JSON).body(createClient);
     }
 
     @When("I create a client")
     public void i_create_a_client() {
         response = request.when().post(CLIENT_URL);
+    }
+
+    @When("I get products of (.*) client")
+    public void i_get_products_of_a_client(String name) {
+        request = given();
+        response = request.when().get(CLIENT_URL + "/" + name + "/products");
     }
 
     @Then("the status code is {int}")
@@ -43,5 +54,11 @@ public class CreateClientStepDefs {
         for (Map.Entry<String, String> field : responseFields.entrySet()) {
             validatableResponse.body(field.getKey(), equalTo(field.getValue()));
         }
+    }
+
+    @And("response contains {int} products")
+    public void response_contains_products(int numberOfProducts) {
+        List<Product> products = Arrays.asList(response.as(Product[].class));
+        Assert.assertEquals(numberOfProducts, products.size());
     }
 }
