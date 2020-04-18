@@ -3,7 +3,7 @@ package employee.infrastructure;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import employee.cli.exception.DataSourceBadResponseException;
+import employee.domain.exception.DataSourceBadResponseException;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
 import org.junit.Before;

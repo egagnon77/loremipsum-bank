@@ -32,11 +32,8 @@ public class Product {
         } else {
             throw new InvalidArgumentException("Invalid product level.");
         }
-        if (ApprobationStatus.isValid(approbationStatus)) {
-            this.approbationStatus = approbationStatus;
-        } else {
-            throw new InvalidArgumentException("Invalid approbations.");
-        }
+        validateApprobationStatus(approbationStatus, productType);
+        this.setApprobationStatus(approbationStatus);
 
         this.id = id;
     }
@@ -62,6 +59,21 @@ public class Product {
     }
 
     public void setApprobationStatus(Integer approbationStatus) {
+        validateApprobationStatus(approbationStatus, this.productType);
         this.approbationStatus = approbationStatus;
+    }
+
+    private void validateApprobationStatus(Integer approbationStatus, Integer productType) {
+        if (ApprobationStatus.isValid(approbationStatus)) {
+            if (productType.equals(ProductType.AUTOMATIC.getValue()) && !approbationStatus
+                .equals(ApprobationStatus.SUBSCRIBED.getValue())) {
+                throw new InvalidArgumentException(
+                    "A Product of type 'Automatic' cannot have an approbation Status other than 'Subscribe'");
+            }
+
+        } else {
+            throw new InvalidArgumentException("Invalid approbation.");
+        }
+
     }
 }

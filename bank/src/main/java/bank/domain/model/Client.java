@@ -44,7 +44,6 @@ public class Client {
         } else {
             throw new InvalidArgumentException("Invalid productLevel");
         }
-
     }
 
 

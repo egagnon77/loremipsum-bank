@@ -6,7 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import employee.cli.exception.CommandLineException;
-import employee.cli.exception.DataSourceBadResponseException;
+import employee.domain.exception.DataSourceBadResponseException;
+import employee.domain.exception.NotFoundException;
 import employee.domain.factory.ClientFactory;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
@@ -15,7 +16,6 @@ import employee.domain.service.EmployeeService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -123,7 +123,8 @@ public class CommandLineProcessorTest {
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
-        doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).getProducts(client);
+        doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService)
+            .getProducts(client);
         testedClass.process(commandLine);
 
         verify(logger).error(AN_EXCEPTION_MESSAGE);
@@ -132,11 +133,29 @@ public class CommandLineProcessorTest {
     @Test
     public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldLogTheException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator).process(commandLine);
+        doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator)
+            .process(commandLine);
         testedClass.process(commandLine);
 
         verify(logger).error(AN_EXCEPTION_MESSAGE);
     }
+
+    @Test
+    public void givenACommandLineWithStatusOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.LIST.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.LIST.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        when(employeeService.getProducts(client))
+            .thenThrow(new NotFoundException(AN_EXCEPTION_MESSAGE));
+
+        testedClass.process(commandLine);
+
+        verify(logger).error(AN_EXCEPTION_MESSAGE);
+    }
+
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();

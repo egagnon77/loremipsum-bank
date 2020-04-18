@@ -48,6 +48,7 @@ public class ProductMapperTest {
         assertEquals(product.getId(), productDto.getId());
         assertEquals(product.getProductLevel(), productDto.getProductLevel());
         assertEquals(product.getProductType(), productDto.getProductType());
+        assertEquals(product.getApprobationStatus(), productDto.getApprobationStatus());
     }
 
     @Test

@@ -33,7 +33,4 @@ public class ClientDto {
         return products;
     }
 
-    public void setProducts(List<ProductDto> products) {
-        this.products = products;
-    }
 }

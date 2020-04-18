@@ -1,7 +1,8 @@
 package employee.cli;
 
 import employee.cli.exception.CommandLineException;
-import employee.cli.exception.DataSourceBadResponseException;
+import employee.domain.exception.DataSourceBadResponseException;
+import employee.domain.exception.NotFoundException;
 import employee.domain.factory.ClientFactory;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
@@ -66,7 +67,10 @@ public class CommandLineProcessor {
             logger.info(client.toString());
         } catch (DataSourceBadResponseException e) {
             logger.error(e.getMessage());
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
         }
+
     }
 
 }

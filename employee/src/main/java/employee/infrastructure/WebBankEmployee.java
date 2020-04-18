@@ -1,7 +1,7 @@
 package employee.infrastructure;
 
 
-import employee.cli.exception.DataSourceBadResponseException;
+import employee.domain.exception.DataSourceBadResponseException;
 import employee.domain.employee.BankEmployee;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
@@ -9,7 +9,6 @@ import employee.domain.model.Product;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

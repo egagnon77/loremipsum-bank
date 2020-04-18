@@ -30,4 +30,12 @@ public class LoggerConfigurationTest {
 
         assertNotNull(result);
     }
+
+    @Test
+    public void whenGettingEmployeeApplicationLogger_thenLoggerMustBeReturned() {
+
+        Logger result = testedClass.employeeApplicationLogger();
+
+        assertNotNull(result);
+    }
 }
