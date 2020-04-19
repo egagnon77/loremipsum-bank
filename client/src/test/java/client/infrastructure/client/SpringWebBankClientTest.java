@@ -90,4 +90,12 @@ public class SpringWebBankClientTest {
 
         assertEquals(Arrays.asList(products), result);
     }
+
+    @Test(expected = NotFoundException.class)
+    public void whenGetAvailableProductsFail_thenANotFoundExceptionMustBeThrown() {
+        when(bankSystemUrlBuilder.buildGetAvailableProductsUrl(client)).thenReturn(A_GET_PRODUCTS_URL);
+        when(restTemplate.getForEntity(A_GET_PRODUCTS_URL, Product[].class)).thenThrow(HttpClientErrorException.class);
+
+        testedClass.getAvailableProducts(client);
+    }
 }
