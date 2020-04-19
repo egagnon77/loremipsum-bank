@@ -6,17 +6,18 @@ import bank.domain.exception.NotFoundException;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.domain.repository.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import bank.domain.repository.ProductRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ClientService {
 
     private ClientRepository clientRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     public ClientService(ClientRepository clientRepository) {
@@ -48,7 +49,18 @@ public class ClientService {
 
     public List<Product> getProducts(String id) {
         Client client = get(id);
-        return Collections.unmodifiableList(client.getProducts());       
+        return Collections.unmodifiableList(client.getProducts());
+    }
+
+    public List<Product> getAvailableProducts(String id) {
+        Client client = get(id);
+        Optional<List<Product>> products = productRepository
+            .findAvailable(client.getProductLevel());
+        if (products.isPresent()) {
+            return products.get();
+        } else {
+            throw new NotFoundException("No products available.");
+        }
     }
 
     public Client upgradeStatus(String id) {
