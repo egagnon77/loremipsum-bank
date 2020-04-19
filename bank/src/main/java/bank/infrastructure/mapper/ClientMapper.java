@@ -38,12 +38,15 @@ public class ClientMapper {
         }        
 
         client.setProducts(products);
+        client.setProductLevel(clientDto.getProductLevel());
+
         return client;
     }
 
     public ClientDto toDto(Client client) {
         ClientDto clientDto = new ClientDto();
         clientDto.setId(client.getName());
+        clientDto.setProductLevel(client.getProductLevel());
         return clientDto;
     }
 }

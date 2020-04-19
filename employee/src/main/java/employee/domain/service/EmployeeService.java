@@ -23,4 +23,8 @@ public class EmployeeService {
     }
 
     public List<Product> getProducts(Client client) { return bankEmployee.getProducts(client); }
+
+    public Client upgradeClient(Client client) {
+        return bankEmployee.upgradeClient(client);
+    }
 }

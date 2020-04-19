@@ -20,7 +20,9 @@ public class ClientDto {
         inverseJoinColumns=@JoinColumn(name="product_id")
     )
     private List<ProductDto> products = new ArrayList<>();
-    
+
+    private Integer productLevel;
+
     public String getId() {
         return id;
     }
@@ -33,4 +35,11 @@ public class ClientDto {
         return products;
     }
 
+    public Integer getProductLevel() {
+        return productLevel;
+    }
+
+    public void setProductLevel(Integer productLevel) {
+        this.productLevel = productLevel;
+    }
 }

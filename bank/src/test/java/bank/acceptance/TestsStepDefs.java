@@ -1,7 +1,9 @@
 package bank.acceptance;
 
 import bank.api.v1.dto.CreateClient;
+import bank.domain.model.Client;
 import bank.domain.model.Product;
+import bank.domain.model.ProductLevel;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -44,6 +46,12 @@ public class TestsStepDefs {
         response = request.when().get(CLIENT_URL + "/" + name + "/products");
     }
 
+    @When("I upgrade status of (.*)")
+    public void i_upgrade_status_of_a_client(String name) {
+        request = given();
+        response = request.when().patch(CLIENT_URL + "/" + name + "/status/upgrade");
+    }
+
     @Then("the status code is {int}")
     public void verify_status_code(int statusCode) {
         validatableResponse = response.then().statusCode(statusCode);
@@ -60,5 +68,11 @@ public class TestsStepDefs {
     public void response_contains_products(int numberOfProducts) {
         List<Product> products = Arrays.asList(response.as(Product[].class));
         Assert.assertEquals(numberOfProducts, products.size());
+    }
+
+    @And("(.*) status is (.*)")
+    public void client_status_is(String name, String status) {
+        Client client = response.as(Client.class);
+        Assert.assertEquals(ProductLevel.valueOf(status).getValue(), client.getProductLevel());
     }
 }

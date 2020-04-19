@@ -52,4 +52,11 @@ public class WebBankEmployeeTest {
     testedClass.getProducts(client);
   }
 
+  @Test(expected = DataSourceBadResponseException.class)
+  public void whenUpgradeClientFail_thenADataSourceBadResponseExceptionIsThrown() {
+    when(responseBuilder.upgradeClient(any(Client.class))).thenThrow(Exception.class);
+
+    testedClass.upgradeClient(client);
+  }
+
 }

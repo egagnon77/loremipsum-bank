@@ -50,4 +50,16 @@ public class ClientService {
         Client client = get(id);
         return Collections.unmodifiableList(client.getProducts());       
     }
+
+    public Client upgradeStatus(String id) {
+
+        Optional<Client> client = clientRepository.findById(id);
+
+        if (client.isPresent()) {
+            client.get().upgradeStatus();
+            return clientRepository.save(client.get());
+        }
+
+        throw new NotFoundException("Client not found.");
+    }
 }

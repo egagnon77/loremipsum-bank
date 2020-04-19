@@ -41,4 +41,14 @@ public class BankSystemUrlBuilderTest {
         assertEquals( A_BASE_URL + CLIENT_URL + client.getName() + PRODUCTS_URL,result);
 
     }
+
+    @Test
+    public void buildUpgradeClientUrl() {
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+
+        String result = testedClass.buildUpgradeClientUrl(client);
+
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/status/upgrade", result);
+    }
 }

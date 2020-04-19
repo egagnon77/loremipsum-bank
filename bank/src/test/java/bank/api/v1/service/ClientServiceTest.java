@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -111,5 +110,27 @@ public class ClientServiceTest {
     public void givenAnInexistingClient_whenGetProducts_thenANotFoundExceptionMustBeThrown() {
         when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
         testedClass.getProducts(A_NAME);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAnInexistingClient_whenUpgradeStatus_thenANotFoundExceptionIsThrown() {
+
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
+
+        testedClass.upgradeStatus(A_NAME);
+
+
+    }
+
+    @Test
+    public void givenAClient_whenUpgradeStatus_thenAClientIsReturned() {
+
+        Client client = new Client(A_NAME);
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
+        when(clientRepository.save(client)).thenReturn(client);
+
+        Client result = testedClass.upgradeStatus(A_NAME);
+
+        assertEquals(client, result);
     }
 }

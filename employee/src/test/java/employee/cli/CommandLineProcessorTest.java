@@ -131,6 +131,40 @@ public class CommandLineProcessorTest {
     }
 
     @Test
+    public void givenACommandLineWithUpgradeOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.UPGRADE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.UPGRADE.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        Client upgradedClient = new Client();
+        upgradedClient.setName(A_CLIENT_NAME);
+        upgradedClient.setProductLevel(1);
+        when(employeeService.upgradeClient(client)).thenReturn(upgradedClient);
+
+        testedClass.process(commandLine);
+
+        verify(logger).info(upgradedClient.toString());
+    }
+
+    @Test
+    public void givenACommandLineWithUpgradeOption_whenException_thenLoggerShouldLogTheException() {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.UPGRADE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.UPGRADE.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).upgradeClient(client);
+
+        testedClass.process(commandLine);
+
+        verify(logger).error(AN_EXCEPTION_MESSAGE);
+    }
+
+    @Test
     public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldLogTheException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator)

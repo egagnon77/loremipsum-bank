@@ -50,6 +50,16 @@ public class WebBankEmployee implements BankEmployee {
         return products;
     }
 
+    @Override
+    public Client upgradeClient(Client client) {
+        try {
+            Mono<Client> mono = responseBuilder.upgradeClient(client);
+            return mono.block();
+        } catch (Exception e) {
+            throw new DataSourceBadResponseException(e.getMessage());
+        }
+    }
+
 
 }
 

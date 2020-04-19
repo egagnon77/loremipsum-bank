@@ -34,6 +34,11 @@ public class ClientController {
         return new ResponseEntity<>(clientService.save(createClient), HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/client/{id}/status/upgrade")
+    public ResponseEntity<Client> upgradeStatus(@PathVariable("id") String id) {
+        return new ResponseEntity<>(clientService.upgradeStatus(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/client/{id}/products")
     public ResponseEntity<List<Product>> getProducts(@PathVariable("id") String id) {
         return new ResponseEntity<>(clientService.getProducts(HtmlUtils.htmlEscape(id)), HttpStatus.OK);

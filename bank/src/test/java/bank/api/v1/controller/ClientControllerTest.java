@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.HtmlUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -73,6 +74,28 @@ public class ClientControllerTest {
         when(clientService.save(createClient)).thenReturn(createClient);
 
         ResponseEntity<CreateClient> result = testedClass.save(createClient);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void givenAClientName_whenUpgradeStatus_thenResponseBodyIsAClient() {
+
+        Client client = new Client(A_CLIENT_NAME);
+        when(clientService.upgradeStatus(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(client);
+
+        ResponseEntity<Client> result = testedClass.upgradeStatus(A_CLIENT_NAME);
+
+        assertEquals(client, result.getBody());
+    }
+
+    @Test
+    public void givenAClientName_whenUpgradeStatus_thenResponseHttpStatusIsOk() {
+
+        Client client = new Client(A_CLIENT_NAME);
+        when(clientService.upgradeStatus(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(client);
+
+        ResponseEntity<Client> result = testedClass.upgradeStatus(A_CLIENT_NAME);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }

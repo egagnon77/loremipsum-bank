@@ -58,4 +58,25 @@ public class ClientTest {
         clientUnderTest.setProductLevel(INVALID_PRODUCT_LEVEL);
 
     }
+
+    @Test
+    public void whenUpgradingANormalStatus_thenStatusMustBeVIP() {
+
+        clientUnderTest = new Client(A_NAME);
+
+        clientUnderTest.upgradeStatus();
+
+        assertEquals(ProductLevel.VIP.getValue(), clientUnderTest.getProductLevel());
+    }
+
+    @Test
+    public void whenUpgradingAVIPStatus_thenStatusMustStillBeVIP() {
+
+        clientUnderTest = new Client(A_NAME);
+        clientUnderTest.setProductLevel(ProductLevel.VIP.getValue());
+
+        clientUnderTest.upgradeStatus();
+
+        assertEquals(ProductLevel.VIP.getValue(), clientUnderTest.getProductLevel());
+    }
 }

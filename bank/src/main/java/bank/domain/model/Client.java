@@ -5,6 +5,8 @@ import bank.domain.exception.MissingParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.StringUtils;
 
 public class Client {
@@ -19,6 +21,16 @@ public class Client {
             this.productLevel = ProductLevel.NORMAL.getValue();
         } else {
             throw new MissingParameterException("Client must have a name.");
+        }
+    }
+
+    // Constructor with no args for cucumber test.
+    public Client() {
+    }
+
+    public void upgradeStatus() {
+        if (ProductLevel.NORMAL.getValue().equals(productLevel)) {
+            setProductLevel(ProductLevel.VIP.getValue());
         }
     }
 

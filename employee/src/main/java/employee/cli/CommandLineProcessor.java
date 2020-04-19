@@ -40,11 +40,22 @@ public class CommandLineProcessor {
                 processAddClient(commandLine.getOptionValue(CliOptions.ADD.getValue()));
             } else if (commandLine.hasOption(CliOptions.LIST.getValue())) {
                 processListClient(commandLine.getOptionValue(CliOptions.LIST.getValue()));
+            } else if (commandLine.hasOption(CliOptions.UPGRADE.getValue())) {
+                processUpgradeClient(commandLine.getOptionValue(CliOptions.UPGRADE.getValue()));
             }
         } catch (CommandLineException e) {
             logger.error(e.getMessage());
         }
 
+    }
+
+    private void processUpgradeClient(String clientName) {
+        try {
+            Client upgradedClient = employeeService.upgradeClient(clientFactory.create(clientName));
+            logger.info(upgradedClient.toString());
+        } catch (DataSourceBadResponseException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void processAddClient(String clientName) {

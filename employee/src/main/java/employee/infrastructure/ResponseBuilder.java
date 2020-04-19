@@ -43,4 +43,14 @@ public class ResponseBuilder {
             .retrieve()
             .bodyToFlux(Product.class);
     }
+
+    public Mono<Client> upgradeClient(Client client) {
+        String upgradeClientUrl = bankSystemUrlBuilder.buildUpgradeClientUrl(client);
+
+        return webClient.patch()
+                .uri(upgradeClientUrl)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Client.class);
+    }
 }

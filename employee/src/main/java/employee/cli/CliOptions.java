@@ -2,7 +2,8 @@ package employee.cli;
 
 public enum CliOptions {
     ADD("add"),
-    LIST("list");
+    LIST("list"),
+    UPGRADE("upgrade");
 
     private String value;
 

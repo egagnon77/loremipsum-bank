@@ -6,6 +6,7 @@ public class Client {
 
     private String name;
     private List<Product> products;
+    private Integer productLevel;
 
     public String getName() {
         return name;
@@ -23,11 +24,20 @@ public class Client {
         this.products = products;
     }
 
+    public Integer getProductLevel() {
+        return productLevel;
+    }
+
+    public void setProductLevel(Integer productLevel) {
+        this.productLevel = productLevel;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "name='" + name + '\'' +
                 ", products=" + products +
+                ", productLevel=" + productLevel +
                 '}';
     }
 }

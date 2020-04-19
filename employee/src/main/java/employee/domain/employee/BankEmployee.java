@@ -10,4 +10,6 @@ public interface BankEmployee {
     public AddClient addClient(AddClient client);
 
     public List<Product> getProducts(Client client);
+
+    public Client upgradeClient(Client client);
 }

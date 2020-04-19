@@ -13,6 +13,7 @@ public class CliConfiguration {
     private static final String ARGUMENT_CLIENT_NAME = "CLIENT_NAME";
     private static final String ADD_DESCRIPTION = "Crée un client de nom CLIENT_NAME";
     private static final String LIST_DESCRIPTION = "Liste tous les produits du client";
+    private static final String UPGRADE_DESCRIPTION = "Augmente le statut du client";
 
     @Bean
     public Options options() {
@@ -27,6 +28,11 @@ public class CliConfiguration {
             .longOpt(CliOptions.LIST.getValue()).argName(ARGUMENT_CLIENT_NAME)
             .desc(LIST_DESCRIPTION)
             .build());
+
+        options.addOption(Option.builder().required(false).hasArg(true)
+                .longOpt(CliOptions.UPGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
+                .desc(UPGRADE_DESCRIPTION)
+                .build());
 
         return options;
     }
