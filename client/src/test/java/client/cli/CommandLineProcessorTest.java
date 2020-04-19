@@ -1,10 +1,15 @@
 package client.cli;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import client.domain.exception.NotFoundException;
 import client.domain.factory.ClientFactory;
 import client.domain.model.Client;
 import client.domain.model.Product;
 import client.domain.service.ClientService;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineProcessorTest {

@@ -1,12 +1,13 @@
-INSERT INTO product (id, category, name) VALUES (1, 1, 'A');
-INSERT INTO product (id, category, name) VALUES (2, 1, 'B');
-INSERT INTO product (id, category, name) VALUES (3, 2, 'Z');
-INSERT INTO product (id, category, name) VALUES (4, 2, 'Y');
+INSERT INTO product (id, product_type, product_level, name) VALUES (5, 0, 0, 'Produit_A');
+INSERT INTO product (id, product_type, product_level, name) VALUES (6, 1, 0, 'Produit_B');
+INSERT INTO product (id, product_type, product_level, name) VALUES (7, 0, 1, 'Produit_Z');
+INSERT INTO product (id, product_type, product_level, name) VALUES (8, 1, 1, 'Produit_Y');
 
 INSERT INTO client VALUES ('PoorMen');
 INSERT INTO client VALUES ('MiddleMen');
 INSERT INTO client VALUES ('RichMen');
 
-INSERT INTO client_products (id, client_id, product_id) VALUES (1, 'MiddleMen', 1);
-INSERT INTO client_products (id, client_id, product_id) VALUES (2, 'RichMen', 2);
-INSERT INTO client_products (id, client_id, product_id) VALUES (3, 'RichMen', 3);
+INSERT INTO client_products (id, client_id, product_id, approbation_status) VALUES (1, 'MiddleMen', 5, 0);
+INSERT INTO client_products (id, client_id, product_id, approbation_status) VALUES (2, 'RichMen', 6 , 0);
+INSERT INTO client_products (id, client_id, product_id, approbation_status) VALUES (3, 'RichMen', 7, 0);
+

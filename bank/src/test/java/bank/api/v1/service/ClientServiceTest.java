@@ -96,7 +96,7 @@ public class ClientServiceTest {
     public void givenAnExistingClientWithProducts_whenGetProducts_thenReturnList() {
         // Given
         Client client = new Client(A_NAME);
-        Product[] products = { new Product(1, "my product", 2) };
+        Product[] products = { new Product(1, "my product", 1,0,0) };
         client.setProducts(Arrays.asList(products));
         when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
 

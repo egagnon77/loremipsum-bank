@@ -1,20 +1,22 @@
 package bank.domain.model;
 
+import bank.domain.exception.InvalidArgumentException;
 import bank.domain.exception.MissingParameterException;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
 public class Client {
 
     private String name;
     private List<Product> products = new ArrayList<>();
+    private Integer productLevel;
 
     public Client(String name) {
         if (StringUtils.isNotBlank(name)) {
             this.name = name;
+            this.productLevel = ProductLevel.NORMAL.getValue();
         } else {
             throw new MissingParameterException("Client must have a name.");
         }
@@ -32,10 +34,27 @@ public class Client {
         return name;
     }
 
+    public Integer getProductLevel() {
+        return productLevel;
+    }
+
+    public void setProductLevel(Integer productLevel) {
+        if (ProductLevel.isValid(productLevel)) {
+            this.productLevel = productLevel;
+        } else {
+            throw new InvalidArgumentException("Invalid productLevel");
+        }
+    }
+
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Client client = (Client) o;
         return Objects.equals(name, client.name);
     }

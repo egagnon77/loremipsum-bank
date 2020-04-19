@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import employee.domain.employee.BankEmployee;
 import employee.domain.model.AddClient;
+import employee.domain.model.Client;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,5 +31,12 @@ public class EmployeeServiceTest {
         testedClass.addClient(any(AddClient.class));
 
         verify(bankEmployee, times(1)).addClient(any(AddClient.class));
+    }
+
+    @Test
+    public void givenAnyClient_whenGettingProducts_thenWeShouldCallBankEmployee() {
+        testedClass.getProducts(any(Client.class));
+
+        verify(bankEmployee, times(1)).getProducts(any(Client.class));
     }
 }

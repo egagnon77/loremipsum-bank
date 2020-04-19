@@ -1,5 +1,6 @@
 package employee.infrastructure;
 
+import employee.domain.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,4 +21,7 @@ public class BankSystemUrlBuilder {
         return bankServerBaseUrl + "/client/";
     }
 
+    public String buildGetProductsUrl(Client client) {
+        return bankServerBaseUrl + "/client/" + client.getName() + "/products";
+    }
 }

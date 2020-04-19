@@ -1,4 +1,4 @@
-package employee.cli;
+package employee.domain.exception;
 
 public class DataSourceBadResponseException extends RuntimeException {
 
