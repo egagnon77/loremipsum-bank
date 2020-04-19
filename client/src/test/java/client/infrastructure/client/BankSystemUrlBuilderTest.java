@@ -28,4 +28,16 @@ public class BankSystemUrlBuilderTest {
 
         assertEquals(A_BASE_URL + "/client/" + client.getName() + "/products", result);
     }
+
+    @Test
+    public void givenAClient_whenBuildGetAvailableProductsUrl_thenUrlMustBeReturnedWithTheNameOfThisClient() {
+
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+
+        String result = testedClass.buildGetAvailableProductsUrl(client);
+
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/products/available", result);
+    }
+
 }

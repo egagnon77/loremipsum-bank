@@ -65,12 +65,13 @@ public class Product {
 
     private void validateApprobationStatus(Integer approbationStatus, Integer productType) {
         if (ApprobationStatus.isValid(approbationStatus)) {
-            if (productType.equals(ProductType.AUTOMATIC.getValue()) && !approbationStatus
-                .equals(ApprobationStatus.SUBSCRIBED.getValue())) {
-                throw new InvalidArgumentException(
-                    "A Product of type 'Automatic' cannot have an approbation Status other than 'Subscribe'");
+            if (!approbationStatus.equals(ApprobationStatus.NOT_SET.getValue())) {
+                if (productType.equals(ProductType.AUTOMATIC.getValue())
+                    && (!approbationStatus.equals(ApprobationStatus.SUBSCRIBED.getValue()))) {
+                    throw new InvalidArgumentException(
+                        "A Product of type 'Automatic' cannot have an approbation Status other than 'Subscribed'");
+                }
             }
-
         } else {
             throw new InvalidArgumentException("Invalid approbation.");
         }

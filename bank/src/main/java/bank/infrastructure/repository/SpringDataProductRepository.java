@@ -6,8 +6,6 @@ import bank.infrastructure.entity.ProductDto;
 import bank.infrastructure.mapper.ProductMapper;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +23,15 @@ public class SpringDataProductRepository implements ProductRepository {
     }
 
     @Override
-    public Optional<List<Product>> findAvailable(Integer productLevel) {
-        Optional<List<ProductDto>> productsDto = crudProductRepository.findAvailable(productLevel);
+    public List<Product> findAll() {
+
         List<Product> products = new ArrayList<>();
 
-        Stream<ProductDto> productDtoStream = productsDto.map(List::stream).orElse(Stream.empty());
-        productDtoStream.forEach(el -> products.add(productMapper.toProduct(el)));
+        for (ProductDto productDto : crudProductRepository.findAll()) {
+            products.add(productMapper.toProduct(productDto));
+        }
 
-        return Optional.of(products);
+        return products;
     }
+
 }

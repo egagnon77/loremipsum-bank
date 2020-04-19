@@ -78,4 +78,16 @@ public class SpringWebBankClientTest {
 
         testedClass.getProducts(client);
     }
+
+    @Test
+    public void givenAClient_whenGetAvailableProducts_thenProductsMustBeReturned() {
+        when(bankSystemUrlBuilder.buildGetAvailableProductsUrl(client)).thenReturn(A_GET_PRODUCTS_URL);
+        Product[] products = new Product[1];
+        ResponseEntity<Product[]> responseEntity = new ResponseEntity<>(products, HttpStatus.OK);
+        when(restTemplate.getForEntity(A_GET_PRODUCTS_URL, Product[].class)).thenReturn(responseEntity);
+
+        List<Product> result = testedClass.getAvailableProducts(client);
+
+        assertEquals(Arrays.asList(products), result);
+    }
 }

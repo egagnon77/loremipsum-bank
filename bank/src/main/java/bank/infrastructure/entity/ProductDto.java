@@ -1,6 +1,7 @@
 package bank.infrastructure.entity;
 
 import bank.domain.exception.NotFoundException;
+import bank.domain.model.ApprobationStatus;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -68,6 +69,6 @@ public class ProductDto {
                 return current.getApprobationStatus();
             }
         }
-        throw new NotFoundException("approbation Status not found.");
+        return ApprobationStatus.NOT_SET.getValue();
     }
 }

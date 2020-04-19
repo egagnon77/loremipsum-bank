@@ -49,7 +49,7 @@ public class ClientController {
         return new ResponseEntity<>(clientService.getProducts(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/client{id}/products/available")
+    @GetMapping(value = "/client/{id}/products/available")
     public ResponseEntity<List<Product>> getAvailableProducts(@PathVariable("id") String id) {
         return new ResponseEntity<>(clientService.getAvailableProducts(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
     }

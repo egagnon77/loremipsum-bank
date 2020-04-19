@@ -10,6 +10,7 @@ import bank.domain.repository.ProductRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,9 @@ public class ClientService {
     private ProductRepository productRepository;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ProductRepository productRepository) {
         this.clientRepository = clientRepository;
+        this.productRepository = productRepository;
     }
 
     public Client get(String id) {
@@ -50,17 +52,15 @@ public class ClientService {
     public List<Product> getProducts(String id) {
         Client client = get(id);
         return Collections.unmodifiableList(client.getProducts());
+
     }
 
     public List<Product> getAvailableProducts(String id) {
         Client client = get(id);
-        Optional<List<Product>> products = productRepository
-            .findAvailable(client.getProductLevel());
-        if (products.isPresent()) {
-            return products.get();
-        } else {
-            throw new NotFoundException("No products available.");
-        }
+        List<Product> products = productRepository.findAll().stream().filter(p ->
+            p.getProductLevel() <= client.getProductLevel()).collect(Collectors.toList());
+
+        return products;
     }
 
     public Client upgradeStatus(String id) {
@@ -74,6 +74,7 @@ public class ClientService {
 
         throw new NotFoundException("Client not found.");
     }
+
 
     public Client downgradeStatus(String id) {
 

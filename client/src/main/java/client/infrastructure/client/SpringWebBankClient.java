@@ -38,4 +38,17 @@ public class SpringWebBankClient implements BankClient {
             throw new NotFoundException(e.getMessage());
         }
     }
+
+    public List<Product> getAvailableProducts(Client client) {
+
+        String getAvailableProductsUrl = bankSystemUrlBuilder.buildGetAvailableProductsUrl(client);
+
+        try {
+            ResponseEntity<Product[]> response = restTemplate.getForEntity(getAvailableProductsUrl, Product[].class);
+            return Arrays.asList(response.getBody());
+
+        } catch (HttpClientErrorException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+    }
 }
