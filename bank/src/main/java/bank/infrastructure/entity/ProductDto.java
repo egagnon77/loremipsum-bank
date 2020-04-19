@@ -1,6 +1,8 @@
 package bank.infrastructure.entity;
 
 import bank.domain.exception.NotFoundException;
+
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -13,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "product")
-public class ProductDto {
+public class ProductDto implements Serializable {
 
     @Id
     @GeneratedValue
@@ -34,6 +36,10 @@ public class ProductDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<ClientProductsDto> getClientProductsDto() {
+        return clientProductsDto;
     }
 
     public String getName() {

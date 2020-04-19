@@ -48,4 +48,9 @@ public class ClientController {
     public ResponseEntity<List<Product>> getProducts(@PathVariable("id") String id) {
         return new ResponseEntity<>(clientService.getProducts(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
     }
+
+    @PatchMapping(value = "/client/{name}/product/{id}/accept")
+    public ResponseEntity<Client> acceptProduct(@PathVariable("name") String name, @PathVariable("id") Integer id) {
+        return new ResponseEntity<>(clientService.acceptProduct(HtmlUtils.htmlEscape(name), id), HttpStatus.OK);
+    }
 }

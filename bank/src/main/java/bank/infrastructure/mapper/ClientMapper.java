@@ -46,7 +46,15 @@ public class ClientMapper {
     public ClientDto toDto(Client client) {
         ClientDto clientDto = new ClientDto();
         clientDto.setId(client.getName());
+
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : client.getProducts()) {
+            productDtos.add(productMapper.toDto(product, clientDto));
+        }
+
+        clientDto.getProducts().addAll(productDtos);
         clientDto.setProductLevel(client.getProductLevel());
+
         return clientDto;
     }
 }

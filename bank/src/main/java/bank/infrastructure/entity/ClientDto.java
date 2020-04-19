@@ -1,5 +1,6 @@
 package bank.infrastructure.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "client")
-public class ClientDto {
+public class ClientDto implements Serializable {
 
     @Id
     private String id;

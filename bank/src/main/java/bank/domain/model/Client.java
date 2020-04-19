@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import bank.domain.exception.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
 public class Client {
@@ -64,6 +64,17 @@ public class Client {
         }
     }
 
+    public void acceptProduct(Integer productId) {
+        for (Product product : products) {
+            if (product.getId().equals(productId)
+                    && ApprobationStatus.WAITING_FOR_SUBCRIPTION.getValue().equals(product.getApprobationStatus())) {
+                product.setApprobationStatus(ApprobationStatus.SUBSCRIBED.getValue());
+                return;
+            }
+        }
+
+        throw new NotFoundException("No product to accept has been found.");
+    }
 
     @Override
     public boolean equals(Object o) {

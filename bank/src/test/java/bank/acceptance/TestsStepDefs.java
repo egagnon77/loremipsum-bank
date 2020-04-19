@@ -1,6 +1,7 @@
 package bank.acceptance;
 
 import bank.api.v1.dto.CreateClient;
+import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.domain.model.ProductLevel;
@@ -20,6 +21,8 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestsStepDefs {
 
@@ -58,6 +61,12 @@ public class TestsStepDefs {
         response = request.when().patch(CLIENT_URL + "/" + name + "/status/downgrade");
     }
 
+    @When("I accept product {int} for client {word}")
+    public void i_accept_product_for_a_client(int productId, String clientName) {
+        request = given();
+        response = request.when().patch(CLIENT_URL + "/" + clientName + "/product/ + " + productId + "/accept");
+    }
+
     @Then("the status code is {int}")
     public void verify_status_code(int statusCode) {
         validatableResponse = response.then().statusCode(statusCode);
@@ -73,12 +82,24 @@ public class TestsStepDefs {
     @And("response contains {int} products")
     public void response_contains_products(int numberOfProducts) {
         List<Product> products = Arrays.asList(response.as(Product[].class));
-        Assert.assertEquals(numberOfProducts, products.size());
+        assertEquals(numberOfProducts, products.size());
     }
 
     @And("(.*) status is (.*)")
     public void client_status_is(String name, String status) {
         Client client = response.as(Client.class);
-        Assert.assertEquals(ProductLevel.valueOf(status).getValue(), client.getProductLevel());
+        assertEquals(ProductLevel.valueOf(status).getValue(), client.getProductLevel());
+    }
+
+    @And("{word} is now subscribed to product id {int}")
+    public void client_is_now_subscribed_to_product_id(String clientName, Integer productId) {
+        Client client = response.as(Client.class);
+        for (Product product : client.getProducts()) {
+            if (product.getId().equals(productId)) {
+                assertEquals(ApprobationStatus.SUBSCRIBED.getValue(), product.getApprobationStatus());
+                return;
+            }
+        }
+        fail("Client is not subscribed to the given product.");
     }
 }

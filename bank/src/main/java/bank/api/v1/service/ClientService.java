@@ -74,4 +74,16 @@ public class ClientService {
 
         throw new NotFoundException("Client not found.");
     }
+
+    public Client acceptProduct(String clientName, Integer productId) {
+
+        Optional<Client> client = clientRepository.findById(clientName);
+
+        if (client.isPresent()) {
+            client.get().acceptProduct(productId);
+            return clientRepository.save(client.get());
+        }
+
+        throw new NotFoundException("Client not found.");
+    }
 }
