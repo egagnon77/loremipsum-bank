@@ -1,38 +1,43 @@
 package bank.api.v1.service;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import bank.api.v1.dto.CreateClient;
 import bank.domain.exception.AlreadyExistsException;
 import bank.domain.exception.NotFoundException;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.domain.repository.ClientRepository;
+import bank.domain.repository.ProductRepository;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ClientServiceTest {
 
     private static final String A_NAME = "aName";
+    private static final Integer PRODUCT_LEVEL_NORMAL = 0;
 
     @Mock
     private ClientRepository clientRepository;
+    @Mock
+    private ProductRepository productRepository;
 
     private ClientService testedClass;
 
     @Before
     public void setup() {
-        testedClass = new ClientService(clientRepository);
+        testedClass = new ClientService(clientRepository, productRepository);
     }
 
     @Test
@@ -95,7 +100,7 @@ public class ClientServiceTest {
     public void givenAnExistingClientWithProducts_whenGetProducts_thenReturnList() {
         // Given
         Client client = new Client(A_NAME);
-        Product[] products = { new Product(1, "my product", 1,0,0) };
+        Product[] products = {new Product(1, "my product", 1, 0, 0)};
         client.setProducts(Arrays.asList(products));
         when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
 
@@ -154,5 +159,19 @@ public class ClientServiceTest {
         Client result = testedClass.downgradeStatus(A_NAME);
 
         assertEquals(client, result);
+    }
+
+
+    @Test
+    public void givenAnExistingClientWithApprobationLevel_whenAvailable_thenReturnList() {
+        Client client = new Client(A_NAME);
+        client.setProductLevel(PRODUCT_LEVEL_NORMAL);
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
+        List<Product> products = new ArrayList<>();
+        products.add(new Product(1, "my product", 1, 0, 0));
+        when(productRepository.findAll()).thenReturn(products);
+
+        List<Product> result = testedClass.getAvailableProducts(A_NAME);
+        assertArrayEquals(result.toArray(), products.toArray());
     }
 }

@@ -39,4 +39,16 @@ public class ClientServiceTest {
 
         assertEquals(products, result);
     }
+
+    @Test
+    public void givenAClient_whenGetAvailableProducts_thenAListOfProductsMustBeReturned() {
+
+        List<Product> products = new ArrayList<>();
+        Client client = new Client();
+        when(bankClient.getProducts(client)).thenReturn(products);
+
+        List<Product> result = testedClass.getAvailableProducts(client);
+
+        assertEquals(products, result);
+    }
 }

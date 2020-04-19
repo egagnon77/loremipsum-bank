@@ -25,7 +25,7 @@ public class Product implements Serializable {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", category=" + category +
+                ", product level=" + category +
                 '}';
     }
 }

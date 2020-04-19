@@ -12,12 +12,15 @@ public class CliConfiguration {
 
     private static final String ARG_CLIENT_NAME = "CLIENT_NAME";
     private static final String LIST_DESCRIPTION = "Liste tous les produits du client";
+    private static final String AVAILABLE_DESCRIPTION = "Liste tous les produits auquel le client a accès";
 
     @Bean
     public Options options() {
         Options options = new Options();
         options.addOption(Option.builder(CliOptionsValue.Name.getValue()).argName(ARG_CLIENT_NAME).required(true).hasArg(true).build());
         options.addOption(Option.builder().longOpt(CliOptions.Status.getValue()).desc(LIST_DESCRIPTION).build());
+
+        options.addOption(Option.builder().longOpt(CliOptions.Available.getValue()).desc(AVAILABLE_DESCRIPTION).build());
         return options;
     }
 

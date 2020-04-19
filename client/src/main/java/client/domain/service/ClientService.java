@@ -21,4 +21,6 @@ public class ClientService {
     public List<Product> getProducts(Client client) {
         return bankClient.getProducts(client);
     }
+
+    public List<Product> getAvailableProducts(Client client) { return bankClient.getAvailableProducts(client); }
 }

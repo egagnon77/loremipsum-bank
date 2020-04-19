@@ -3,6 +3,7 @@ package bank.domain.model;
 import java.util.stream.Stream;
 
 public enum ApprobationStatus {
+    NOT_SET(-1),
     SUBSCRIBED(0),
     WAITING_FOR_SUBCRIPTION(1),
     WAITING_FOR_DELETION(2);

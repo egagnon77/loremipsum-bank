@@ -8,4 +8,5 @@ import java.util.List;
 public interface BankClient {
 
     List<Product> getProducts(Client client);
+    List<Product> getAvailableProducts(Client client);
 }

@@ -28,13 +28,29 @@ public class CommandLineProcessor {
 
     public void process(CommandLine commandLine) {
         if (commandLine.hasOption(CliOptions.Status.getValue())) {
-            Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
-            try {
-                client.setProducts(clientService.getProducts(client));
-                logger.info(client.toString());
-            } catch (NotFoundException e) {
-                logger.error(e.getMessage());
-            }
+            processStatusClient(commandLine);
+        } else if (commandLine.hasOption(CliOptions.Available.getValue())) {
+            processAvailableProducts(commandLine);
+        }
+    }
+
+    private void processStatusClient(CommandLine commandLine) {
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        try {
+            client.setProducts(clientService.getProducts(client));
+            logger.info(client.toString());
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void processAvailableProducts(CommandLine commandLine) {
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        try {
+            client.setProducts(clientService.getAvailableProducts(client));
+            logger.info(client.toString());
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
         }
     }
 }
