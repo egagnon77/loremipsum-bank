@@ -42,6 +42,8 @@ public class CommandLineProcessor {
                 processListClient(commandLine.getOptionValue(CliOptions.LIST.getValue()));
             } else if (commandLine.hasOption(CliOptions.UPGRADE.getValue())) {
                 processUpgradeClient(commandLine.getOptionValue(CliOptions.UPGRADE.getValue()));
+            } else if (commandLine.hasOption(CliOptions.DOWNGRADE.getValue())) {
+                processDowngradeClient(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue()));
             }
         } catch (CommandLineException e) {
             logger.error(e.getMessage());
@@ -53,6 +55,15 @@ public class CommandLineProcessor {
         try {
             Client upgradedClient = employeeService.upgradeClient(clientFactory.create(clientName));
             logger.info(upgradedClient.toString());
+        } catch (DataSourceBadResponseException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private void processDowngradeClient(String clientName) {
+        try {
+            Client downgradedClient = employeeService.downgradeClient(clientFactory.create(clientName));
+            logger.info(downgradedClient.toString());
         } catch (DataSourceBadResponseException e) {
             logger.error(e.getMessage());
         }

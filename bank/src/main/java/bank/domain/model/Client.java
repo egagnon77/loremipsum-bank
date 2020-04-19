@@ -34,6 +34,12 @@ public class Client {
         }
     }
 
+    public void downgradeStatus() {
+        if (ProductLevel.VIP.getValue().equals(productLevel)) {
+            setProductLevel(ProductLevel.NORMAL.getValue());
+        }
+    }
+
     public List<Product> getProducts() {
         return products;
     }

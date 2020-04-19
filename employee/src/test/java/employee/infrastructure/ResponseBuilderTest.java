@@ -24,6 +24,7 @@ public class ResponseBuilderTest {
     private static final String AN_ADD_CLIENT_URL = "anAddClientUrl";
     private static final String A_LIST_PRODUCT_URL = "aListProductUrl";
     private static final String A_UPGRADE_CLIENT_URL = "aUpgradeClientUrl";
+    private static final String A_DOWNGRADE_CLIENT_URL = "aDowngradeClientUrl";
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -111,6 +112,21 @@ public class ResponseBuilderTest {
         when(response.bodyToMono(Client.class)).thenReturn(expected);
 
         Mono<Client> result = testedClass.upgradeClient(client);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void givenClientObject_whenDowngradeClient_thenAMonoClientIsReturned() {
+        Mono<Client> expected = Mockito.mock(Mono.class);
+        when(bankSystemUrlBuilder.buildDowngradeClientUrl(client)).thenReturn(A_DOWNGRADE_CLIENT_URL);
+        when(webClient.patch()).thenReturn(requestBodyUri);
+        when(requestBodyUri.uri(A_DOWNGRADE_CLIENT_URL)).thenReturn(requestBody);
+        when(requestBody.accept(MediaType.APPLICATION_JSON)).thenReturn(requestBody);
+        when(requestBody.retrieve()).thenReturn(response);
+        when(response.bodyToMono(Client.class)).thenReturn(expected);
+
+        Mono<Client> result = testedClass.downgradeClient(client);
 
         assertEquals(expected, result);
 

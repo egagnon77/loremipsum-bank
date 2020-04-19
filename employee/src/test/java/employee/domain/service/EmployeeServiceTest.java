@@ -39,4 +39,24 @@ public class EmployeeServiceTest {
 
         verify(bankEmployee, times(1)).getProducts(any(Client.class));
     }
+
+    @Test
+    public void givenAClient_whenUpgradeClient_thenWeShouldCallBankEmployee() {
+
+        Client client = new Client();
+
+        testedClass.upgradeClient(client);
+
+        verify(bankEmployee, times(1)).upgradeClient(client);
+    }
+
+    @Test
+    public void givenAClient_whenDowngradeClient_thenWeShouldCallBankEmployee() {
+
+        Client client = new Client();
+
+        testedClass.downgradeClient(client);
+
+        verify(bankEmployee, times(1)).downgradeClient(client);
+    }
 }

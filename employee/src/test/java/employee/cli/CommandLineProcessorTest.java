@@ -165,6 +165,40 @@ public class CommandLineProcessorTest {
     }
 
     @Test
+    public void givenACommandLineWithDowngradeOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.DOWNGRADE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        Client downgradedClient = new Client();
+        downgradedClient.setName(A_CLIENT_NAME);
+        downgradedClient.setProductLevel(0);
+        when(employeeService.downgradeClient(client)).thenReturn(downgradedClient);
+
+        testedClass.process(commandLine);
+
+        verify(logger).info(downgradedClient.toString());
+    }
+
+    @Test
+    public void givenACommandLineWithDowngradeOption_whenException_thenLoggerShouldLogTheException() {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.DOWNGRADE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        doThrow(new DataSourceBadResponseException(AN_EXCEPTION_MESSAGE)).when(employeeService).downgradeClient(client);
+
+        testedClass.process(commandLine);
+
+        verify(logger).error(AN_EXCEPTION_MESSAGE);
+    }
+
+    @Test
     public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldLogTheException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator)

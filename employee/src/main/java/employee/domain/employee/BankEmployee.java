@@ -12,4 +12,6 @@ public interface BankEmployee {
     public List<Product> getProducts(Client client);
 
     public Client upgradeClient(Client client);
+
+    public Client downgradeClient(Client client);
 }

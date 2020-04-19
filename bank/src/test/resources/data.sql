@@ -6,8 +6,10 @@ INSERT INTO product (id, product_type, product_level, name) VALUES (8, 1, 1, 'Pr
 INSERT INTO client VALUES ('PoorMen', 0);
 INSERT INTO client VALUES ('MiddleMen', 0);
 INSERT INTO client VALUES ('RichMen', 0);
-INSERT INTO client VALUES ('NormalMen', 0);
-INSERT INTO client VALUES ('VIPMen', 1);
+INSERT INTO client VALUES ('NormalMenToUpgrade', 0);
+INSERT INTO client VALUES ('VIPMenToUpgrade', 1);
+INSERT INTO client VALUES ('NormalMenToDowngrade', 0);
+INSERT INTO client VALUES ('VIPMenToDowngrade', 1);
 
 INSERT INTO client_products (id, client_id, product_id, approbation_status) VALUES (1, 'MiddleMen', 5, 0);
 INSERT INTO client_products (id, client_id, product_id, approbation_status) VALUES (2, 'RichMen', 6 , 0);

@@ -60,6 +60,16 @@ public class WebBankEmployee implements BankEmployee {
         }
     }
 
+    @Override
+    public Client downgradeClient(Client client) {
+        try {
+            Mono<Client> mono = responseBuilder.downgradeClient(client);
+            return mono.block();
+        } catch (Exception e) {
+            throw new DataSourceBadResponseException(e.getMessage());
+        }
+    }
+
 
 }
 

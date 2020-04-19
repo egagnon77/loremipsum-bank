@@ -79,4 +79,25 @@ public class ClientTest {
 
         assertEquals(ProductLevel.VIP.getValue(), clientUnderTest.getProductLevel());
     }
+
+    @Test
+    public void whenDowngradingANormalStatus_thenStatusMustStillBeNormal() {
+
+        clientUnderTest = new Client(A_NAME);
+
+        clientUnderTest.downgradeStatus();
+
+        assertEquals(ProductLevel.NORMAL.getValue(), clientUnderTest.getProductLevel());
+    }
+
+    @Test
+    public void whenDowngradingAVIPStatus_thenStatusMustBeNormal() {
+
+        clientUnderTest = new Client(A_NAME);
+        clientUnderTest.setProductLevel(ProductLevel.VIP.getValue());
+
+        clientUnderTest.downgradeStatus();
+
+        assertEquals(ProductLevel.NORMAL.getValue(), clientUnderTest.getProductLevel());
+    }
 }

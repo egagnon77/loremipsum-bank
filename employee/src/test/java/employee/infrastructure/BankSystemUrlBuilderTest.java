@@ -51,4 +51,14 @@ public class BankSystemUrlBuilderTest {
 
         assertEquals(A_BASE_URL + "/client/" + client.getName() + "/status/upgrade", result);
     }
+
+    @Test
+    public void buildDowngradeClientUrl() {
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+
+        String result = testedClass.buildDowngradeClientUrl(client);
+
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/status/downgrade", result);
+    }
 }

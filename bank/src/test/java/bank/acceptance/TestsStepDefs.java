@@ -52,6 +52,12 @@ public class TestsStepDefs {
         response = request.when().patch(CLIENT_URL + "/" + name + "/status/upgrade");
     }
 
+    @When("I downgrade status of (.*)")
+    public void i_downgrade_status_of_a_client(String name) {
+        request = given();
+        response = request.when().patch(CLIENT_URL + "/" + name + "/status/downgrade");
+    }
+
     @Then("the status code is {int}")
     public void verify_status_code(int statusCode) {
         validatableResponse = response.then().statusCode(statusCode);

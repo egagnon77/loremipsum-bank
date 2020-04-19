@@ -62,4 +62,16 @@ public class ClientService {
 
         throw new NotFoundException("Client not found.");
     }
+
+    public Client downgradeStatus(String id) {
+
+        Optional<Client> client = clientRepository.findById(id);
+
+        if (client.isPresent()) {
+            client.get().downgradeStatus();
+            return clientRepository.save(client.get());
+        }
+
+        throw new NotFoundException("Client not found.");
+    }
 }

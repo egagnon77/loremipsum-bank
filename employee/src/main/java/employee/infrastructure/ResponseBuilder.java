@@ -53,4 +53,14 @@ public class ResponseBuilder {
                 .retrieve()
                 .bodyToMono(Client.class);
     }
+
+    public Mono<Client> downgradeClient(Client client) {
+        String downgradeClientUrl = bankSystemUrlBuilder.buildDowngradeClientUrl(client);
+
+        return webClient.patch()
+                .uri(downgradeClientUrl)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Client.class);
+    }
 }

@@ -39,6 +39,11 @@ public class ClientController {
         return new ResponseEntity<>(clientService.upgradeStatus(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/client/{id}/status/downgrade")
+    public ResponseEntity<Client> downgradeStatus(@PathVariable("id") String id) {
+        return new ResponseEntity<>(clientService.downgradeStatus(HtmlUtils.htmlEscape(id)), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/client/{id}/products")
     public ResponseEntity<List<Product>> getProducts(@PathVariable("id") String id) {
         return new ResponseEntity<>(clientService.getProducts(HtmlUtils.htmlEscape(id)), HttpStatus.OK);

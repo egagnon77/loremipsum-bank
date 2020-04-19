@@ -27,4 +27,8 @@ public class EmployeeService {
     public Client upgradeClient(Client client) {
         return bankEmployee.upgradeClient(client);
     }
+
+    public Client downgradeClient(Client client) {
+        return bankEmployee.downgradeClient(client);
+    }
 }

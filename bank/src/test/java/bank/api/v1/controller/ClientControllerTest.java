@@ -101,6 +101,28 @@ public class ClientControllerTest {
     }
 
     @Test
+    public void givenAClientName_whenDowngradeStatus_thenResponseBodyIsAClient() {
+
+        Client client = new Client(A_CLIENT_NAME);
+        when(clientService.downgradeStatus(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(client);
+
+        ResponseEntity<Client> result = testedClass.downgradeStatus(A_CLIENT_NAME);
+
+        assertEquals(client, result.getBody());
+    }
+
+    @Test
+    public void givenAClientName_whenDowngradeStatus_thenResponseHttpStatusIsOk() {
+
+        Client client = new Client(A_CLIENT_NAME);
+        when(clientService.downgradeStatus(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(client);
+
+        ResponseEntity<Client> result = testedClass.downgradeStatus(A_CLIENT_NAME);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
     public void givenExistingClient_whenGetProducts_thenResponseBodyShouldBeAProductsList() {
         // Given
         Product[] productArray = { new Product(1, "my product", 0, 1,0) };

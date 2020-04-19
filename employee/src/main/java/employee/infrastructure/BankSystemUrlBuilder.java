@@ -28,4 +28,8 @@ public class BankSystemUrlBuilder {
     public String buildUpgradeClientUrl(Client client) {
         return bankServerBaseUrl + "/client/" + client.getName() + "/status/upgrade";
     }
+
+    public String buildDowngradeClientUrl(Client client) {
+        return bankServerBaseUrl + "/client/" + client.getName() + "/status/downgrade";
+    }
 }

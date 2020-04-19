@@ -16,6 +16,7 @@ public class CliConfigurationTest {
     private static final String ADD_DESCRIPTION = "Crée un client de nom CLIENT_NAME";
     private static final String LIST_DESCRIPTION = "Liste tous les produits du client";
     private static final String UPGRADE_DESCRIPTION = "Augmente le statut du client";
+    private static final String DOWNGRADE_DESCRIPTION = "Diminue le statut du client";
 
     private static final Option ADD_OPTION = Option.builder().required(false).hasArg(true)
         .longOpt(CliOptions.ADD.getValue()).argName(ARGUMENT_CLIENT_NAME).desc(ADD_DESCRIPTION)
@@ -29,6 +30,11 @@ public class CliConfigurationTest {
     private static final Option UPGRADE_OPTION = Option.builder().required(false).hasArg(true)
             .longOpt(CliOptions.UPGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
             .desc(UPGRADE_DESCRIPTION)
+            .build();
+
+    private static final Option DOWNGRADE_OPTION = Option.builder().required(false).hasArg(true)
+            .longOpt(CliOptions.DOWNGRADE.getValue()).argName(ARGUMENT_CLIENT_NAME)
+            .desc(DOWNGRADE_DESCRIPTION)
             .build();
 
     private CliConfiguration testedClass;
@@ -81,6 +87,20 @@ public class CliConfigurationTest {
     }
 
     @Test
+    public void whenGettingOptions_thenOptionsMustContainsADowngradeOption() {
+
+        Options result = testedClass.options();
+
+        boolean optionFound = false;
+        for (Option option : result.getOptions()) {
+            if (option.equals(DOWNGRADE_OPTION)) {
+                optionFound = true;
+            }
+        }
+        assertTrue(optionFound);
+    }
+
+    @Test
     public void whenGettingOptions_thenOptionAddMustContainsAnArgWithTheClientName() {
 
         Options result = testedClass.options();
@@ -105,6 +125,15 @@ public class CliConfigurationTest {
 
         assertEquals(ARGUMENT_CLIENT_NAME,
                 result.getOption(CliOptions.UPGRADE.getValue()).getArgName());
+    }
+
+    @Test
+    public void whenGettingOptions_thenOptionDowngradeMustContainsAnArgWithTheClientName() {
+
+        Options result = testedClass.options();
+
+        assertEquals(ARGUMENT_CLIENT_NAME,
+                result.getOption(CliOptions.DOWNGRADE.getValue()).getArgName());
     }
 
     @Test

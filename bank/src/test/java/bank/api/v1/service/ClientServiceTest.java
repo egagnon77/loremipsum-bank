@@ -133,4 +133,26 @@ public class ClientServiceTest {
 
         assertEquals(client, result);
     }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAnInexistingClient_whenDowngradeStatus_thenANotFoundExceptionIsThrown() {
+
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
+
+        testedClass.downgradeStatus(A_NAME);
+
+
+    }
+
+    @Test
+    public void givenAClient_whenDowngradeStatus_thenAClientIsReturned() {
+
+        Client client = new Client(A_NAME);
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
+        when(clientRepository.save(client)).thenReturn(client);
+
+        Client result = testedClass.downgradeStatus(A_NAME);
+
+        assertEquals(client, result);
+    }
 }
