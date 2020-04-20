@@ -32,6 +32,7 @@ sonarcloud-check:
     - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
   only:
     - master
+    - merge_requests
 
 integration-tests:
   stage: test

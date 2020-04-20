@@ -16,26 +16,9 @@ https://www.oracle.com/java/technologies/javase-jdk8-downloads.html
 ### Docker and Docker compose
 https://docs.docker.com/install/
   
-## How to start the DB and Bank Server
-### Start the DB server (docker-compose)
+## How to start the Bank Server and DB
 ```bash
-sudo ./start-db.sh
-```
-> **Important:** Wait for the DB server to be up and running before launching the server
-
-#### How to create connection In MySQL2
-```yaml
-Hostname: 127.0.0.1     
-port: 3308
-username: root
-password: bankpassword (store in Keychain)
-Schema: bankBD
-```
-    
-
-### Start the Bank server
-```bash
-sudo ./start-server.sh
+sudo ./start-docker.sh
 ```
 > Bank server will run on: http://localhost:8081/api/bank/v1
 
