@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
 public class CliConfiguration {
 
     private static final String ARG_CLIENT_NAME = "CLIENT_NAME";
+    private static final String ARG_PRODUCT_ID = "PRODUCT_ID";
     private static final String LIST_DESCRIPTION = "Liste tous les produits du client";
     private static final String AVAILABLE_DESCRIPTION = "Liste tous les produits auquel le client a accès";
+    private static final String SUBSCRIBE_DESCRIPTION = "Souscrit à un produit";
 
     @Bean
     public Options options() {
@@ -21,6 +23,8 @@ public class CliConfiguration {
         options.addOption(Option.builder().longOpt(CliOptions.Status.getValue()).desc(LIST_DESCRIPTION).build());
 
         options.addOption(Option.builder().longOpt(CliOptions.Available.getValue()).desc(AVAILABLE_DESCRIPTION).build());
+        options.addOption(Option.builder().longOpt(CliOptions.Available.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build());
+
         return options;
     }
 

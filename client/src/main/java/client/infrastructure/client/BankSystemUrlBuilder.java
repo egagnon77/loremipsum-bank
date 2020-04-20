@@ -24,4 +24,8 @@ public class BankSystemUrlBuilder {
     public String buildGetAvailableProductsUrl(Client client) {
         return bankServerBaseUrl + "/client/" + client.getName() + "/products/available";
     }
+
+    public String buildSubscribeProductUrl(Client client, String productId ) {
+        return bankServerBaseUrl + "/client/" + client.getName() + "/products/" + productId + "/subscribe";
+    }
 }

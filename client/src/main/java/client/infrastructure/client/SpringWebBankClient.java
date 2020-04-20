@@ -51,4 +51,9 @@ public class SpringWebBankClient implements BankClient {
             throw new NotFoundException(e.getMessage());
         }
     }
+
+    @Override
+    public Product subscribeProduct(Client client, Integer productId) {
+        return null;
+    }
 }

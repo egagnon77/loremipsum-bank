@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 public class BankSystemUrlBuilderTest {
 
     private static final String A_CLIENT_NAME = "aClientName";
+    private static final String A_PRODUCT_ID = "aProductid/";
     private static final String A_BASE_URL = "aBaseUrl";
 
     private BankSystemUrlBuilder testedClass;
@@ -39,5 +40,18 @@ public class BankSystemUrlBuilderTest {
 
         assertEquals(A_BASE_URL + "/client/" + client.getName() + "/products/available", result);
     }
+
+    @Test
+    public void givenAClient_whenBuildSubscribeProductsUrl_thenUrlMustBeReturnedWithTheNameOfThisClientAndProductId() {
+
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+
+        String result = testedClass.buildSubscribeProductUrl(client, A_PRODUCT_ID);
+
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/products/" + A_PRODUCT_ID + "/subscribe", result);
+    }
+
+
 
 }

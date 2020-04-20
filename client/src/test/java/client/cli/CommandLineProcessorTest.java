@@ -25,6 +25,7 @@ public class CommandLineProcessorTest {
     private static final String A_CLIENT_NAME = "aClientName";
     private static final String A_PRODUCT_NAME = "aProductName";
     private static final String A_MESSAGE = "aMessage";
+    private static final Integer A_PRODUCT_ID = 1;
 
     @Mock
     private ClientFactory clientFactory;
@@ -90,6 +91,21 @@ public class CommandLineProcessorTest {
         when(clientService.getAvailableProducts(client)).thenThrow(new NotFoundException(A_MESSAGE));
 
         testedClass.process(commandLine);
+    }
+
+    @Test
+    public void givenACommandLineWithSubscribeOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.Subscribe.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+        when(clientService.subscribeProduct(client, A_PRODUCT_ID)).thenThrow(new NotFoundException(A_MESSAGE));
+
+        testedClass.process(commandLine);
+
+        verify(logger).error(A_MESSAGE);
     }
 
     private Product createProduct(Integer category, Integer id, String name) {

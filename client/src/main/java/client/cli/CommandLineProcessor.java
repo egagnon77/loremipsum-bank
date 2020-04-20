@@ -33,6 +33,8 @@ public class CommandLineProcessor {
             processStatusClient(commandLine);
         } else if (commandLine.hasOption(CliOptions.Available.getValue())) {
             processAvailableProducts(commandLine);
+        } else if ( commandLine.hasOption(CliOptions.Subscribe.getValue())) {
+            processSubscribe(commandLine);
         }
     }
 
@@ -46,5 +48,15 @@ public class CommandLineProcessor {
         Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
         client.setProducts(clientService.getAvailableProducts(client));
         logger.info(client.toString());
+    }
+
+    private void processSubscribe(CommandLine commandLine) {
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        String productId = commandLine.getOptionValue(CliOptions.Subscribe.getValue());
+        try {
+
+        } catch (NotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 }
