@@ -100,7 +100,7 @@ public class ClientServiceTest {
     public void givenAnExistingClientWithProducts_whenGetProducts_thenReturnList() {
         // Given
         Client client = new Client(A_NAME);
-        Product[] products = {new Product(1, "my product", 1, 0, 0)};
+        Product[] products = {new Product(1, "my product", 1, 0)};
         client.setProducts(Arrays.asList(products));
         when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
 
@@ -168,7 +168,7 @@ public class ClientServiceTest {
         client.setProductLevel(PRODUCT_LEVEL_NORMAL);
         when(clientRepository.findById(A_NAME)).thenReturn(Optional.of(client));
         List<Product> products = new ArrayList<>();
-        products.add(new Product(1, "my product", 1, 0, 0));
+        products.add(new Product(1, "my product", 1, 0));
         when(productRepository.findAll()).thenReturn(products);
 
         List<Product> result = testedClass.getAvailableProducts(A_NAME);
