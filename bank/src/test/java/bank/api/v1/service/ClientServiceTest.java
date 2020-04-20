@@ -10,6 +10,7 @@ import bank.domain.exception.AlreadyExistsException;
 import bank.domain.exception.NotFoundException;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
+import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
 import java.util.ArrayList;
@@ -32,12 +33,14 @@ public class ClientServiceTest {
     private ClientRepository clientRepository;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private ClientProductRepository clientProductRepository;
 
     private ClientService testedClass;
 
     @Before
     public void setup() {
-        testedClass = new ClientService(clientRepository, productRepository);
+        testedClass = new ClientService(clientRepository, productRepository, clientProductRepository);
     }
 
     @Test

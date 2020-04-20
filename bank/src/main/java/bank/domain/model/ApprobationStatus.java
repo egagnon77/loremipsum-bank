@@ -18,6 +18,19 @@ public enum ApprobationStatus {
         return value;
     }
 
+    public static ApprobationStatus fromInteger(int x) {
+        switch(x) {
+            case 0:
+                return SUBSCRIBED;
+            case 1:
+                return WAITING_FOR_SUBCRIPTION;
+            case 2:
+                return WAITING_FOR_DELETION;
+            default:
+                return NOT_SET;
+        }
+    }
+
     public static boolean isValid(Integer approbationStatus) {
         return Stream.of(ApprobationStatus.values())
             .anyMatch(e -> e.getValue().equals(approbationStatus));

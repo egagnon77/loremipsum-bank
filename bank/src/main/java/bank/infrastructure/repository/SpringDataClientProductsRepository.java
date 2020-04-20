@@ -1,5 +1,6 @@
 package bank.infrastructure.repository;
 
+import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.domain.repository.ClientProductRepository;
@@ -28,21 +29,34 @@ public class SpringDataClientProductsRepository implements ClientProductReposito
         this.productMapper = productMapper;
     }
 
-//    @Override
-//    public void save(Client client, Product product) {
+    @Override
+    public ApprobationStatus findById(Client client, Product product) {
 
-        //TODO : INSERT CODE
+        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys();
+        clientProductsPrimaryKeys.setClientDto(clientMapper.toDto(client));
+        clientProductsPrimaryKeys.setProductDto(productMapper.toDto(product));
 
-//        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys();
-//        clientProductsPrimaryKeys.setClientDto(clientMapper.toDto(client));
-//        clientProductsPrimaryKeys.setProductDto(productMapper.toDto(product));
-//
-//        Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository.findById(clientProductsPrimaryKeys);
-//
-//        if (clientProductsDto.isPresent()) {
-////            clientProductsDto.get().setApprobationStatus(product.getApprobationStatus());
-//            crudClientProductsRepository.save(clientProductsDto.get());
-//        }
+        Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository.findById(clientProductsPrimaryKeys);
 
-//    }
+        if (clientProductsDto.isPresent()) {
+            return ApprobationStatus.fromInteger(clientProductsDto.get().getApprobationStatus());
+        }
+
+        return null;
+    }
+
+    @Override
+    public void save(Client client, Product product, ApprobationStatus approbationStatus) {
+
+        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys();
+        clientProductsPrimaryKeys.setClientDto(clientMapper.toDto(client));
+        clientProductsPrimaryKeys.setProductDto(productMapper.toDto(product));
+
+        Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository.findById(clientProductsPrimaryKeys);
+
+        if (clientProductsDto.isPresent()) {
+            clientProductsDto.get().setApprobationStatus(approbationStatus.getValue());
+            crudClientProductsRepository.save(clientProductsDto.get());
+        }
+    }
 }

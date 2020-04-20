@@ -3,8 +3,10 @@ package bank.api.v1.service;
 import bank.api.v1.dto.CreateClient;
 import bank.domain.exception.AlreadyExistsException;
 import bank.domain.exception.NotFoundException;
+import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
+import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
 import java.util.Collections;
@@ -19,11 +21,14 @@ public class ClientService {
 
     private ClientRepository clientRepository;
     private ProductRepository productRepository;
+    private ClientProductRepository clientProductRepository;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository, ProductRepository productRepository) {
+    public ClientService(ClientRepository clientRepository, ProductRepository productRepository,
+                         ClientProductRepository clientProductRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
+        this.clientProductRepository = clientProductRepository;
     }
 
     public Client get(String id) {
@@ -86,5 +91,21 @@ public class ClientService {
         }
 
         throw new NotFoundException("Client not found.");
+    }
+
+    public void acceptManualProduct(String clientName, Integer productId) {
+
+        Optional<Client> client = clientRepository.findById(clientName);
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (client.isPresent() && product.isPresent()) {
+            ApprobationStatus approbationStatus = clientProductRepository.findById(client.get(), product.get());
+
+            if (ApprobationStatus.WAITING_FOR_SUBCRIPTION.equals(approbationStatus)) {
+                clientProductRepository.save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
+            }
+        } else {
+            throw new NotFoundException("Client and product not found.");
+        }
     }
 }

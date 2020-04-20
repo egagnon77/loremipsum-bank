@@ -12,7 +12,9 @@ INSERT INTO client VALUES ('NormalMenToDowngrade', 0);
 INSERT INTO client VALUES ('VIPMenToDowngrade', 1);
 INSERT INTO client VALUES ('NormalMenToList', 0);
 INSERT INTO client VALUES ('VIPMenToList', 1);
+INSERT INTO client VALUES ('MrWantAll', 1);
 
 INSERT INTO client_products (client_id, product_id, approbation_status) VALUES ('MiddleMen', 5, 0);
 INSERT INTO client_products (client_id, product_id, approbation_status) VALUES ('RichMen', 6 , 0);
 INSERT INTO client_products (client_id, product_id, approbation_status) VALUES ('RichMen', 7, 0);
+INSERT INTO client_products (client_id, product_id, approbation_status) VALUES ('MrWantAll', 8, 1);

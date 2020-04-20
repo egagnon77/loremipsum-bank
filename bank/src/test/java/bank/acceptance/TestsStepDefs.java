@@ -64,6 +64,12 @@ public class TestsStepDefs {
         response = request.when().get(CLIENT_URL + "/" + name + "/products/available");
     }
 
+    @When("I accept a manual product with id {int} of {word} client")
+    public void i_accept_product_of_a_client(Integer productId, String clientName) {
+        request = given();
+        response = request.when().patch(CLIENT_URL + "/" + clientName + "/product/" + productId + "/accept");
+    }
+
     @Then("the status code is {int}")
     public void verify_status_code(int statusCode) {
         validatableResponse = response.then().statusCode(statusCode);
