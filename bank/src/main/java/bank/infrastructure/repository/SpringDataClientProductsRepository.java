@@ -32,9 +32,7 @@ public class SpringDataClientProductsRepository implements ClientProductReposito
     @Override
     public ApprobationStatus findById(Client client, Product product) {
 
-        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys();
-        clientProductsPrimaryKeys.setClientDto(clientMapper.toDto(client));
-        clientProductsPrimaryKeys.setProductDto(productMapper.toDto(product));
+        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys(client.getName(),product.getId());
 
         Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository.findById(clientProductsPrimaryKeys);
 
@@ -48,9 +46,7 @@ public class SpringDataClientProductsRepository implements ClientProductReposito
     @Override
     public void save(Client client, Product product, ApprobationStatus approbationStatus) {
 
-        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys();
-        clientProductsPrimaryKeys.setClientDto(clientMapper.toDto(client));
-        clientProductsPrimaryKeys.setProductDto(productMapper.toDto(product));
+        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys(client.getName(),product.getId());
 
         Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository.findById(clientProductsPrimaryKeys);
 

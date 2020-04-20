@@ -7,15 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-//    public Product toProduct(ProductDto p) {
-//        Product product = null;
-//        if (p != null) {
-//            product = new Product(p.getId(), p.getName(), p.getProductType(), p.getProductLevel(),
-//                p.getApprobationStatus());
-//        }
-//        return product;
-//    }
-
     public Product toProduct(ProductDto p) {
         Product product = null;
         if (p != null) {

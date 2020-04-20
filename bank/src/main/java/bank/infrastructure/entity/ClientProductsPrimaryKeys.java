@@ -1,25 +1,57 @@
 package bank.infrastructure.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class ClientProductsPrimaryKeys implements Serializable {
 
-    private ClientDto client_id;
-    private ProductDto product_id;
+    @Column(name = "client_id")
+	private String clientId;
 
-	public ClientDto getClientDto() {
-		return client_id;
+    @Column(name = "product_id")
+    private Integer productId;
+
+	public ClientProductsPrimaryKeys() {
 	}
 
-	public void setClientDto(ClientDto clientDto) {
-		this.client_id = clientDto;
+	public ClientProductsPrimaryKeys(String clientId, Integer productId) {
+		this.clientId = clientId;
+		this.productId = productId;
 	}
 
-	public ProductDto getProductDto() {
-		return product_id;
+	public String getClientId() {
+		return clientId;
 	}
 
-	public void setProductDto(ProductDto productDto) {
-		this.product_id = productDto;
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		ClientProductsPrimaryKeys that = (ClientProductsPrimaryKeys) o;
+		return Objects.equals(clientId, that.clientId) &&
+			Objects.equals(productId, that.productId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(clientId, productId);
 	}
 }

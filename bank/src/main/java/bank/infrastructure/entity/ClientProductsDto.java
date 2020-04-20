@@ -1,23 +1,42 @@
 package bank.infrastructure.entity;
 
+import bank.domain.model.ApprobationStatus;
+import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "client_products")
-@IdClass(ClientProductsPrimaryKeys.class)
 public class ClientProductsDto {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    private ClientDto client_id;
+    @EmbeddedId
+    private ClientProductsPrimaryKeys id;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private ProductDto product_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("clientId")
+    private ClientDto clientDto;
 
-    private Integer approbationStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("productId")
+    private ProductDto productDto;
+
+    @Column(name = "approbation_status")
+    private Integer approbationStatus = ApprobationStatus.NOT_SET.getValue();
+
+    public ClientProductsDto() {}
+
+    public ClientProductsDto(ClientDto clientDto, ProductDto productDto) {
+        this.clientDto = clientDto;
+        this.productDto = productDto;
+        this.id = new ClientProductsPrimaryKeys(clientDto.getId(), productDto.getId());
+    }
+
+    public ClientDto getClientDto() {
+        return clientDto;
+    }
+
+    public ProductDto getProductDto() {
+        return productDto;
+    }
 
     public Integer getApprobationStatus() {
         return approbationStatus;
@@ -27,19 +46,20 @@ public class ClientProductsDto {
         this.approbationStatus = approbationStatus;
     }
 
-    public ClientDto getClient_id() {
-        return client_id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ClientProductsDto that = (ClientProductsDto) o;
+        return Objects.equals(clientDto, that.clientDto) &&
+            Objects.equals(productDto, that.productDto);
     }
 
-    public void setClient_id(ClientDto client_id) {
-        this.client_id = client_id;
-    }
-
-    public ProductDto getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(ProductDto product_id) {
-        this.product_id = product_id;
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientDto, productDto);
     }
 }
