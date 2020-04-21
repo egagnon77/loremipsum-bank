@@ -1,8 +1,5 @@
 package employee.cli;
 
-import employee.cli.exception.CommandLineException;
-import employee.domain.exception.DataSourceBadResponseException;
-import employee.domain.exception.NotFoundException;
 import employee.domain.factory.ClientFactory;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
@@ -45,7 +42,13 @@ public class CommandLineProcessor {
             processUpgradeClient(commandLine.getOptionValue(CliOptions.UPGRADE.getValue()));
         } else if (commandLine.hasOption(CliOptions.DOWNGRADE.getValue())) {
             processDowngradeClient(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue()));
+        } else if (commandLine.hasOption(CliOptions.ACCEPT.getValue()) && commandLine.hasOption(CliOptions.CLIENT.getValue())) {
+            processAcceptProduct(commandLine.getOptionValue(CliOptions.ACCEPT.getValue()), commandLine.getOptionValue(CliOptions.CLIENT.getValue()));
         }
+    }
+
+    private void processAcceptProduct(String productId, String clientName) {
+        employeeService.acceptProduct(Integer.valueOf(productId), clientName);
     }
 
     private void processUpgradeClient(String clientName) {

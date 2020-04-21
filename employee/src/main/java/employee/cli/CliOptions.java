@@ -4,7 +4,9 @@ public enum CliOptions {
     ADD("add"),
     LIST("list"),
     UPGRADE("upgrade"),
-    DOWNGRADE("downgrade");
+    DOWNGRADE("downgrade"),
+    ACCEPT("accept"),
+    CLIENT("client");
 
     private String value;
 

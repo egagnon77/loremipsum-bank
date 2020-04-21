@@ -8,6 +8,8 @@ import bank.infrastructure.entity.ProductDto;
 import bank.infrastructure.mapper.ProductMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SpringDataProductRepositoryTest {
+
+    private static final Integer A_PRODUCT_ID = 88;
 
     @Mock
     private CrudProductRepository crudProductRepository;
@@ -45,6 +49,30 @@ public class SpringDataProductRepositoryTest {
 
         assertEquals(product, results.get(0));
 
+    }
+
+    @Test
+    public void ifProductDontExistInDatabase_whenFindById_thenNoProductIsReturned() {
+
+        when(crudProductRepository.findById(A_PRODUCT_ID)).thenReturn(Optional.empty());
+
+        Optional<Product> result = testedClass.findById(A_PRODUCT_ID);
+
+        assertEquals(Optional.empty(), result);
+    }
+
+    @Test
+    public void whenFindById_thenAProductIsReturned() {
+
+        ProductDto productDto = new ProductDto();
+        Optional<ProductDto> optionalProductDto = Optional.of(productDto);
+        when(crudProductRepository.findById(A_PRODUCT_ID)).thenReturn(optionalProductDto);
+        Product product = new Product();
+        when(productMapper.toProduct(productDto)).thenReturn(product);
+
+        Optional<Product> result = testedClass.findById(A_PRODUCT_ID);
+
+        assertEquals(product, result.get());
     }
 
 }

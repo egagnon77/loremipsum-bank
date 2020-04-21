@@ -5,8 +5,6 @@ import java.util.List;
 
 import java.util.Objects;
 import javax.persistence.*;
-import org.springframework.context.annotation.Primary;
-
 
 @Entity
 @Table(name = "client")
@@ -33,11 +31,6 @@ public class ClientDto {
     public void setId(String id) {
         this.id = id;
     }
-
-//    public List<ProductDto> getProducts() {
-//        return clientProductsDtos ;
-//    }
-
 
     public List<ClientProductsDto> getClientProductsDtos() {
         return clientProductsDtos;

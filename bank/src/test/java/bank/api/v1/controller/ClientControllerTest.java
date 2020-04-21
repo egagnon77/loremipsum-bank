@@ -16,6 +16,7 @@ import org.springframework.web.util.HtmlUtils;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class ClientControllerTest {
 
     private static final String A_CLIENT_NAME = "aClientName";
+    private static final Integer A_PRODUCT_ID = 8;
 
     @Mock
     private ClientService clientService;
@@ -118,6 +120,36 @@ public class ClientControllerTest {
         when(clientService.downgradeStatus(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(client);
 
         ResponseEntity<Client> result = testedClass.downgradeStatus(A_CLIENT_NAME);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void givenAClientName_whenGetAvailableProducts_thenAListOfProductIsReturned() {
+
+        List<Product> products = new ArrayList<>();
+        when(clientService.getAvailableProducts(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(products);
+
+        ResponseEntity<List<Product>> result = testedClass.getAvailableProducts(A_CLIENT_NAME);
+
+        assertEquals(products, result.getBody());
+    }
+
+    @Test
+    public void givenAClientName_whenGetAvailableProducts_thenResponseHttpStatusIsOk() {
+
+        List<Product> products = new ArrayList<>();
+        when(clientService.getAvailableProducts(HtmlUtils.htmlEscape(A_CLIENT_NAME))).thenReturn(products);
+
+        ResponseEntity<List<Product>> result = testedClass.getAvailableProducts(A_CLIENT_NAME);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    public void givenAClientNameAndAProductId_whenAcceptManualProduct_thenResponseHttpStatusIsOk() {
+
+        ResponseEntity<Void> result = testedClass.acceptManualProduct(A_CLIENT_NAME, A_PRODUCT_ID);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }

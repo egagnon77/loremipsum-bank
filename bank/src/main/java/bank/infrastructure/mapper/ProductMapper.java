@@ -14,16 +14,4 @@ public class ProductMapper {
         }
         return product;
     }
-
-    public ProductDto toDto(Product product) {
-
-        ProductDto productDto = new ProductDto();
-
-        productDto.setProductType(product.getProductType());
-        productDto.setProductLevel(product.getProductLevel());
-        productDto.setName(product.getName());
-        productDto.setId(product.getId());
-
-        return productDto;
-    }
 }

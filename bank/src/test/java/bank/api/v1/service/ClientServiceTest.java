@@ -3,11 +3,12 @@ package bank.api.v1.service;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import bank.api.v1.dto.CreateClient;
 import bank.domain.exception.AlreadyExistsException;
 import bank.domain.exception.NotFoundException;
+import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.domain.repository.ClientProductRepository;
@@ -27,6 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ClientServiceTest {
 
     private static final String A_NAME = "aName";
+    private static final Integer A_PRODUCT_ID = 88;
     private static final Integer PRODUCT_LEVEL_NORMAL = 0;
 
     @Mock
@@ -176,5 +178,53 @@ public class ClientServiceTest {
 
         List<Product> result = testedClass.getAvailableProducts(A_NAME);
         assertArrayEquals(result.toArray(), products.toArray());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAClientThatDoNotExistInClientRepository_whenAcceptManualProduct_thenANotFoundExceptionIsThrown() {
+
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
+        Optional<Product> product = Optional.of(new Product());
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+
+        testedClass.acceptManualProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAProductThatDoNotExistInProductRepository_whenAcceptManualProduct_thenANotFoundExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(Optional.empty());
+
+        testedClass.acceptManualProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test
+    public void ifAnApprobationStatusIsNotWaitingForSubscription_whenAcceptManualProduct_thenNothingIsSavedToClientProductRepository() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get())).thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.acceptManualProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(0)).save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
+    }
+
+    @Test
+    public void ifAnApprobationStatusHasAWaitingForSubscription_whenAcceptManualProduct_thenThisClientProductIsSavedToSubscribedInClientProductRepository() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get())).thenReturn(ApprobationStatus.WAITING_FOR_SUBCRIPTION);
+
+        testedClass.acceptManualProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
     }
 }

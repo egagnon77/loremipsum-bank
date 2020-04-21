@@ -7,14 +7,15 @@ import static org.mockito.Mockito.when;
 
 import employee.cli.exception.CommandLineException;
 import employee.domain.exception.DataSourceBadResponseException;
-import employee.domain.exception.NotFoundException;
 import employee.domain.factory.ClientFactory;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
 import employee.domain.model.Product;
 import employee.domain.service.EmployeeService;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +30,7 @@ public class CommandLineProcessorTest {
 
     private static final String A_CLIENT_NAME = "aClientName";
     private static final String A_PRODUCT_NAME = "aProductName";
+    private static final Integer A_PRODUCT_ID = 88;
     private static final String THE_COMPLETED_MESSAGE = "Add Client '{}' Completed.";
     private static final String AN_EXCEPTION_MESSAGE = "myExceptionMessage";
 
@@ -193,9 +195,22 @@ public class CommandLineProcessorTest {
     @Test(expected = CommandLineException.class)
     public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldNotCatchException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator)
-            .process(commandLine);
+        doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator).process(commandLine);
         testedClass.process(commandLine);
+    }
+
+    @Test
+    public void givenACommandLineWithAcceptOptionAndClientName_thenAcceptProductMustBeInvoked() {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.ACCEPT.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptions.CLIENT.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.ACCEPT.getValue())).thenReturn(A_PRODUCT_ID.toString());
+        when(commandLine.getOptionValue(CliOptions.CLIENT.getValue())).thenReturn(A_CLIENT_NAME);
+
+        testedClass.process(commandLine);
+
+        verify(employeeService).acceptProduct(A_PRODUCT_ID, A_CLIENT_NAME);
     }
 
     private Product createProduct(Integer category, Integer id, String name) {

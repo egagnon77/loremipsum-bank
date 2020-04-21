@@ -6,8 +6,6 @@ import bank.domain.model.Product;
 import bank.domain.repository.ClientProductRepository;
 import bank.infrastructure.entity.ClientProductsDto;
 import bank.infrastructure.entity.ClientProductsPrimaryKeys;
-import bank.infrastructure.mapper.ClientMapper;
-import bank.infrastructure.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +15,10 @@ import java.util.Optional;
 public class SpringDataClientProductsRepository implements ClientProductRepository {
 
     private final CrudClientProductsRepository crudClientProductsRepository;
-    private final ClientMapper clientMapper;
-    private final ProductMapper productMapper;
 
     @Autowired
-    public SpringDataClientProductsRepository(CrudClientProductsRepository crudClientProductsRepository,
-                                              ClientMapper clientMapper,
-                                              ProductMapper productMapper) {
+    public SpringDataClientProductsRepository(CrudClientProductsRepository crudClientProductsRepository) {
         this.crudClientProductsRepository = crudClientProductsRepository;
-        this.clientMapper = clientMapper;
-        this.productMapper = productMapper;
     }
 
     @Override

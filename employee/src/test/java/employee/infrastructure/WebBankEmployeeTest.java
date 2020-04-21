@@ -1,6 +1,7 @@
 package employee.infrastructure;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import employee.domain.exception.DataSourceBadResponseException;
@@ -16,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class WebBankEmployeeTest {
 
   private static final String A_NAME = "aName";
+  private static final Integer AN_ID = 88;
 
   @Mock
   private ResponseBuilder responseBuilder;
@@ -64,6 +66,13 @@ public class WebBankEmployeeTest {
     when(responseBuilder.downgradeClient(any(Client.class))).thenThrow(Exception.class);
 
     testedClass.downgradeClient(client);
+  }
+
+  @Test(expected = DataSourceBadResponseException.class)
+  public void whenAcceptProductFail_thenADataSourceBadResponseExceptionIsThrown() {
+    doThrow(Exception.class).when(responseBuilder).acceptProduct(AN_ID, A_NAME);
+
+    testedClass.acceptProduct(AN_ID, A_NAME);
   }
 
 }

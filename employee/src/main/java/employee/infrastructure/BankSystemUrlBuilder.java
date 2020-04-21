@@ -32,4 +32,8 @@ public class BankSystemUrlBuilder {
     public String buildDowngradeClientUrl(Client client) {
         return bankServerBaseUrl + "/client/" + client.getName() + "/status/downgrade";
     }
+
+    public String buildAcceptProductUrl(Integer productId, String clientName) {
+        return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/accept";
+    }
 }
