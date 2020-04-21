@@ -1,47 +1,42 @@
 package bank.infrastructure.entity;
 
+import bank.domain.model.ApprobationStatus;
+import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "client_products")
 public class ClientProductsDto {
-    @Id
-    @GeneratedValue
-    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    private ClientDto client;
+    @EmbeddedId
+    private ClientProductsPrimaryKeys id;
 
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private ProductDto product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("clientId")
+    private ClientDto clientDto;
 
-    private Integer approbationStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("productId")
+    private ProductDto productDto;
 
-    public Integer getId() {
-        return id;
+    @Column(name = "approbation_status")
+    private Integer approbationStatus = ApprobationStatus.NOT_SET.getValue();
+
+    public ClientProductsDto() {}
+
+    public ClientProductsDto(ClientDto clientDto, ProductDto productDto) {
+        this.clientDto = clientDto;
+        this.productDto = productDto;
+        this.id = new ClientProductsPrimaryKeys(clientDto.getId(), productDto.getId());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public ClientDto getClientDto() {
+        return clientDto;
     }
 
-	public ClientDto getClient() {
-		return client;
-	}
-
-	public void setClient(ClientDto client) {
-		this.client = client;
-	}
-
-	public ProductDto getProduct() {
-		return product;
-	}
-
-	public void setProduct(ProductDto product) {
-		this.product = product;
-	}
+    public ProductDto getProductDto() {
+        return productDto;
+    }
 
     public Integer getApprobationStatus() {
         return approbationStatus;
@@ -49,5 +44,22 @@ public class ClientProductsDto {
 
     public void setApprobationStatus(Integer approbationStatus) {
         this.approbationStatus = approbationStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ClientProductsDto that = (ClientProductsDto) o;
+        return Objects.equals(clientDto, that.clientDto) &&
+            Objects.equals(productDto, that.productDto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientDto, productDto);
     }
 }

@@ -10,13 +10,11 @@ public class Product {
     private String name;
     private Integer productType;
     private Integer productLevel;
-    private Integer approbationStatus;
 
     public Product() {
-
     }
 
-    public Product(int id, String name, int productType, int productLevel, int approbationStatus) {
+    public Product(int id, String name, int productType, int productLevel) {
         if (StringUtils.isNotBlank(name)) {
             this.name = name;
         } else {
@@ -32,8 +30,6 @@ public class Product {
         } else {
             throw new InvalidArgumentException("Invalid product level.");
         }
-        validateApprobationStatus(approbationStatus, productType);
-        this.setApprobationStatus(approbationStatus);
 
         this.id = id;
     }
@@ -52,29 +48,5 @@ public class Product {
 
     public Integer getProductLevel() {
         return productLevel;
-    }
-
-    public Integer getApprobationStatus() {
-        return approbationStatus;
-    }
-
-    public void setApprobationStatus(Integer approbationStatus) {
-        validateApprobationStatus(approbationStatus, this.productType);
-        this.approbationStatus = approbationStatus;
-    }
-
-    private void validateApprobationStatus(Integer approbationStatus, Integer productType) {
-        if (ApprobationStatus.isValid(approbationStatus)) {
-            if (!approbationStatus.equals(ApprobationStatus.NOT_SET.getValue())) {
-                if (productType.equals(ProductType.AUTOMATIC.getValue())
-                    && (!approbationStatus.equals(ApprobationStatus.SUBSCRIBED.getValue()))) {
-                    throw new InvalidArgumentException(
-                        "A Product of type 'Automatic' cannot have an approbation Status other than 'Subscribed'");
-                }
-            }
-        } else {
-            throw new InvalidArgumentException("Invalid approbation.");
-        }
-
     }
 }

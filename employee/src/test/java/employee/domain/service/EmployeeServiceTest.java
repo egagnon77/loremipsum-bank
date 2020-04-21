@@ -59,4 +59,15 @@ public class EmployeeServiceTest {
 
         verify(bankEmployee, times(1)).downgradeClient(client);
     }
+
+    @Test
+    public void givenAProductIdAndAClientName_whenAcceptProduct_thenWeShouldCallBankEmployee() {
+
+        Integer aProductId = 88;
+        String aClientName = "aClientName";
+
+        testedClass.acceptProduct(aProductId, aClientName);
+
+        verify(bankEmployee, times(1)).acceptProduct(aProductId, aClientName);
+    }
 }

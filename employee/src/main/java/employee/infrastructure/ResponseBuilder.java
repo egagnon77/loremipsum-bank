@@ -63,4 +63,9 @@ public class ResponseBuilder {
             .retrieve()
             .bodyToMono(Client.class);
     }
+
+    public void acceptProduct(Integer productId, String clientName) {
+        String acceptProductUrl = bankSystemUrlBuilder.buildAcceptProductUrl(productId, clientName);
+        webClient.patch().uri(acceptProductUrl).retrieve().toBodilessEntity().block();
+    }
 }

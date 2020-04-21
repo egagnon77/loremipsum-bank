@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CommandLineValidatorTest {
 
     private static String NO_OPTION_DETECTED_MESSAGE = "No option detected in the command line.";
-    private static String MORE_THAN_ONE_OPTION_MESSAGE = "More than two options detected in the command line.";
+    private static String MORE_THAN_TWO_OPTION_MESSAGE = "More than two options detected in the command line.";
 
     @Mock
     private CommandLineValidator testedClass;
@@ -29,14 +29,15 @@ public class CommandLineValidatorTest {
     }
 
     @Test
-    public void givenACommandLineWithTwoOptionSThenACommandLineExceptionShouldArise() {
+    public void givenACommandLineWithThreeOptionsThenACommandLineExceptionShouldArise() {
         Option optionA = new Option("OptionA", "Description");
         Option optionB = new Option("OptionB", "Description");
+        Option optionC = new Option("OptionC", "Description");
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.getOptions()).thenReturn(new Option[]{optionA, optionB});
+        when(commandLine.getOptions()).thenReturn(new Option[]{optionA, optionB, optionC});
 
-        Assert.assertThrows(MORE_THAN_ONE_OPTION_MESSAGE, CommandLineException.class, () -> {
+        Assert.assertThrows(MORE_THAN_TWO_OPTION_MESSAGE, CommandLineException.class, () -> {
             testedClass.process(commandLine);
         });
 

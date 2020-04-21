@@ -33,9 +33,7 @@ public class ClientMapper {
         Client client = new Client(clientDto.getId());
 
         List<Product> products = new ArrayList<>();
-        for(ProductDto product : clientDto.getProducts()){
-            products.add(productMapper.toProduct(product));
-        }        
+        clientDto.getClientProductsDtos().forEach(el -> products.add(productMapper.toProduct(el.getProductDto())));
 
         client.setProducts(products);
         client.setProductLevel(clientDto.getProductLevel());

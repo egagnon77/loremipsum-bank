@@ -1,7 +1,7 @@
 package employee.infrastructure;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,10 +22,12 @@ import reactor.core.publisher.Mono;
 public class ResponseBuilderTest {
 
     private static final String A_NAME = "aName";
+    private static final Integer AN_ID = 88;
     private static final String AN_ADD_CLIENT_URL = "anAddClientUrl";
     private static final String A_LIST_PRODUCT_URL = "aListProductUrl";
     private static final String A_UPGRADE_CLIENT_URL = "aUpgradeClientUrl";
     private static final String A_DOWNGRADE_CLIENT_URL = "aDowngradeClientUrl";
+    private static final String AN_ACCEPT_PRODUCT_URL = "anAcceptProductUrl";
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -45,6 +48,8 @@ public class ResponseBuilderTest {
 
     @Mock
     private WebClient.ResponseSpec response;
+    @Mock
+    private Mono<ResponseEntity<Void>> voidResponseEntity;
 
     private AddClient addClient;
     private Client client;
@@ -130,5 +135,24 @@ public class ResponseBuilderTest {
 
         assertEquals(expected, result);
 
+    }
+
+    @Test
+    public void givenAnIdAndAName_whenAcceptProduct_thenWebClientIsInvoked() {
+
+        when(bankSystemUrlBuilder.buildAcceptProductUrl(AN_ID, A_NAME)).thenReturn(AN_ACCEPT_PRODUCT_URL);
+        when(webClient.patch()).thenReturn(requestBodyUri);
+        when(requestBodyUri.uri(AN_ACCEPT_PRODUCT_URL)).thenReturn(requestBody);
+        when(requestBody.retrieve()).thenReturn(response);
+        when(response.toBodilessEntity()).thenReturn(voidResponseEntity);
+        when(voidResponseEntity.block()).thenReturn(null);
+
+        testedClass.acceptProduct(AN_ID, A_NAME);
+
+        verify(webClient).patch();
+        verify(requestBodyUri).uri(AN_ACCEPT_PRODUCT_URL);
+        verify(requestBody).retrieve();
+        verify(response).toBodilessEntity();
+        verify(voidResponseEntity).block();
     }
 }

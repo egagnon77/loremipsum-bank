@@ -1,7 +1,5 @@
 package bank.domain.model;
 
-import java.util.stream.Stream;
-
 public enum ApprobationStatus {
     NOT_SET(-1),
     SUBSCRIBED(0),
@@ -18,8 +16,16 @@ public enum ApprobationStatus {
         return value;
     }
 
-    public static boolean isValid(Integer approbationStatus) {
-        return Stream.of(ApprobationStatus.values())
-            .anyMatch(e -> e.getValue().equals(approbationStatus));
+    public static ApprobationStatus fromInteger(int x) {
+        switch(x) {
+            case 0:
+                return SUBSCRIBED;
+            case 1:
+                return WAITING_FOR_SUBCRIPTION;
+            case 2:
+                return WAITING_FOR_DELETION;
+            default:
+                return NOT_SET;
+        }
     }
 }

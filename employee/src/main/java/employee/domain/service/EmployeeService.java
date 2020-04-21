@@ -31,4 +31,8 @@ public class EmployeeService {
     public Client downgradeClient(Client client) {
         return bankEmployee.downgradeClient(client);
     }
+
+    public void acceptProduct(Integer productId, String clientName) {
+        bankEmployee.acceptProduct(productId, clientName);
+    }
 }

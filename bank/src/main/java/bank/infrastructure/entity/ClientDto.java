@@ -3,24 +3,25 @@ package bank.infrastructure.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Objects;
 import javax.persistence.*;
-
 
 @Entity
 @Table(name = "client")
 public class ClientDto {
 
     @Id
+    @Column(name = "client_id")
     private String id;
 
-    @OneToMany
-    @JoinTable(
-        name="client_products",
-    	joinColumns=@JoinColumn(name="client_id"),
-        inverseJoinColumns=@JoinColumn(name="product_id")
+    @OneToMany(
+        mappedBy = "clientDto",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
-    private List<ProductDto> products = new ArrayList<>();
+    private List<ClientProductsDto> clientProductsDtos = new ArrayList<>();
 
+    @Column(name = "product_Level")
     private Integer productLevel;
 
     public String getId() {
@@ -31,8 +32,8 @@ public class ClientDto {
         this.id = id;
     }
 
-    public List<ProductDto> getProducts() {
-        return products;
+    public List<ClientProductsDto> getClientProductsDtos() {
+        return clientProductsDtos;
     }
 
     public Integer getProductLevel() {
@@ -41,5 +42,18 @@ public class ClientDto {
 
     public void setProductLevel(Integer productLevel) {
         this.productLevel = productLevel;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClientDto clientDto = (ClientDto) o;
+        return Objects.equals(id, clientDto.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

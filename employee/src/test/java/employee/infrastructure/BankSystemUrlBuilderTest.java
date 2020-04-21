@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.omg.CORBA.PRIVATE_MEMBER;
+import sun.util.resources.cldr.ln.CalendarData_ln_CD;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BankSystemUrlBuilderTest {
@@ -18,6 +19,7 @@ public class BankSystemUrlBuilderTest {
     private static final String PRODUCTS_URL = "/products";
 
     private static final String A_CLIENT_NAME = "aClientName";
+    private static final Integer A_PRODUCT_ID = 88;
 
 
     @Before
@@ -60,5 +62,12 @@ public class BankSystemUrlBuilderTest {
         String result = testedClass.buildDowngradeClientUrl(client);
 
         assertEquals(A_BASE_URL + "/client/" + client.getName() + "/status/downgrade", result);
+    }
+
+    @Test
+    public void buildAcceptProductUrl() {
+        String result = testedClass.buildAcceptProductUrl(A_PRODUCT_ID, A_CLIENT_NAME);
+
+        assertEquals(A_BASE_URL + "/client/" + A_CLIENT_NAME + "/product/" + A_PRODUCT_ID + "/accept", result);
     }
 }
