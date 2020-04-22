@@ -81,6 +81,12 @@ public class TestsStepDefs {
         response = request.when().patch(CLIENT_URL + "/" + clientName + "/product/" + productId + "/reject");
     }
 
+    @When("I list all clients waiting for a product approbation")
+    public void i_list_all_clients_waiting_for_a_product_approbation() {
+        request = given();
+        response = request.when().get(CLIENT_URL + "s/products/waitingapprobation");
+    }
+
     @Then("the status code is {int}")
     public void verify_status_code(int statusCode) {
         validatableResponse = response.then().statusCode(statusCode);
@@ -97,6 +103,12 @@ public class TestsStepDefs {
     public void response_contains_products(int numberOfProducts) {
         List<Product> products = Arrays.asList(response.as(Product[].class));
         Assert.assertEquals(numberOfProducts, products.size());
+    }
+
+    @And("response contains {int} clients")
+    public void response_contains_clients(int numberOfClients) {
+        List<Client> clients = Arrays.asList(response.as(Client[].class));
+        Assert.assertEquals(numberOfClients, clients.size());
     }
 
     @And("(.*) status is (.*)")

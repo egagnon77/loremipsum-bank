@@ -18,4 +18,6 @@ public interface BankEmployee {
     void acceptProduct(Integer productId, String clientName);
 
     void rejectProduct(Integer productId, String clientName);
+
+    List<Client> task();
 }

@@ -29,6 +29,7 @@ public class ResponseBuilderTest {
     private static final String A_DOWNGRADE_CLIENT_URL = "aDowngradeClientUrl";
     private static final String AN_ACCEPT_PRODUCT_URL = "anAcceptProductUrl";
     private static final String A_REJECT_PRODUCT_URL = "aRejectProductUrl";
+    private static final String A_TASK_URL = "aTaskUrl";
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -174,5 +175,21 @@ public class ResponseBuilderTest {
         verify(requestBody).retrieve();
         verify(response).toBodilessEntity();
         verify(voidResponseEntity).block();
+    }
+
+    @Test
+    public void whenTask_thenAMonoArrayOfClientIsReturned() {
+
+        Client[] clients = new Client[]{};
+
+        when(bankSystemUrlBuilder.buildGetTaskUrl()).thenReturn(A_TASK_URL);
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(A_TASK_URL)).thenReturn(requestBody);
+        when(requestBody.retrieve()).thenReturn(response);
+        when(response.bodyToMono(Client[].class)).thenReturn(Mono.just(clients));
+
+        Mono<Client[]> result = testedClass.task();
+
+        assertEquals(clients, result.block());
     }
 }

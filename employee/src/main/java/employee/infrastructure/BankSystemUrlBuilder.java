@@ -40,4 +40,8 @@ public class BankSystemUrlBuilder {
     public String buildRejectProductUrl(Integer productId, String clientName) {
         return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/reject";
     }
+
+    public String buildGetTaskUrl() {
+        return bankServerBaseUrl + "/clients/products/waitingapprobation";
+    }
 }

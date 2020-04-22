@@ -41,4 +41,8 @@ public class EmployeeService {
     public void rejectProduct(Integer productId, String clientName) {
         bankEmployee.rejectProduct(productId, clientName);
     }
+
+    public List<Client> task() {
+        return bankEmployee.task();
+    }
 }

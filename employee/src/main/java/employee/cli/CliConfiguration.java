@@ -18,6 +18,7 @@ public class CliConfiguration {
     private static final String DOWNGRADE_DESCRIPTION = "Diminue le statut du client";
     private static final String ACCEPT_DESCRIPTION = "Accepter la mise en place du produit";
     private static final String REJECT_DESCRIPTION = "Rejeter la mise en place du produit";
+    private static final String TASKS_DESCRIPTION = "Liste les clients avec des produits en attente de validation";
     private static final String CLIENT_DESCRIPTION = "Le nom du client";
 
     @Bean
@@ -57,6 +58,11 @@ public class CliConfiguration {
         options.addOption(Option.builder().required(false).hasArg(true)
                 .longOpt(CliOptions.CLIENT.getValue()).argName(ARGUMENT_CLIENT_NAME)
                 .desc(CLIENT_DESCRIPTION)
+                .build());
+
+        options.addOption(Option.builder().required(false).hasArg(false)
+                .longOpt(CliOptions.TASKS.getValue())
+                .desc(TASKS_DESCRIPTION)
                 .build());
 
         return options;

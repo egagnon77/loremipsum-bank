@@ -16,6 +16,8 @@ INSERT INTO client VALUES ('MrWantAll', 1);
 INSERT INTO client VALUES ('MrsNormalWantAProduct', 0);
 INSERT INTO client VALUES ('MrsVipWantAProduct', 1);
 INSERT INTO client VALUES ('MrWantNothing', 0);
+INSERT INTO client VALUES ('ClientWaitingForProductAccept', 1);
+INSERT INTO client VALUES ('ClientWaitingForProductReject', 0);
 
 INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('MiddleMen', 5, 0);
 INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('RichMen', 6 , 0);
@@ -23,3 +25,5 @@ INSERT INTO client_products (clientDto_client_id, productDto_product_id, approba
 INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('MrWantAll', 8, 1);
 INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('MrsVipWantAProduct', 8, 1);
 INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('MrWantNothing', 8, 2);
+INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('ClientWaitingForProductAccept', 8, 1);
+INSERT INTO client_products (clientDto_client_id, productDto_product_id, approbation_status) VALUES ('ClientWaitingForProductReject', 8, 2);

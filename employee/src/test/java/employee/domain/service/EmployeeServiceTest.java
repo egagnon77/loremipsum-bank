@@ -81,4 +81,12 @@ public class EmployeeServiceTest {
 
         verify(bankEmployee, times(1)).rejectProduct(aProductId, aClientName);
     }
+
+    @Test
+    public void whenTask_thenWeShouldCallBankEmployee() {
+
+        testedClass.task();
+
+        verify(bankEmployee, times(1)).task();
+    }
 }

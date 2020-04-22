@@ -11,6 +11,8 @@ import bank.domain.model.ProductType;
 import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -147,5 +149,24 @@ public class ClientService {
         } else {
             throw new NotFoundException("Client and product not found.");
         }
+    }
+
+    public List<Client> findClientsWaitingProductApprobation() {
+
+        List<Client> waitingForProductApprobations = new ArrayList<>();
+
+        for (Client client : clientRepository.findAll()) {
+            for (Product product : client.getProducts()) {
+
+                ApprobationStatus approbationStatus = clientProductRepository.findById(client, product);
+
+                if ((ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus) || ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus))
+                        && !waitingForProductApprobations.contains(client)) {
+                    waitingForProductApprobations.add(client);
+                }
+            }
+        }
+
+        return waitingForProductApprobations;
     }
 }

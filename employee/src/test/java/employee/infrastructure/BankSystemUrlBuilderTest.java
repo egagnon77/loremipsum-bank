@@ -77,4 +77,11 @@ public class BankSystemUrlBuilderTest {
 
         assertEquals(A_BASE_URL + "/client/" + A_CLIENT_NAME + "/product/" + A_PRODUCT_ID + "/reject", result);
     }
+
+    @Test
+    public void buildTaskUrl() {
+        String result = testedClass.buildGetTaskUrl();
+
+        assertEquals(A_BASE_URL + "/clients/products/waitingapprobation", result);
+    }
 }

@@ -71,4 +71,9 @@ public class ClientController {
         clientService.rejectManualProduct(HtmlUtils.htmlEscape(clientName), productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(value = "/clients/products/waitingapprobation")
+    public ResponseEntity<List<Client>> findClientsWaitingProductApprobation() {
+        return new ResponseEntity<>(clientService.findClientsWaitingProductApprobation(), HttpStatus.OK);
+    }
 }

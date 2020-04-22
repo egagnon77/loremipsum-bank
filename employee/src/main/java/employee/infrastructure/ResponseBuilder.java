@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
 public class ResponseBuilder {
 
@@ -72,5 +74,14 @@ public class ResponseBuilder {
     public void rejectProduct(Integer productId, String clientName) {
         String rejectProductUrl = bankSystemUrlBuilder.buildRejectProductUrl(productId, clientName);
         webClient.patch().uri(rejectProductUrl).retrieve().toBodilessEntity().block();
+    }
+
+    public Mono<Client[]> task() {
+        String getTaskUrl = bankSystemUrlBuilder.buildGetTaskUrl();
+
+        return webClient.get()
+                .uri(getTaskUrl)
+                .retrieve()
+                .bodyToMono(Client[].class);
     }
 }

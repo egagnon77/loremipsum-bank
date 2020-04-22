@@ -6,6 +6,8 @@ import employee.domain.employee.BankEmployee;
 import employee.domain.model.AddClient;
 import employee.domain.model.Client;
 import employee.domain.model.Product;
+
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -83,6 +85,16 @@ public class WebBankEmployee implements BankEmployee {
     public void rejectProduct(Integer productId, String clientName) {
         try {
             responseBuilder.rejectProduct(productId, clientName);
+        } catch (Exception e) {
+            throw new DataSourceBadResponseException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Client> task() {
+        try {
+            Mono<Client[]> mono = responseBuilder.task();
+            return Arrays.asList(mono.block());
         } catch (Exception e) {
             throw new DataSourceBadResponseException(e.getMessage());
         }

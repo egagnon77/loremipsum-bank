@@ -7,6 +7,8 @@ import bank.infrastructure.mapper.ClientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -19,6 +21,18 @@ public class SpringDataClientRepository implements ClientRepository {
     public SpringDataClientRepository(CrudClientRepository crudClientRepository, ClientMapper clientMapper) {
         this.crudClientRepository = crudClientRepository;
         this.clientMapper = clientMapper;
+    }
+
+    @Override
+    public List<Client> findAll() {
+
+        List<Client> clients = new ArrayList<>();
+
+        for (ClientDto clientDto : crudClientRepository.findAll()) {
+            clients.add(clientMapper.toClient(clientDto));
+        }
+
+        return clients;
     }
 
     @Override

@@ -197,4 +197,15 @@ public class ClientControllerTest {
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
+
+    @Test
+    public void whenFindClientsWaitingProductApprobation_thenAListOfClientIsReturned() {
+
+        List<Client> clients = new ArrayList<>();
+        when(clientService.findClientsWaitingProductApprobation()).thenReturn(clients);
+
+        ResponseEntity<List<Client>> result = testedClass.findClientsWaitingProductApprobation();
+
+        assertEquals(clients, result.getBody());
+    }
 }

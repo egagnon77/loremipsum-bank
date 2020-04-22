@@ -5,3 +5,4 @@
 ./client.sh -n CLIENT_NAME --avail
 ./employee.sh --upgrade CLIENT_NAME
 ./employee.sh --downgrade CLIENT_NAME
+./employee.sh --tasks

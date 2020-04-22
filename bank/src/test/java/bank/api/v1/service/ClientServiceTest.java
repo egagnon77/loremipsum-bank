@@ -360,4 +360,69 @@ public class ClientServiceTest {
 
         verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.NOT_SET);
     }
+
+    @Test
+    public void ifNoClientInDatabase_thenAnEmptyListIsReturned_whenFindingClientsWaitingProductApprobation() {
+
+        List<Client> emptyList = new ArrayList<>();
+        when(clientRepository.findAll()).thenReturn(emptyList);
+
+        List<Client> result = testedClass.findClientsWaitingProductApprobation();
+
+        assertEquals(emptyList, result);
+    }
+
+    @Test
+    public void ifNoProductWithWaitingApprobationInDatabase_thenAnEmptyListIsReturned_whenFindingClientsWaitingProductApprobation() {
+
+        Client client = new Client();
+        List<Client> clients = new ArrayList<>();
+        Product product = new Product();
+        client.setProducts(new ArrayList<>());
+        client.getProducts().add(product);
+        clients.add(client);
+        when(clientRepository.findAll()).thenReturn(clients);
+        when(clientProductRepository.findById(client, product)).thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        List<Client> result = testedClass.findClientsWaitingProductApprobation();
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void ifAProductWithWaitingApprobationInDatabase_thenAListOfClientIsReturned_whenFindingClientsWaitingProductApprobation() {
+
+        Client client = new Client();
+        List<Client> clients = new ArrayList<>();
+        Product product = new Product();
+        client.setProducts(new ArrayList<>());
+        client.getProducts().add(product);
+        clients.add(client);
+        when(clientRepository.findAll()).thenReturn(clients);
+        when(clientProductRepository.findById(client, product)).thenReturn(ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
+
+        List<Client> result = testedClass.findClientsWaitingProductApprobation();
+
+        assertEquals(clients, result);
+    }
+
+    @Test
+    public void ifAClientHasMoreThanOneProductWithWaitingApprobationInDatabase_thenListOfClientReturnedMustHaveThisClientOnlyOnce_whenFindingClientsWaitingProductApprobation() {
+
+        Client client = new Client();
+        List<Client> clients = new ArrayList<>();
+        Product product = new Product();
+        Product product2 = new Product();
+        client.setProducts(new ArrayList<>());
+        client.getProducts().add(product);
+        client.getProducts().add(product2);
+        clients.add(client);
+        when(clientRepository.findAll()).thenReturn(clients);
+        when(clientProductRepository.findById(client, product)).thenReturn(ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
+        when(clientProductRepository.findById(client, product2)).thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
+
+        List<Client> result = testedClass.findClientsWaitingProductApprobation();
+
+        assertEquals(clients, result);
+    }
 }

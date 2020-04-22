@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class CommandLineProcessor {
 
@@ -46,7 +48,14 @@ public class CommandLineProcessor {
             processAcceptProduct(commandLine.getOptionValue(CliOptions.ACCEPT.getValue()), commandLine.getOptionValue(CliOptions.CLIENT.getValue()));
         } else if (commandLine.hasOption(CliOptions.REJECT.getValue()) && commandLine.hasOption(CliOptions.CLIENT.getValue())) {
             processRejectProduct(commandLine.getOptionValue(CliOptions.REJECT.getValue()), commandLine.getOptionValue(CliOptions.CLIENT.getValue()));
+        } else if (commandLine.hasOption(CliOptions.TASKS.getValue())) {
+            processTask();
         }
+    }
+
+    private void processTask() {
+        List<Client> clients = employeeService.task();
+        logger.info(clients.toString());
     }
 
     private void processAcceptProduct(String productId, String clientName) {

@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -69,5 +71,20 @@ public class SpringDataClientRepositoryTest {
         testedClass.save(client);
 
         assertEquals(client, client);
+    }
+
+    @Test
+    public void whenFindAll_thenAListOfClientIsReturned() {
+
+        Client client = new Client();
+        List<ClientDto> dtos = new ArrayList<>();
+        ClientDto clientDto = new ClientDto();
+        dtos.add(clientDto);
+        when(crudClientRepository.findAll()).thenReturn(dtos);
+        when(clientMapper.toClient(clientDto)).thenReturn(client);
+
+        List<Client> result = testedClass.findAll();
+
+        assertEquals(result.get(0), client);
     }
 }

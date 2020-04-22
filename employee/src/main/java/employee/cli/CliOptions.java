@@ -7,7 +7,8 @@ public enum CliOptions {
     DOWNGRADE("downgrade"),
     ACCEPT("accept"),
     REJECT("reject"),
-    CLIENT("client");
+    CLIENT("client"),
+    TASKS("tasks");
 
     private String value;
 

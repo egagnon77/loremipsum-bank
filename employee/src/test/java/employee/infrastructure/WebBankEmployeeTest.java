@@ -82,4 +82,11 @@ public class WebBankEmployeeTest {
     testedClass.rejectProduct(AN_ID, A_NAME);
   }
 
+  @Test(expected = DataSourceBadResponseException.class)
+  public void whenTaskFail_thenADataSourceBadResponseExceptionIsThrown() {
+    doThrow(Exception.class).when(responseBuilder).task();
+
+    testedClass.task();
+  }
+
 }

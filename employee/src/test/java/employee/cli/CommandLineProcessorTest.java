@@ -227,6 +227,17 @@ public class CommandLineProcessorTest {
         verify(employeeService).rejectProduct(A_PRODUCT_ID, A_CLIENT_NAME);
     }
 
+    @Test
+    public void givenACommandLineWithTaskOption_thenTaskMustBeInvoked() {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.TASKS.getValue())).thenReturn(true);
+
+        testedClass.process(commandLine);
+
+        verify(employeeService).task();
+    }
+
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();
         product.setCategory(category);

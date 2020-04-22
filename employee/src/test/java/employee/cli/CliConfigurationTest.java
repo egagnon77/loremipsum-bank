@@ -20,6 +20,7 @@ public class CliConfigurationTest {
     private static final String DOWNGRADE_DESCRIPTION = "Diminue le statut du client";
     private static final String ACCEPT_DESCRIPTION = "Accepter la mise en place du produit";
     private static final String REJECT_DESCRIPTION = "Rejeter la mise en place du produit";
+    private static final String TASKS_DESCRIPTION = "Liste les clients avec des produits en attente de validation";
     private static final String CLIENT_DESCRIPTION = "Le nom du client";
 
     private static final Option ADD_OPTION = Option.builder().required(false).hasArg(true)
@@ -56,11 +57,30 @@ public class CliConfigurationTest {
             .desc(CLIENT_DESCRIPTION)
             .build();
 
+    private static final Option TASKS_OPTION = Option.builder().required(false).hasArg(false)
+            .longOpt(CliOptions.TASKS.getValue())
+            .desc(TASKS_DESCRIPTION)
+            .build();
+
     private CliConfiguration testedClass;
 
     @Before
     public void setUp() {
         testedClass = new CliConfiguration();
+    }
+
+    @Test
+    public void whenGettingOptions_thenOptionsMustContainsATaskOption() {
+
+        Options result = testedClass.options();
+
+        boolean optionFound = false;
+        for (Option option : result.getOptions()) {
+            if (option.equals(TASKS_OPTION)) {
+                optionFound = true;
+            }
+        }
+        assertTrue(optionFound);
     }
 
     @Test
