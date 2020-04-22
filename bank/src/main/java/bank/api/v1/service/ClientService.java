@@ -11,7 +11,6 @@ import bank.domain.model.ProductType;
 import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -117,7 +116,7 @@ public class ClientService {
             }
 
             if (!isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
-                clientProductRepository.save(client.get(), product.get(), ApprobationStatus.NOT_SET);
+                clientProductRepository.deleteById(client.get(), product.get());
             }
         } else {
             throw new NotFoundException("Client and product not found.");
@@ -151,6 +150,36 @@ public class ClientService {
         }
     }
 
+    public void unSubscribeProduct(String clientName, Integer productId) {
+
+        Optional<Client> client = clientRepository.findById(clientName);
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (client.isPresent() && product.isPresent()) {
+
+            ApprobationStatus approbationStatus = clientProductRepository
+                .findById(client.get(), product.get());
+
+            if (approbationStatus == null) {
+                throw new NotFoundException("Product is not subscribed. Cannot unsubscribe.");
+            } else if (approbationStatus.equals(ApprobationStatus.WAITING_FOR_DELETION)) {
+                throw new AlreadyExistsException("Product is already waiting to be unsubscribe.");
+            }
+
+            if (product.get().getProductType().equals(ProductType.AUTOMATIC.getValue()) ||
+                approbationStatus.equals(ApprobationStatus.WAITING_FOR_SUBSCRIPTION)) {
+                clientProductRepository.deleteById(client.get(), product.get());
+            } else {
+                approbationStatus = ApprobationStatus.WAITING_FOR_DELETION;
+                clientProductRepository.save(client.get(), product.get(), approbationStatus);
+            }
+
+        } else {
+            throw new NotFoundException("Client and product not found.");
+        }
+    }
+
+
     public List<Client> findClientsWaitingProductApprobation() {
 
         List<Client> waitingForProductApprobations = new ArrayList<>();
@@ -160,8 +189,9 @@ public class ClientService {
 
                 ApprobationStatus approbationStatus = clientProductRepository.findById(client, product);
 
-                if ((ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus) || ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus))
-                        && !waitingForProductApprobations.contains(client)) {
+                if ((ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus)
+                    || ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus))
+                    && !waitingForProductApprobations.contains(client)) {
                     waitingForProductApprobations.add(client);
                 }
             }

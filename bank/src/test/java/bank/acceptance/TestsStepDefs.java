@@ -75,6 +75,13 @@ public class TestsStepDefs {
         response = request.when().put(CLIENT_URL + "/" + clientName + "/product/" + productId + "/subscribe");
     }
 
+    @When("I unsubscribe to a product with id {int} of {word} client")
+    public void i_unsubscribe_to_a_product_of_a_client(Integer productId, String clientName) {
+        request = given();
+        response = request.when().put(CLIENT_URL + "/" + clientName + "/product/" + productId + "/unsubscribe");
+    }
+
+
     @When("I reject a manual product with id {int} of {word} client")
     public void i_reject_product_of_a_client(Integer productId, String clientName) {
         request = given();

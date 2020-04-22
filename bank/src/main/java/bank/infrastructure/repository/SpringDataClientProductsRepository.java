@@ -61,10 +61,24 @@ public class SpringDataClientProductsRepository implements ClientProductReposito
             Optional<ProductDto> productDto = crudProductRepository.findById(product.getId());
             if (clientDto.isPresent() && productDto.isPresent()) {
                 ClientProductsDto newClientProductsDto = new ClientProductsDto(clientDto.get(), productDto.get());
+                newClientProductsDto.setApprobationStatus(approbationStatus.getValue());
+
                 crudClientProductsRepository.save(newClientProductsDto);
             }
 
         }
 
+    }
+
+    @Override
+    public void deleteById(Client client, Product product) {
+        ClientProductsPrimaryKeys clientProductsPrimaryKeys = new ClientProductsPrimaryKeys(client.getName(),
+            product.getId());
+
+        Optional<ClientProductsDto> clientProductsDto = crudClientProductsRepository
+            .findById(clientProductsPrimaryKeys);
+        if (clientProductsDto.isPresent()) {
+            crudClientProductsRepository.deleteById(clientProductsPrimaryKeys);
+        }
     }
 }

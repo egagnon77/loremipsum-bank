@@ -66,6 +66,12 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping(value = "/client/{name}/product/{id}/unsubscribe")
+    public ResponseEntity<Void> unsubscribeProduct(@PathVariable("name") String clientName, @PathVariable("id") Integer productId) {
+        clientService.unSubscribeProduct(HtmlUtils.htmlEscape(clientName), productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PatchMapping(value = "/client/{name}/product/{id}/reject")
     public ResponseEntity<Void> rejectManualProduct(@PathVariable("name") String clientName, @PathVariable("id") Integer productId) {
         clientService.rejectManualProduct(HtmlUtils.htmlEscape(clientName), productId);
