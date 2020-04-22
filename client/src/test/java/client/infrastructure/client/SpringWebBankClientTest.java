@@ -1,10 +1,12 @@
 package client.infrastructure.client;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import client.domain.exception.DataSourceBadResponseException;
 import client.domain.exception.NotFoundException;
 import client.domain.model.Client;
 import client.domain.model.Product;
@@ -105,5 +107,31 @@ public class SpringWebBankClientTest {
 
         verify(restTemplate, times(1)).put(A_GET_PRODUCTS_URL,Object.class);
 
+    }
+
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenSubscribeFail_thenANDataSourceBadResponseExceptionMustBeThrown() {
+        when(bankSystemUrlBuilder.buildSubscribeProductUrl(client,A_PRODUCT_ID)).thenReturn(A_GET_PRODUCTS_URL);
+        doThrow(new HttpClientErrorException(HttpStatus.TOO_EARLY)).when(restTemplate).put(A_GET_PRODUCTS_URL, Object.class);
+
+        testedClass.subscribeProduct(client, A_PRODUCT_ID);
+    }
+
+    @Test()
+    public void givenAClientAndAProduct_whenUnsubscribeProduct_thenRestemplateWithPutMustBeCalled() {
+        when(bankSystemUrlBuilder.buildUnsubscribeProductUrl(client, A_PRODUCT_ID)).thenReturn(A_GET_PRODUCTS_URL);
+
+        testedClass.unSubscribeProduct(client, A_PRODUCT_ID);
+
+        verify(restTemplate, times(1)).put(A_GET_PRODUCTS_URL,Object.class);
+
+    }
+
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenUnsubscribeFail_thenANDataSourceBadResponseExceptionMustBeThrown() {
+        when(bankSystemUrlBuilder.buildUnsubscribeProductUrl(client,A_PRODUCT_ID)).thenReturn(A_GET_PRODUCTS_URL);
+        doThrow(new HttpClientErrorException(HttpStatus.TOO_EARLY)).when(restTemplate).put(A_GET_PRODUCTS_URL, Object.class);
+
+        testedClass.unSubscribeProduct(client, A_PRODUCT_ID);
     }
 }

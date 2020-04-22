@@ -27,7 +27,7 @@ public class EmployeeApplication implements CommandLineRunner {
     private CommandLineParser commandLineParser;
     private CommandLineProcessor commandLineProcessor;
     private Options options;
-    private Logger logger;
+    private Logger loggerNonStatique;
 
     @Autowired
     public EmployeeApplication(
@@ -39,7 +39,7 @@ public class EmployeeApplication implements CommandLineRunner {
         this.options = options;
         this.commandLineParser = commandLineParser;
         this.commandLineProcessor = commandLineProcessor;
-        this.logger = logger;
+        this.loggerNonStatique = logger;
     }
 
     public static void main(String[] args) {
@@ -54,7 +54,7 @@ public class EmployeeApplication implements CommandLineRunner {
 
         }
         catch (Exception ex) {
-            LOGGER.error("Technical Error : " + ex.getMessage());
+            LOGGER.error("Technical Error : {} ", ex.getMessage());
             System.exit(EXIT_FAILURE);
         }
     }
@@ -69,7 +69,7 @@ public class EmployeeApplication implements CommandLineRunner {
                 commandLineProcessor.process(commandLine);
             }
         } catch (ParseException parse) {
-            logger.info(getHelpFormatted());
+            loggerNonStatique.info(getHelpFormatted());
             throw parse;
         }
     }

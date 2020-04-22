@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandLineValidator {
 
-    private static String NO_OPTION_DETECTED_MESSAGE = "No option detected in the command line.";
-    private static String MORE_THAN_TWO_OPTION_MESSAGE = "More than two options detected in the command line.";
+    private static final String NO_OPTION_DETECTED_MESSAGE = "No option detected in the command line.";
+    private static final String MORE_THAN_TWO_OPTION_MESSAGE = "More than two options detected in the command line.";
 
 
     public void process(CommandLine commandLine) {

@@ -53,8 +53,8 @@ public class CommandLineProcessorTest {
     @Test
     public void givenACommandLineWithStatusOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.Status.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.hasOption(CliOptions.STATUS.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
@@ -68,8 +68,8 @@ public class CommandLineProcessorTest {
     @Test
     public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.Available.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.hasOption(CliOptions.AVAILABLE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
@@ -83,8 +83,8 @@ public class CommandLineProcessorTest {
     @Test(expected = NotFoundException.class)
     public void givenACommandLineWithAvailableOption_whenAnNotFoundExceptionOccursDuringProcess_thenShouldNOtCatchException() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.Available.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.hasOption(CliOptions.AVAILABLE.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
@@ -96,10 +96,10 @@ public class CommandLineProcessorTest {
     @Test
     public void givenACommandLineWithSubscribeOptionAndClientName_thenSubscribeProductMustBeInvoked() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
-        when(commandLine.hasOption(CliOptions.Subscribe.getValue())).thenReturn(true);
-        when(commandLine.hasOption(CliOptionsValue.Name.getValue())).thenReturn(true);
-        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
-        when(commandLine.getOptionValue(CliOptions.Subscribe.getValue())).thenReturn(A_PRODUCT_ID.toString());
+        when(commandLine.hasOption(CliOptions.SUBSCRIBE.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.SUBSCRIBE.getValue())).thenReturn(A_PRODUCT_ID.toString());
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
@@ -108,6 +108,23 @@ public class CommandLineProcessorTest {
 
         verify(clientService).subscribeProduct(client, A_PRODUCT_ID);
     }
+
+    @Test
+    public void givenACommandLineWithUnsubscribeOptionAndClientName_thenUnsubscribeProductMustBeInvoked() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.UNSUBSCRIBE.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.UNSUBSCRIBE.getValue())).thenReturn(A_PRODUCT_ID.toString());
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+
+        testedClass.process(commandLine);
+
+        verify(clientService).unSubscribeProduct(client, A_PRODUCT_ID);
+    }
+
 
 
     private Product createProduct(Integer category, Integer id, String name) {

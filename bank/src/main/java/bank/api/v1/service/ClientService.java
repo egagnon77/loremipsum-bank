@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientService {
 
+    public static final String ERROR_CLIENT_AND_PRODUCT_NOT_FOUND = "Client and product not found.";
+    public static final String ERROR_CLIENT_NOT_FOUND = "Client not found.";
     private ClientRepository clientRepository;
     private ProductRepository productRepository;
     private ClientProductRepository clientProductRepository;
@@ -42,7 +44,7 @@ public class ClientService {
             return client.get();
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
     public CreateClient save(CreateClient createClient) {
@@ -79,7 +81,7 @@ public class ClientService {
             return clientRepository.save(client.get());
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
 
@@ -92,7 +94,7 @@ public class ClientService {
             return clientRepository.save(client.get());
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
     public void acceptManualProduct(String clientName, Integer productId) {
@@ -119,7 +121,7 @@ public class ClientService {
                 clientProductRepository.deleteById(client.get(), product.get());
             }
         } else {
-            throw new NotFoundException("Client and product not found.");
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }
     }
 
@@ -146,7 +148,7 @@ public class ClientService {
             }
             clientProductRepository.save(client.get(), product.get(), approbationStatus);
         } else {
-            throw new NotFoundException("Client and product not found.");
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }
     }
 
@@ -175,7 +177,7 @@ public class ClientService {
             }
 
         } else {
-            throw new NotFoundException("Client and product not found.");
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }
     }
 
