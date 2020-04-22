@@ -11,6 +11,7 @@ import client.domain.service.ClientService;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +52,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithStatusOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
+    public void givenACommandLineWithStatusOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.STATUS.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
@@ -66,7 +68,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
+    public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.AVAILABLE.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
@@ -81,7 +84,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void givenACommandLineWithAvailableOption_whenAnNotFoundExceptionOccursDuringProcess_thenShouldNOtCatchException() {
+    public void givenACommandLineWithAvailableOption_whenAnNotFoundExceptionOccursDuringProcess_thenShouldNOtCatchException()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.AVAILABLE.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
@@ -94,7 +98,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithSubscribeOptionAndClientName_thenSubscribeProductMustBeInvoked() {
+    public void givenACommandLineWithSubscribeOptionAndClientName_thenSubscribeProductMustBeInvoked()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.SUBSCRIBE.getValue())).thenReturn(true);
         when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
@@ -110,7 +115,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithUnsubscribeOptionAndClientName_thenUnsubscribeProductMustBeInvoked() {
+    public void givenACommandLineWithUnsubscribeOptionAndClientName_thenUnsubscribeProductMustBeInvoked()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.UNSUBSCRIBE.getValue())).thenReturn(true);
         when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
@@ -125,6 +131,19 @@ public class CommandLineProcessorTest {
         verify(clientService).unSubscribeProduct(client, A_PRODUCT_ID);
     }
 
+    @Test(expected = ParseException.class)
+    public void givenACommandLineOnLyClientName_thenAParseExceptionShouldBeThrown()
+        throws ParseException {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+
+        testedClass.process(commandLine);
+
+    }
 
 
     private Product createProduct(Integer category, Integer id, String name) {

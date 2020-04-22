@@ -68,6 +68,7 @@ public class ClientApplication implements CommandLineRunner {
 
         } catch (DataSourceBadResponseException ds) {
             loggerNonStatique.error(ds.getMessage());
+            throw ds;
 
         } catch (ParseException parse) {
             loggerNonStatique.info(getHelpFormatted());
