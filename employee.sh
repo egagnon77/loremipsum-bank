@@ -1,3 +1,5 @@
+#!/bin/bash
+
 arg1=$1
 arg2=$2
 arg3=$3
@@ -19,4 +21,4 @@ fi
 
 echo "Evaluated arguments: ${COMMANDS}"
 
-mvn exec:java -pl employee -Dexec.mainClass=employee.EmployeeApplication -Dexec.args="${COMMANDS}" -Dexec.cleanupDaemonThreads=false
+mvn -q exec:java -pl employee -Dexec.mainClass=employee.EmployeeApplication -Dexec.args="${COMMANDS}" -Dexec.cleanupDaemonThreads=false
