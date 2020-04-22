@@ -6,6 +6,7 @@ public enum CliOptions {
     UPGRADE("upgrade"),
     DOWNGRADE("downgrade"),
     ACCEPT("accept"),
+    REJECT("reject"),
     CLIENT("client");
 
     private String value;

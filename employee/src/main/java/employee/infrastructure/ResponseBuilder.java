@@ -68,4 +68,9 @@ public class ResponseBuilder {
         String acceptProductUrl = bankSystemUrlBuilder.buildAcceptProductUrl(productId, clientName);
         webClient.patch().uri(acceptProductUrl).retrieve().toBodilessEntity().block();
     }
+
+    public void rejectProduct(Integer productId, String clientName) {
+        String rejectProductUrl = bankSystemUrlBuilder.buildRejectProductUrl(productId, clientName);
+        webClient.patch().uri(rejectProductUrl).retrieve().toBodilessEntity().block();
+    }
 }

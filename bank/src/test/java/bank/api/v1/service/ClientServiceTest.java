@@ -227,4 +227,52 @@ public class ClientServiceTest {
 
         verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
     }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAClientThatDoNotExistInClientRepository_whenRejectManualProduct_thenANotFoundExceptionIsThrown() {
+
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
+        Optional<Product> product = Optional.of(new Product());
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+
+        testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void givenAProductThatDoNotExistInProductRepository_whenRejectManualProduct_thenANotFoundExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(Optional.empty());
+
+        testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test
+    public void ifAnApprobationStatusIsNotWaitingForDeletion_whenRejectManualProduct_thenNothingIsDeleteInClientProductRepository() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get())).thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(0)).save(client.get(), product.get(), ApprobationStatus.NOT_SET);
+    }
+
+    @Test
+    public void ifAnApprobationStatusHasAWaitingForDeletion_whenRejectManualProduct_thenThisClientProductIsDeleteInClientProductRepository() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get())).thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
+
+        testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.NOT_SET);
+    }
 }

@@ -35,4 +35,8 @@ public class EmployeeService {
     public void acceptProduct(Integer productId, String clientName) {
         bankEmployee.acceptProduct(productId, clientName);
     }
+
+    public void rejectProduct(Integer productId, String clientName) {
+        bankEmployee.rejectProduct(productId, clientName);
+    }
 }

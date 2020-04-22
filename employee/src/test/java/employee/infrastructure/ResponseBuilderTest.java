@@ -28,6 +28,7 @@ public class ResponseBuilderTest {
     private static final String A_UPGRADE_CLIENT_URL = "aUpgradeClientUrl";
     private static final String A_DOWNGRADE_CLIENT_URL = "aDowngradeClientUrl";
     private static final String AN_ACCEPT_PRODUCT_URL = "anAcceptProductUrl";
+    private static final String A_REJECT_PRODUCT_URL = "aRejectProductUrl";
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -151,6 +152,25 @@ public class ResponseBuilderTest {
 
         verify(webClient).patch();
         verify(requestBodyUri).uri(AN_ACCEPT_PRODUCT_URL);
+        verify(requestBody).retrieve();
+        verify(response).toBodilessEntity();
+        verify(voidResponseEntity).block();
+    }
+
+    @Test
+    public void givenAnIdAndAName_whenRejectProduct_thenWebClientIsInvoked() {
+
+        when(bankSystemUrlBuilder.buildRejectProductUrl(AN_ID, A_NAME)).thenReturn(A_REJECT_PRODUCT_URL);
+        when(webClient.patch()).thenReturn(requestBodyUri);
+        when(requestBodyUri.uri(A_REJECT_PRODUCT_URL)).thenReturn(requestBody);
+        when(requestBody.retrieve()).thenReturn(response);
+        when(response.toBodilessEntity()).thenReturn(voidResponseEntity);
+        when(voidResponseEntity.block()).thenReturn(null);
+
+        testedClass.rejectProduct(AN_ID, A_NAME);
+
+        verify(webClient).patch();
+        verify(requestBodyUri).uri(A_REJECT_PRODUCT_URL);
         verify(requestBody).retrieve();
         verify(response).toBodilessEntity();
         verify(voidResponseEntity).block();

@@ -70,4 +70,15 @@ public class EmployeeServiceTest {
 
         verify(bankEmployee, times(1)).acceptProduct(aProductId, aClientName);
     }
+
+    @Test
+    public void givenAProductIdAndAClientName_whenRejectProduct_thenWeShouldCallBankEmployee() {
+
+        Integer aProductId = 88;
+        String aClientName = "aClientName";
+
+        testedClass.rejectProduct(aProductId, aClientName);
+
+        verify(bankEmployee, times(1)).rejectProduct(aProductId, aClientName);
+    }
 }

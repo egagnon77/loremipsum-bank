@@ -59,4 +59,10 @@ public class ClientController {
         clientService.acceptManualProduct(HtmlUtils.htmlEscape(clientName), productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping(value = "/client/{name}/product/{id}/reject")
+    public ResponseEntity<Void> rejectManualProduct(@PathVariable("name") String clientName, @PathVariable("id") Integer productId) {
+        clientService.rejectManualProduct(HtmlUtils.htmlEscape(clientName), productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

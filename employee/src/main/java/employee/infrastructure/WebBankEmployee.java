@@ -79,8 +79,12 @@ public class WebBankEmployee implements BankEmployee {
         }
     }
 
-
+    @Override
+    public void rejectProduct(Integer productId, String clientName) {
+        try {
+            responseBuilder.rejectProduct(productId, clientName);
+        } catch (Exception e) {
+            throw new DataSourceBadResponseException(e.getMessage());
+        }
+    }
 }
-
-
-

@@ -36,4 +36,8 @@ public class BankSystemUrlBuilder {
     public String buildAcceptProductUrl(Integer productId, String clientName) {
         return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/accept";
     }
+
+    public String buildRejectProductUrl(Integer productId, String clientName) {
+        return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/reject";
+    }
 }

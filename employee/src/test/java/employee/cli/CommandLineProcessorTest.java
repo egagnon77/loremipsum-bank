@@ -213,6 +213,20 @@ public class CommandLineProcessorTest {
         verify(employeeService).acceptProduct(A_PRODUCT_ID, A_CLIENT_NAME);
     }
 
+    @Test
+    public void givenACommandLineWithRejectOptionAndClientName_thenRejectProductMustBeInvoked() {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.REJECT.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptions.CLIENT.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.REJECT.getValue())).thenReturn(A_PRODUCT_ID.toString());
+        when(commandLine.getOptionValue(CliOptions.CLIENT.getValue())).thenReturn(A_CLIENT_NAME);
+
+        testedClass.process(commandLine);
+
+        verify(employeeService).rejectProduct(A_PRODUCT_ID, A_CLIENT_NAME);
+    }
+
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();
         product.setCategory(category);

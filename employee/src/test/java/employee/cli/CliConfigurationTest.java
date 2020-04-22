@@ -19,6 +19,7 @@ public class CliConfigurationTest {
     private static final String UPGRADE_DESCRIPTION = "Augmente le statut du client";
     private static final String DOWNGRADE_DESCRIPTION = "Diminue le statut du client";
     private static final String ACCEPT_DESCRIPTION = "Accepter la mise en place du produit";
+    private static final String REJECT_DESCRIPTION = "Rejeter la mise en place du produit";
     private static final String CLIENT_DESCRIPTION = "Le nom du client";
 
     private static final Option ADD_OPTION = Option.builder().required(false).hasArg(true)
@@ -45,6 +46,11 @@ public class CliConfigurationTest {
             .desc(ACCEPT_DESCRIPTION)
             .build();
 
+    private static final Option REJECT_OPTION = Option.builder().required(false).hasArg(true)
+            .longOpt(CliOptions.REJECT.getValue()).argName(ARGUMENT_PRODUCT_ID)
+            .desc(REJECT_DESCRIPTION)
+            .build();
+
     private static final Option CLIENT_OPTION = Option.builder().required(false).hasArg(true)
             .longOpt(CliOptions.CLIENT.getValue()).argName(ARGUMENT_CLIENT_NAME)
             .desc(CLIENT_DESCRIPTION)
@@ -55,6 +61,20 @@ public class CliConfigurationTest {
     @Before
     public void setUp() {
         testedClass = new CliConfiguration();
+    }
+
+    @Test
+    public void whenGettingOptions_thenOptionsMustContainsARejectOption() {
+
+        Options result = testedClass.options();
+
+        boolean optionFound = false;
+        for (Option option : result.getOptions()) {
+            if (option.equals(REJECT_OPTION)) {
+                optionFound = true;
+            }
+        }
+        assertTrue(optionFound);
     }
 
     @Test
@@ -157,6 +177,15 @@ public class CliConfigurationTest {
 
         assertEquals(ARGUMENT_PRODUCT_ID,
                 result.getOption(CliOptions.ACCEPT.getValue()).getArgName());
+    }
+
+    @Test
+    public void whenGettingOptions_thenOptionRejectMustContainsAnArgWithTheProductId() {
+
+        Options result = testedClass.options();
+
+        assertEquals(ARGUMENT_PRODUCT_ID,
+                result.getOption(CliOptions.REJECT.getValue()).getArgName());
     }
 
     @Test

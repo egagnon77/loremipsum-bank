@@ -70,4 +70,11 @@ public class BankSystemUrlBuilderTest {
 
         assertEquals(A_BASE_URL + "/client/" + A_CLIENT_NAME + "/product/" + A_PRODUCT_ID + "/accept", result);
     }
+
+    @Test
+    public void buildRejectProductUrl() {
+        String result = testedClass.buildRejectProductUrl(A_PRODUCT_ID, A_CLIENT_NAME);
+
+        assertEquals(A_BASE_URL + "/client/" + A_CLIENT_NAME + "/product/" + A_PRODUCT_ID + "/reject", result);
+    }
 }

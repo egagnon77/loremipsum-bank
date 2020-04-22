@@ -44,11 +44,17 @@ public class CommandLineProcessor {
             processDowngradeClient(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue()));
         } else if (commandLine.hasOption(CliOptions.ACCEPT.getValue()) && commandLine.hasOption(CliOptions.CLIENT.getValue())) {
             processAcceptProduct(commandLine.getOptionValue(CliOptions.ACCEPT.getValue()), commandLine.getOptionValue(CliOptions.CLIENT.getValue()));
+        } else if (commandLine.hasOption(CliOptions.REJECT.getValue()) && commandLine.hasOption(CliOptions.CLIENT.getValue())) {
+            processRejectProduct(commandLine.getOptionValue(CliOptions.REJECT.getValue()), commandLine.getOptionValue(CliOptions.CLIENT.getValue()));
         }
     }
 
     private void processAcceptProduct(String productId, String clientName) {
         employeeService.acceptProduct(Integer.valueOf(productId), clientName);
+    }
+
+    private void processRejectProduct(String productId, String clientName) {
+        employeeService.rejectProduct(Integer.valueOf(productId), clientName);
     }
 
     private void processUpgradeClient(String clientName) {

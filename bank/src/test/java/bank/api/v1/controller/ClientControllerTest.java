@@ -155,6 +155,14 @@ public class ClientControllerTest {
     }
 
     @Test
+    public void givenAClientNameAndAProductId_whenRejectManualProduct_thenResponseHttpStatusIsOk() {
+
+        ResponseEntity<Void> result = testedClass.rejectManualProduct(A_CLIENT_NAME, A_PRODUCT_ID);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
     public void givenExistingClient_whenGetProducts_thenResponseBodyShouldBeAProductsList() {
         // Given
         Product[] productArray = { new Product(1, "my product", 0, 1) };

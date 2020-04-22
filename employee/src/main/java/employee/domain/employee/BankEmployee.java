@@ -16,4 +16,6 @@ public interface BankEmployee {
     public Client downgradeClient(Client client);
 
     void acceptProduct(Integer productId, String clientName);
+
+    void rejectProduct(Integer productId, String clientName);
 }

@@ -94,6 +94,14 @@ public class ClientService {
     }
 
     public void acceptManualProduct(String clientName, Integer productId) {
+        acceptOrRejectManualProduct(clientName, productId, true);
+    }
+
+    public void rejectManualProduct(String clientName, Integer productId) {
+        acceptOrRejectManualProduct(clientName, productId, false);
+    }
+
+    private void acceptOrRejectManualProduct(String clientName, Integer productId, boolean isAccept) {
 
         Optional<Client> client = clientRepository.findById(clientName);
         Optional<Product> product = productRepository.findById(productId);
@@ -101,11 +109,16 @@ public class ClientService {
         if (client.isPresent() && product.isPresent()) {
             ApprobationStatus approbationStatus = clientProductRepository.findById(client.get(), product.get());
 
-            if (ApprobationStatus.WAITING_FOR_SUBCRIPTION.equals(approbationStatus)) {
+            if (isAccept && ApprobationStatus.WAITING_FOR_SUBCRIPTION.equals(approbationStatus)) {
                 clientProductRepository.save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
+            }
+
+            if (!isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
+                clientProductRepository.save(client.get(), product.get(), ApprobationStatus.NOT_SET);
             }
         } else {
             throw new NotFoundException("Client and product not found.");
         }
+
     }
 }
