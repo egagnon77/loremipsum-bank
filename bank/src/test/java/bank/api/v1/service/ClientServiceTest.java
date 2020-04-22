@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -287,7 +288,8 @@ public class ClientServiceTest {
     public void ifAProductIsAutomatic_whenSubscribeProduct_ThenApprobationStatusShouldBeSubscribed() {
 
         Optional<Client> client = Optional.of(new Client("name"));
-        Optional<Product> product = Optional.of(new Product(8, "Product", PRODUCT_TYPE_AUTOMATIC, PRODUCT_LEVEL_NORMAL));
+        Optional<Product> product = Optional
+            .of(new Product(8, "Product", PRODUCT_TYPE_AUTOMATIC, PRODUCT_LEVEL_NORMAL));
 
         when(clientRepository.findById(A_NAME)).thenReturn(client);
         when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
@@ -310,7 +312,8 @@ public class ClientServiceTest {
             .thenReturn(null);
 
         testedClass.subscribeProduct(A_NAME, A_PRODUCT_ID);
-        verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
+        verify(clientProductRepository, times(1))
+            .save(client.get(), product.get(), ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
     }
 
     @Test(expected = NotFoundException.class)
@@ -354,11 +357,12 @@ public class ClientServiceTest {
         Optional<Product> product = Optional.of(new Product());
         when(clientRepository.findById(A_NAME)).thenReturn(client);
         when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
-        when(clientProductRepository.findById(client.get(), product.get())).thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
 
         testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
 
-        verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.NOT_SET);
+        verify(clientProductRepository, times(1)).deleteById(client.get(), product.get());
     }
 
     @Test
@@ -424,5 +428,103 @@ public class ClientServiceTest {
         List<Client> result = testedClass.findClientsWaitingProductApprobation();
 
         assertEquals(clients, result);
+    }
+
+    @Test
+    public void ifAClientAndProductWithApprobationStatusOfWaitingForSubscriptionExistWhenUnsubscribeThenProductIsDeleted() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).deleteById(client.get(), product.get());
+    }
+
+    @Test
+    public void ifAClientAndProductWithApprobationStatusSubscribedExistWhenUnsubscribeTheProductIsDeleted() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_AUTOMATIC,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).deleteById(client.get(), product.get());
+    }
+
+    @Test
+    public void ifAClientAndProductManualWithApprobationStatusSubscribedExistWhenUnsubscribeTheProductIsWaitingForDeletion() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).save(client.get(), product.get(),ApprobationStatus.WAITING_FOR_DELETION);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void ifClientNotExistWhenUnsubscribeThenExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(Optional.empty());
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void ifProductNotExistWhenUnsubscribeThenExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(Optional.empty());
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.SUBSCRIBED);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+
+    @Test(expected = NotFoundException.class)
+    public void ifProductClientIsNotSubscribeWhenUnsubscribeThenExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(null);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
+    }
+
+    @Test(expected = AlreadyExistsException.class)
+    public void ifProductClientIsWaitingForUnSubscribingWhenUnsubscribeThenExceptionIsThrown() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product(A_PRODUCT_ID,A_NAME,PRODUCT_TYPE_MANUAL,PRODUCT_LEVEL_NORMAL));
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
+
+        testedClass.unSubscribeProduct(A_NAME, A_PRODUCT_ID);
     }
 }

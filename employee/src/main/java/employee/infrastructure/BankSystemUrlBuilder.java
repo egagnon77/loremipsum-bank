@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class BankSystemUrlBuilder {
 
     private static final String BANK_SERVER_BASE_URL = "${employee.bank.server.base.url}";
+    public static final String CLIENT_URL = "/client/";
 
     private String bankServerBaseUrl;
 
@@ -18,27 +19,27 @@ public class BankSystemUrlBuilder {
     }
 
     public String buildAddClientUrl() {
-        return bankServerBaseUrl + "/client/";
+        return bankServerBaseUrl + CLIENT_URL;
     }
 
     public String buildGetProductsUrl(Client client) {
-        return bankServerBaseUrl + "/client/" + client.getName() + "/products";
+        return bankServerBaseUrl + CLIENT_URL + client.getName() + "/products";
     }
 
     public String buildUpgradeClientUrl(Client client) {
-        return bankServerBaseUrl + "/client/" + client.getName() + "/status/upgrade";
+        return bankServerBaseUrl + CLIENT_URL + client.getName() + "/status/upgrade";
     }
 
     public String buildDowngradeClientUrl(Client client) {
-        return bankServerBaseUrl + "/client/" + client.getName() + "/status/downgrade";
+        return bankServerBaseUrl + CLIENT_URL + client.getName() + "/status/downgrade";
     }
 
     public String buildAcceptProductUrl(Integer productId, String clientName) {
-        return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/accept";
+        return bankServerBaseUrl + CLIENT_URL + clientName + "/product/" + productId + "/accept";
     }
 
     public String buildRejectProductUrl(Integer productId, String clientName) {
-        return bankServerBaseUrl + "/client/" + clientName + "/product/" + productId + "/reject";
+        return bankServerBaseUrl + CLIENT_URL + clientName + "/product/" + productId + "/reject";
     }
 
     public String buildGetTaskUrl() {

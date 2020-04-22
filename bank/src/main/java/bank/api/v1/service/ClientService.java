@@ -11,7 +11,6 @@ import bank.domain.model.ProductType;
 import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientService {
 
+    public static final String ERROR_CLIENT_AND_PRODUCT_NOT_FOUND = "Client and product not found.";
+    public static final String ERROR_CLIENT_NOT_FOUND = "Client not found.";
     private ClientRepository clientRepository;
     private ProductRepository productRepository;
     private ClientProductRepository clientProductRepository;
@@ -43,7 +44,7 @@ public class ClientService {
             return client.get();
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
     public CreateClient save(CreateClient createClient) {
@@ -80,7 +81,7 @@ public class ClientService {
             return clientRepository.save(client.get());
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
 
@@ -93,7 +94,7 @@ public class ClientService {
             return clientRepository.save(client.get());
         }
 
-        throw new NotFoundException("Client not found.");
+        throw new NotFoundException(ERROR_CLIENT_NOT_FOUND);
     }
 
     public void acceptManualProduct(String clientName, Integer productId) {
@@ -117,10 +118,10 @@ public class ClientService {
             }
 
             if (!isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
-                clientProductRepository.save(client.get(), product.get(), ApprobationStatus.NOT_SET);
+                clientProductRepository.deleteById(client.get(), product.get());
             }
         } else {
-            throw new NotFoundException("Client and product not found.");
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }
     }
 
@@ -147,9 +148,39 @@ public class ClientService {
             }
             clientProductRepository.save(client.get(), product.get(), approbationStatus);
         } else {
-            throw new NotFoundException("Client and product not found.");
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }
     }
+
+    public void unSubscribeProduct(String clientName, Integer productId) {
+
+        Optional<Client> client = clientRepository.findById(clientName);
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (client.isPresent() && product.isPresent()) {
+
+            ApprobationStatus approbationStatus = clientProductRepository
+                .findById(client.get(), product.get());
+
+            if (approbationStatus == null) {
+                throw new NotFoundException("Product is not subscribed. Cannot unsubscribe.");
+            } else if (approbationStatus.equals(ApprobationStatus.WAITING_FOR_DELETION)) {
+                throw new AlreadyExistsException("Product is already waiting to be unsubscribe.");
+            }
+
+            if (product.get().getProductType().equals(ProductType.AUTOMATIC.getValue()) ||
+                approbationStatus.equals(ApprobationStatus.WAITING_FOR_SUBSCRIPTION)) {
+                clientProductRepository.deleteById(client.get(), product.get());
+            } else {
+                approbationStatus = ApprobationStatus.WAITING_FOR_DELETION;
+                clientProductRepository.save(client.get(), product.get(), approbationStatus);
+            }
+
+        } else {
+            throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
+        }
+    }
+
 
     public List<Client> findClientsWaitingProductApprobation() {
 
@@ -160,8 +191,9 @@ public class ClientService {
 
                 ApprobationStatus approbationStatus = clientProductRepository.findById(client, product);
 
-                if ((ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus) || ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus))
-                        && !waitingForProductApprobations.contains(client)) {
+                if ((ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus)
+                    || ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus))
+                    && !waitingForProductApprobations.contains(client)) {
                     waitingForProductApprobations.add(client);
                 }
             }

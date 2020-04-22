@@ -10,8 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Component
 public class ResponseBuilder {
 
@@ -80,8 +78,8 @@ public class ResponseBuilder {
         String getTaskUrl = bankSystemUrlBuilder.buildGetTaskUrl();
 
         return webClient.get()
-                .uri(getTaskUrl)
-                .retrieve()
-                .bodyToMono(Client[].class);
+            .uri(getTaskUrl)
+            .retrieve()
+            .bodyToMono(Client[].class);
     }
 }

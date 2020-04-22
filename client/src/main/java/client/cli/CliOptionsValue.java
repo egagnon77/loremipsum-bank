@@ -2,7 +2,7 @@ package client.cli;
 
 public enum CliOptionsValue {
 
-    Name("n");
+    NAME("n");
 
     private String value;
 

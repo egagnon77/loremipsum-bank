@@ -28,31 +28,40 @@ public class CommandLineProcessor {
     }
 
     public void process(CommandLine commandLine) {
-        if (commandLine.hasOption(CliOptions.Status.getValue())) {
+        if (commandLine.hasOption(CliOptions.STATUS.getValue())) {
             processStatusClient(commandLine);
-        } else if (commandLine.hasOption(CliOptions.Available.getValue())) {
+        } else if (commandLine.hasOption(CliOptions.AVAILABLE.getValue())) {
             processAvailableProducts(commandLine);
-        } else if (commandLine.hasOption(CliOptions.Subscribe.getValue())) {
+        } else if (commandLine.hasOption(CliOptions.SUBSCRIBE.getValue())) {
             processSubscribe(commandLine);
+        } else if (commandLine.hasOption(CliOptions.UNSUBSCRIBE.getValue())) {
+            processUnsubscribe(commandLine);
         }
     }
 
     private void processStatusClient(CommandLine commandLine) {
-        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.NAME.getValue()));
         client.setProducts(clientService.getProducts(client));
         logger.info(client.toString());
     }
 
     private void processAvailableProducts(CommandLine commandLine) {
-        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.NAME.getValue()));
         client.setProducts(clientService.getAvailableProducts(client));
         logger.info(client.toString());
     }
 
     private void processSubscribe(CommandLine commandLine) {
-        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
-        String productId = commandLine.getOptionValue(CliOptions.Subscribe.getValue());
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.NAME.getValue()));
+        String productId = commandLine.getOptionValue(CliOptions.SUBSCRIBE.getValue());
         clientService.subscribeProduct(client, (Integer.valueOf(productId)));
         logger.info("Subscribed ProductId '{}' Completed.", productId);
+    }
+
+    private void processUnsubscribe(CommandLine commandLine) {
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.NAME.getValue()));
+        String productId = commandLine.getOptionValue(CliOptions.UNSUBSCRIBE.getValue());
+        clientService.unSubscribeProduct(client, (Integer.valueOf(productId)));
+        logger.info("Unsubscribed ProductId '{}' Completed. There may be an authorization required.", productId);
     }
 }

@@ -16,10 +16,10 @@ public class CliConfigurationTest {
     private static final String AVAILABLE_DESCRIPTION = "Liste tous les produits auquel le client a accès";
     private static final String SUBSCRIBE_DESCRIPTION = "Souscrit à un produit";
 
-    private static final Option CLIENT_NAME_OPTION = Option.builder(CliOptionsValue.Name.getValue()).argName(ARG_CLIENT_NAME).required(true).hasArg(true).build();
-    private static final Option STATUS_OPTION = Option.builder().longOpt(CliOptions.Status.getValue()).desc(LIST_DESCRIPTION).build();
-    private static final Option AVAILABLE_OPTION =  Option.builder().longOpt(CliOptions.Available.getValue()).desc(AVAILABLE_DESCRIPTION).build();
-    private static final Option SUBSCRIBE_OPTION = Option.builder().longOpt(CliOptions.Available.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build();
+    private static final Option CLIENT_NAME_OPTION = Option.builder(CliOptionsValue.NAME.getValue()).argName(ARG_CLIENT_NAME).required(true).hasArg(true).build();
+    private static final Option STATUS_OPTION = Option.builder().longOpt(CliOptions.STATUS.getValue()).desc(LIST_DESCRIPTION).build();
+    private static final Option AVAILABLE_OPTION =  Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).desc(AVAILABLE_DESCRIPTION).build();
+    private static final Option SUBSCRIBE_OPTION = Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build();
     private CliConfiguration testedClass;
 
     @Before
@@ -32,7 +32,7 @@ public class CliConfigurationTest {
 
         Options result = testedClass.options();
 
-        assertEquals(CLIENT_NAME_OPTION, result.getOption(CliOptionsValue.Name.getValue()));
+        assertEquals(CLIENT_NAME_OPTION, result.getOption(CliOptionsValue.NAME.getValue()));
     }
 
     @Test

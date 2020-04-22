@@ -16,7 +16,7 @@ public class ClientDto {
 
     @OneToMany(
         mappedBy = "clientDto",
-        cascade = CascadeType.ALL,
+        cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE},
         orphanRemoval = true
     )
     private List<ClientProductsDto> clientProductsDtos = new ArrayList<>();

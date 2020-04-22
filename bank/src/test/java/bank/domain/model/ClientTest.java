@@ -1,10 +1,15 @@
 package bank.domain.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import bank.domain.exception.InvalidArgumentException;
 import bank.domain.exception.MissingParameterException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -107,5 +112,53 @@ public class ClientTest {
     {
         Client client= new Client();
         assertNotNull(client);
+    }
+
+    @Test
+    public void whenAssigningProductThenClientContaintProduct() {
+        Product product = new Product();
+        clientUnderTest = new Client(A_NAME);
+        clientUnderTest.getProducts().add(product);
+
+        assertTrue(clientUnderTest.getProducts().contains(product));
+    }
+
+    @Test
+    public void whenAssigningProductListThenClientListIsContained() {
+        Product product = new Product();
+        List<Product> productArrayList = new ArrayList<>();
+        productArrayList.add(product);
+        clientUnderTest = new Client(A_NAME);
+        clientUnderTest.setProducts(productArrayList);
+        assertEquals(productArrayList, clientUnderTest.getProducts());
+    }
+
+    @Test
+    public void whenComparingTwoClientByNameThenTheyShouldBeEquals() {
+        Client a = new Client(A_NAME);
+        Client b = new Client(A_NAME);
+
+        assertTrue(a.equals(b));
+    }
+
+    @Test
+    public void whenComparingSameClientThenTheyShouldBeEquals() {
+        Client a = new Client(A_NAME);
+
+        assertTrue(a.equals(a));
+    }
+
+    @Test
+    public void whenTypeComparedIsNotClientThenTheyShouldNotEquals() {
+        Client a = new Client(A_NAME);
+        Integer b = 0;
+        assertFalse(a.equals(b));
+    }
+
+    @Test
+    public void whenClientIsCreateThenAHashCodeShouldBeCreated() {
+        Client a = new Client(A_NAME);
+        Integer b = 0;
+        assertTrue(a.hashCode() > 0);
     }
 }

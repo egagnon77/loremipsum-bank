@@ -1,6 +1,10 @@
 package client;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import client.cli.CommandLineProcessor;
+import client.domain.exception.DataSourceBadResponseException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -12,11 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientApplicationTest {
@@ -56,5 +55,22 @@ public class ClientApplicationTest {
 
         when(commandLineParser.parse(options, new String[]{AN_ARGUMENT})).thenThrow(new ParseException(A_MESSAGE));
         testedClass.run(AN_ARGUMENT);
+    }
+
+    @Test(expected = ParseException.class)
+    public void givenEmptyArgumentWhenParsingThenAParExceptionMustBeThrown() throws Exception {
+
+        String[] arg = new String[0];
+        testedClass.run(arg);
+    }
+
+    @Test()
+    public void ifAnDataSourceBadResponseExceptionIsThrownByTheCommandLineParserThenAnExceptionIsLoggedAsAnError()
+        throws Exception {
+
+        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT}))
+            .thenThrow(new DataSourceBadResponseException(A_MESSAGE));
+        testedClass.run(AN_ARGUMENT);
+        verify(logger).error(A_MESSAGE);
     }
 }

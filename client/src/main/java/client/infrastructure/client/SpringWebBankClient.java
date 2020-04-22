@@ -62,4 +62,15 @@ public class SpringWebBankClient implements BankClient {
             throw new DataSourceBadResponseException(e.getMessage());
         }
     }
+
+    @Override
+    public void unSubscribeProduct(Client client, Integer productId) {
+        String getUnsubscribeProductsUrl = bankSystemUrlBuilder.buildUnsubscribeProductUrl(client, productId);
+
+        try {
+            restTemplate.put(getUnsubscribeProductsUrl, Object.class);
+        } catch (HttpClientErrorException e) {
+            throw new DataSourceBadResponseException(e.getMessage());
+        }
+    }
 }

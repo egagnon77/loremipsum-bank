@@ -28,5 +28,9 @@ public class ClientService {
     public void subscribeProduct(Client client, Integer productID) {
         bankClient.subscribeProduct(client, productID);
     }
+
+    public void unSubscribeProduct(Client client, Integer productID) {
+        bankClient.unSubscribeProduct(client, productID);
+    }
 }
 

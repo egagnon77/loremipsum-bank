@@ -3,13 +3,10 @@ package bank.infrastructure.mapper;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.infrastructure.entity.ClientDto;
-import bank.infrastructure.entity.ProductDto;
-
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ClientMapper {

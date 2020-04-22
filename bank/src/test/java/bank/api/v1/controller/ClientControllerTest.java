@@ -199,6 +199,14 @@ public class ClientControllerTest {
     }
 
     @Test
+    public void givenAClientNameAndAProductId_whenUnsubscribeProduct_thenResponseHttpStatusIsOk() {
+
+        ResponseEntity<Void> result = testedClass.unsubscribeProduct(A_CLIENT_NAME, A_PRODUCT_ID);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
     public void whenFindClientsWaitingProductApprobation_thenAListOfClientIsReturned() {
 
         List<Client> clients = new ArrayList<>();

@@ -52,5 +52,16 @@ public class BankSystemUrlBuilderTest {
         assertEquals(A_BASE_URL + "/client/" + client.getName() + "/product/" + A_PRODUCT_ID + "/subscribe", result);
     }
 
+    @Test
+    public void givenAClient_whenBuildUnsubscribeProductsUrl_thenUrlMustBeReturnedWithTheNameOfThisClientAndProductId() {
+
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+
+        String result = testedClass.buildUnsubscribeProductUrl(client, A_PRODUCT_ID);
+
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/product/" + A_PRODUCT_ID + "/unsubscribe", result);
+    }
+
 
 }

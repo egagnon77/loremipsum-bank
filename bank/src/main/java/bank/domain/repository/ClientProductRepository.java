@@ -10,4 +10,6 @@ public interface ClientProductRepository {
 
     void save(Client client, Product product, ApprobationStatus approbationStatus);
 
+    void deleteById(Client client, Product product);
+
 }
