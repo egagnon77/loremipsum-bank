@@ -10,7 +10,7 @@ addons:
 stages:
   - tests
   - name: deploy
-    if: branch = master 
+    if: type = push && branch = master
 
 jobs:
   include:
