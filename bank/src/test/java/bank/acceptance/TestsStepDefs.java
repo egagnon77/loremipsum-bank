@@ -1,5 +1,8 @@
 package bank.acceptance;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+
 import bank.api.v1.dto.CreateClient;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
@@ -12,14 +15,10 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Assert;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import org.junit.Assert;
 
 public class TestsStepDefs {
 
@@ -68,6 +67,12 @@ public class TestsStepDefs {
     public void i_accept_product_of_a_client(Integer productId, String clientName) {
         request = given();
         response = request.when().patch(CLIENT_URL + "/" + clientName + "/product/" + productId + "/accept");
+    }
+
+    @When("I subscribe to a product with id {int} of {word} client")
+    public void i_subscribe_to_a_product_of_a_client(Integer productId, String clientName) {
+        request = given();
+        response = request.when().put(CLIENT_URL + "/" + clientName + "/product/" + productId + "/subscribe");
     }
 
     @When("I reject a manual product with id {int} of {word} client")

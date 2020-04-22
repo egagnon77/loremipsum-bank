@@ -3,7 +3,8 @@ package client.cli;
 public enum CliOptions {
 
     Status("status"),
-    Available("avail");
+    Available("avail"),
+    Subscribe("subscribe");
 
     private String value;
 

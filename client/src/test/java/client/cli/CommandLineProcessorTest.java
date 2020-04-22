@@ -25,6 +25,7 @@ public class CommandLineProcessorTest {
     private static final String A_CLIENT_NAME = "aClientName";
     private static final String A_PRODUCT_NAME = "aProductName";
     private static final String A_MESSAGE = "aMessage";
+    private static final Integer A_PRODUCT_ID = 1;
 
     @Mock
     private ClientFactory clientFactory;
@@ -63,7 +64,7 @@ public class CommandLineProcessorTest {
 
         verify(logger).info(client.toString());
     }
-    
+
     @Test
     public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
@@ -91,6 +92,23 @@ public class CommandLineProcessorTest {
 
         testedClass.process(commandLine);
     }
+
+    @Test
+    public void givenACommandLineWithSubscribeOptionAndClientName_thenSubscribeProductMustBeInvoked() {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.Subscribe.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.Name.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.Subscribe.getValue())).thenReturn(A_PRODUCT_ID.toString());
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+
+        testedClass.process(commandLine);
+
+        verify(clientService).subscribeProduct(client, A_PRODUCT_ID);
+    }
+
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();

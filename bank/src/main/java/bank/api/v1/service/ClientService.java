@@ -2,10 +2,12 @@ package bank.api.v1.service;
 
 import bank.api.v1.dto.CreateClient;
 import bank.domain.exception.AlreadyExistsException;
+import bank.domain.exception.InvalidArgumentException;
 import bank.domain.exception.NotFoundException;
 import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
+import bank.domain.model.ProductType;
 import bank.domain.repository.ClientProductRepository;
 import bank.domain.repository.ClientRepository;
 import bank.domain.repository.ProductRepository;
@@ -25,7 +27,7 @@ public class ClientService {
 
     @Autowired
     public ClientService(ClientRepository clientRepository, ProductRepository productRepository,
-                         ClientProductRepository clientProductRepository) {
+        ClientProductRepository clientProductRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
         this.clientProductRepository = clientProductRepository;
@@ -62,10 +64,9 @@ public class ClientService {
 
     public List<Product> getAvailableProducts(String id) {
         Client client = get(id);
-        List<Product> products = productRepository.findAll().stream().filter(p ->
+        return productRepository.findAll().stream().filter(p ->
             p.getProductLevel() <= client.getProductLevel()).collect(Collectors.toList());
 
-        return products;
     }
 
     public Client upgradeStatus(String id) {
@@ -109,7 +110,7 @@ public class ClientService {
         if (client.isPresent() && product.isPresent()) {
             ApprobationStatus approbationStatus = clientProductRepository.findById(client.get(), product.get());
 
-            if (isAccept && ApprobationStatus.WAITING_FOR_SUBCRIPTION.equals(approbationStatus)) {
+            if (isAccept && ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus)) {
                 clientProductRepository.save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
             }
 
@@ -119,6 +120,32 @@ public class ClientService {
         } else {
             throw new NotFoundException("Client and product not found.");
         }
+    }
 
+    public void subscribeProduct(String clientName, Integer productId) {
+
+        Optional<Client> client = clientRepository.findById(clientName);
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (client.isPresent() && product.isPresent()) {
+            if (product.get().getProductLevel() > client.get().getProductLevel()) {
+                throw new InvalidArgumentException("Cannot subscribe: product not available for the client.");
+            }
+            ApprobationStatus approbationStatus = clientProductRepository
+                .findById(client.get(), product.get());
+
+            if (approbationStatus != null) {
+                throw new AlreadyExistsException("Product is already subscribed.");
+            }
+
+            if (product.get().getProductType().equals(ProductType.AUTOMATIC.getValue())) {
+                approbationStatus = ApprobationStatus.SUBSCRIBED;
+            } else {
+                approbationStatus = ApprobationStatus.WAITING_FOR_SUBSCRIPTION;
+            }
+            clientProductRepository.save(client.get(), product.get(), approbationStatus);
+        } else {
+            throw new NotFoundException("Client and product not found.");
+        }
     }
 }

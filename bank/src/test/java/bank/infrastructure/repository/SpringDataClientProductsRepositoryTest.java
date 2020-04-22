@@ -1,22 +1,23 @@
 package bank.infrastructure.repository;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import bank.domain.model.ApprobationStatus;
 import bank.domain.model.Client;
 import bank.domain.model.Product;
 import bank.infrastructure.entity.ClientProductsDto;
 import bank.infrastructure.entity.ClientProductsPrimaryKeys;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SpringDataClientProductsRepositoryTest {
@@ -24,16 +25,23 @@ public class SpringDataClientProductsRepositoryTest {
     @Mock
     private CrudClientProductsRepository crudClientProductsRepository;
 
+    @Mock
+    private CrudClientRepository crudClientRepository;
+
+    @Mock
+    private CrudProductRepository crudProductRepository;
+
     private Client client;
     private Product product;
 
     private SpringDataClientProductsRepository testedClass;
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         client = new Client();
         product = new Product();
-        testedClass = new SpringDataClientProductsRepository(crudClientProductsRepository);
+        testedClass = new SpringDataClientProductsRepository(crudClientProductsRepository, crudClientRepository,
+            crudProductRepository);
     }
 
     @Test
@@ -51,7 +59,8 @@ public class SpringDataClientProductsRepositoryTest {
 
         ClientProductsDto clientProductsDto = new ClientProductsDto();
         clientProductsDto.setApprobationStatus(1);
-        when(crudClientProductsRepository.findById(any(ClientProductsPrimaryKeys.class))).thenReturn(Optional.of(clientProductsDto));
+        when(crudClientProductsRepository.findById(any(ClientProductsPrimaryKeys.class)))
+            .thenReturn(Optional.of(clientProductsDto));
 
         ApprobationStatus result = testedClass.findById(client, product);
 
@@ -59,10 +68,11 @@ public class SpringDataClientProductsRepositoryTest {
     }
 
     @Test
-    public void ifNoClientProductExist_whenSaving_thenNothingIsSavedToDatabase() {
+    public void ifNoClientProductExistAndNoClient_whenSaving_thenNothingIsSavedToDatabase() {
 
         when(crudClientProductsRepository.findById(any(ClientProductsPrimaryKeys.class))).thenReturn(Optional.empty());
-
+        when(crudClientRepository.findById(any(String.class))).thenReturn(Optional.empty());
+        when(crudProductRepository.findById(any(Integer.class))).thenReturn(Optional.empty());
         testedClass.save(client, product, ApprobationStatus.SUBSCRIBED);
 
         verify(crudClientProductsRepository, times(0)).save(any(ClientProductsDto.class));
@@ -73,7 +83,8 @@ public class SpringDataClientProductsRepositoryTest {
 
         ClientProductsDto clientProductsDto = new ClientProductsDto();
         clientProductsDto.setApprobationStatus(1);
-        when(crudClientProductsRepository.findById(any(ClientProductsPrimaryKeys.class))).thenReturn(Optional.of(clientProductsDto));
+        when(crudClientProductsRepository.findById(any(ClientProductsPrimaryKeys.class)))
+            .thenReturn(Optional.of(clientProductsDto));
 
         testedClass.save(client, product, ApprobationStatus.SUBSCRIBED);
 

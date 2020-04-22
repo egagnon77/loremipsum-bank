@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class BankSystemUrlBuilder {
 
     private static final String BANK_SERVER_BASE_URL = "${client.bank.server.base.url}";
+    public static final String CLIENT_PART_URL = "/client/";
 
     private String bankServerBaseUrl;
 
@@ -18,10 +19,14 @@ public class BankSystemUrlBuilder {
     }
 
     public String buildGetProductsUrl(Client client) {
-        return bankServerBaseUrl + "/client/" + client.getName() + "/products";
+        return bankServerBaseUrl + CLIENT_PART_URL + client.getName() + "/products";
     }
 
     public String buildGetAvailableProductsUrl(Client client) {
-        return bankServerBaseUrl + "/client/" + client.getName() + "/products/available";
+        return bankServerBaseUrl + CLIENT_PART_URL + client.getName() + "/products/available";
+    }
+
+    public String buildSubscribeProductUrl(Client client, Integer productId) {
+        return bankServerBaseUrl + CLIENT_PART_URL + client.getName() + "/product/" + productId + "/subscribe";
     }
 }

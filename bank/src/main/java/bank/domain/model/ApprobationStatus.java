@@ -3,7 +3,7 @@ package bank.domain.model;
 public enum ApprobationStatus {
     NOT_SET(-1),
     SUBSCRIBED(0),
-    WAITING_FOR_SUBCRIPTION(1),
+    WAITING_FOR_SUBSCRIPTION(1),
     WAITING_FOR_DELETION(2);
 
     private Integer value;
@@ -21,7 +21,7 @@ public enum ApprobationStatus {
             case 0:
                 return SUBSCRIBED;
             case 1:
-                return WAITING_FOR_SUBCRIPTION;
+                return WAITING_FOR_SUBSCRIPTION;
             case 2:
                 return WAITING_FOR_DELETION;
             default:

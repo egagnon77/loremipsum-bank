@@ -9,4 +9,5 @@ public interface BankClient {
 
     List<Product> getProducts(Client client);
     List<Product> getAvailableProducts(Client client);
+    void subscribeProduct(Client client, Integer productId);
 }

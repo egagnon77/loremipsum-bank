@@ -3,10 +3,9 @@ package client.domain.service;
 import client.domain.client.BankClient;
 import client.domain.model.Client;
 import client.domain.model.Product;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ClientService {
@@ -22,5 +21,12 @@ public class ClientService {
         return bankClient.getProducts(client);
     }
 
-    public List<Product> getAvailableProducts(Client client) { return bankClient.getAvailableProducts(client); }
+    public List<Product> getAvailableProducts(Client client) {
+        return bankClient.getAvailableProducts(client);
+    }
+
+    public void subscribeProduct(Client client, Integer productID) {
+        bankClient.subscribeProduct(client, productID);
+    }
 }
+

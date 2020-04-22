@@ -1,10 +1,9 @@
 package client;
 
 import client.cli.CommandLineProcessor;
-
+import client.domain.exception.DataSourceBadResponseException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -21,13 +20,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ClientApplication implements CommandLineRunner {
+
     private static final int EXIT_FAILURE = 1;
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientApplication.class);
     public static final String CMD_LINE_SYNTAX = "java -jar client.jar";
     private CommandLineParser commandLineParser;
     private CommandLineProcessor commandLineProcessor;
     private Options options;
-    private Logger logger;
+    private Logger loggerNonStatique;
 
     @Autowired
     public ClientApplication(
@@ -39,7 +39,7 @@ public class ClientApplication implements CommandLineRunner {
         this.options = options;
         this.commandLineParser = commandLineParser;
         this.commandLineProcessor = commandLineProcessor;
-        this.logger = logger;
+        this.loggerNonStatique = logger;
     }
 
     public static void main(String[] args) {
@@ -50,27 +50,29 @@ public class ClientApplication implements CommandLineRunner {
 
             String[] cleanedArgs = client.cli.CommandLine.cleanArguments(args);
             clientApplication.run(cleanedArgs);
-        }
-        catch (Exception ex) {
-            LOGGER.error("Technical Error : " + ex.getMessage());
+        } catch (Exception ex) {
+            LOGGER.error("Technical Error : {}", ex.getMessage());
             System.exit(EXIT_FAILURE);
         }
     }
 
     @Override
     public void run(String... args) throws Exception {
-        try {            
+        try {
             if (args.length == 0) {
                 throw new ParseException("Empty arguments.");
             } else {
                 CommandLine commandLine = commandLineParser.parse(options, args);
                 commandLineProcessor.process(commandLine);
             }
-        } 
-        catch (ParseException parse) {
-            logger.info(getHelpFormatted());
+
+        } catch (DataSourceBadResponseException ds) {
+            LOGGER.error(ds.getMessage());
+
+        } catch (ParseException parse) {
+            loggerNonStatique.info(getHelpFormatted());
             throw parse;
-        }       
+        }
     }
 
     private String getHelpFormatted() {
@@ -78,7 +80,7 @@ public class ClientApplication implements CommandLineRunner {
 
         StringWriter out = new StringWriter();
         PrintWriter printWriter = new PrintWriter(out);
-        
+
         formatter.printHelp(
             printWriter,
             80,

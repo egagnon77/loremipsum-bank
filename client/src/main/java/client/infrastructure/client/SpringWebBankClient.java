@@ -1,17 +1,17 @@
 package client.infrastructure.client;
 
 import client.domain.client.BankClient;
+import client.domain.exception.DataSourceBadResponseException;
 import client.domain.exception.NotFoundException;
 import client.domain.model.Client;
 import client.domain.model.Product;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class SpringWebBankClient implements BankClient {
@@ -21,7 +21,7 @@ public class SpringWebBankClient implements BankClient {
 
     @Autowired
     public SpringWebBankClient(BankSystemUrlBuilder bankSystemUrlBuilder,
-                               RestTemplate restTemplate) {
+        RestTemplate restTemplate) {
         this.bankSystemUrlBuilder = bankSystemUrlBuilder;
         this.restTemplate = restTemplate;
     }
@@ -49,6 +49,17 @@ public class SpringWebBankClient implements BankClient {
 
         } catch (HttpClientErrorException e) {
             throw new NotFoundException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void subscribeProduct(Client client, Integer productId) {
+        String getSubscribeProductsUrl = bankSystemUrlBuilder.buildSubscribeProductUrl(client, productId);
+
+        try {
+            restTemplate.put(getSubscribeProductsUrl, Object.class);
+        } catch (HttpClientErrorException e) {
+            throw new DataSourceBadResponseException(e.getMessage());
         }
     }
 }

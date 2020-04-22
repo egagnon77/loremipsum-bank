@@ -1,6 +1,5 @@
 package client.cli;
 
-import client.domain.exception.NotFoundException;
 import client.domain.factory.ClientFactory;
 import client.domain.model.Client;
 import client.domain.service.ClientService;
@@ -33,6 +32,8 @@ public class CommandLineProcessor {
             processStatusClient(commandLine);
         } else if (commandLine.hasOption(CliOptions.Available.getValue())) {
             processAvailableProducts(commandLine);
+        } else if (commandLine.hasOption(CliOptions.Subscribe.getValue())) {
+            processSubscribe(commandLine);
         }
     }
 
@@ -46,5 +47,12 @@ public class CommandLineProcessor {
         Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
         client.setProducts(clientService.getAvailableProducts(client));
         logger.info(client.toString());
+    }
+
+    private void processSubscribe(CommandLine commandLine) {
+        Client client = clientFactory.create(commandLine.getOptionValue(CliOptionsValue.Name.getValue()));
+        String productId = commandLine.getOptionValue(CliOptions.Subscribe.getValue());
+        clientService.subscribeProduct(client, (Integer.valueOf(productId)));
+        logger.info("Subscribed ProductId '{}' Completed.", productId);
     }
 }

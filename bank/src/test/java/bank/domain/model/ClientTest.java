@@ -1,6 +1,7 @@
 package bank.domain.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import bank.domain.exception.InvalidArgumentException;
 import bank.domain.exception.MissingParameterException;
@@ -99,5 +100,12 @@ public class ClientTest {
         clientUnderTest.downgradeStatus();
 
         assertEquals(ProductLevel.NORMAL.getValue(), clientUnderTest.getProductLevel());
+    }
+
+    @Test
+    public void whenCreatingAClientWithNoArgumentThenANotNullClientIsConstructed()
+    {
+        Client client= new Client();
+        assertNotNull(client);
     }
 }
