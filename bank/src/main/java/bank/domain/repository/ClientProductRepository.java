@@ -9,4 +9,5 @@ public interface ClientProductRepository {
     ApprobationStatus findById(Client client, Product product);
 
     void save(Client client, Product product, ApprobationStatus approbationStatus);
+
 }

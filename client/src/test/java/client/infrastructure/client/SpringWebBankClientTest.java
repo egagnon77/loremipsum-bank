@@ -1,32 +1,31 @@
 package client.infrastructure.client;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import client.domain.exception.NotFoundException;
 import client.domain.model.Client;
 import client.domain.model.Product;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SpringWebBankClientTest {
 
     private static final String A_NAME = "aName";
     private static final String A_GET_PRODUCTS_URL = "aGetProductsUrl";
+    private static final Integer A_PRODUCT_ID = 1;
 
     @Mock
     private BankSystemUrlBuilder bankSystemUrlBuilder;
@@ -47,7 +46,6 @@ public class SpringWebBankClientTest {
         client = new Client();
         client.setName(A_NAME);
     }
-
 
 
     @Test
@@ -97,5 +95,15 @@ public class SpringWebBankClientTest {
         when(restTemplate.getForEntity(A_GET_PRODUCTS_URL, Product[].class)).thenThrow(HttpClientErrorException.class);
 
         testedClass.getAvailableProducts(client);
+    }
+
+    @Test()
+    public void givenAClientAndAProduct_whenSubscribeProduct_thenRestemplateWithPutMustBeCalled() {
+        when(bankSystemUrlBuilder.buildSubscribeProductUrl(client, A_PRODUCT_ID)).thenReturn(A_GET_PRODUCTS_URL);
+
+        testedClass.subscribeProduct(client, A_PRODUCT_ID);
+
+        verify(restTemplate, times(1)).put(A_GET_PRODUCTS_URL,Object.class);
+
     }
 }

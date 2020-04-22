@@ -23,7 +23,7 @@ public class CliConfiguration {
         options.addOption(Option.builder().longOpt(CliOptions.Status.getValue()).desc(LIST_DESCRIPTION).build());
 
         options.addOption(Option.builder().longOpt(CliOptions.Available.getValue()).desc(AVAILABLE_DESCRIPTION).build());
-        options.addOption(Option.builder().longOpt(CliOptions.Available.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build());
+        options.addOption(Option.builder().longOpt(CliOptions.Subscribe.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build());
 
         return options;
     }

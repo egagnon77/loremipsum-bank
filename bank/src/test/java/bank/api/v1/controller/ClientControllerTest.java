@@ -189,4 +189,12 @@ public class ClientControllerTest {
         // Then
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
+
+    @Test
+    public void givenAClientNameAndAProductId_whenSubscribeProduct_thenResponseHttpStatusIsOk() {
+
+        ResponseEntity<Void> result = testedClass.subscribeProduct(A_CLIENT_NAME, A_PRODUCT_ID);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
 }

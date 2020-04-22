@@ -25,8 +25,8 @@ public class ClientService {
         return bankClient.getAvailableProducts(client);
     }
 
-    public Product subscribeProduct(Client client, Integer productID) {
-        return bankClient.subscribeProduct(client, productID);
+    public void subscribeProduct(Client client, Integer productID) {
+        bankClient.subscribeProduct(client, productID);
     }
 }
 

@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -50,5 +52,16 @@ public class ClientServiceTest {
         List<Product> result = testedClass.getAvailableProducts(client);
 
         assertEquals(products, result);
+    }
+
+    @Test
+    public void givenAProductIdAndAClientName_whenSubscribeProduct_thenWeShouldCallBankEmployee() {
+
+        Integer aProductId = 88;
+        String aClientName = "aClientName";
+        Client client = new Client();
+        testedClass.subscribeProduct(client,aProductId);
+
+        verify(bankClient, times(1)).subscribeProduct(client, aProductId);
     }
 }

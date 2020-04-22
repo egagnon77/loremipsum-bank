@@ -64,7 +64,7 @@ public class CommandLineProcessorTest {
 
         verify(logger).info(client.toString());
     }
-    
+
     @Test
     public void givenACommandLineWithAvailableOption_whenProcess_thenLoggerShouldLogAClientWithHisProducts() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
@@ -94,19 +94,21 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithSubscribeOption_whenAnNotFoundExceptionOccursDuringProcess_thenLoggerShouldLogAnError() {
+    public void givenACommandLineWithSubscribeOptionAndClientName_thenSubscribeProductMustBeInvoked() {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.Subscribe.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.Name.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptionsValue.Name.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.Subscribe.getValue())).thenReturn(A_PRODUCT_ID.toString());
         Client client = new Client();
         client.setName(A_CLIENT_NAME);
         when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
-        when(clientService.subscribeProduct(client, A_PRODUCT_ID)).thenThrow(new NotFoundException(A_MESSAGE));
 
         testedClass.process(commandLine);
 
-        verify(logger).error(A_MESSAGE);
+        verify(clientService).subscribeProduct(client, A_PRODUCT_ID);
     }
+
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();

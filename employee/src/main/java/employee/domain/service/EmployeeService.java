@@ -22,7 +22,9 @@ public class EmployeeService {
         return bankEmployee.addClient(addClient);
     }
 
-    public List<Product> getProducts(Client client) { return bankEmployee.getProducts(client); }
+    public List<Product> getProducts(Client client) {
+        return bankEmployee.getProducts(client);
+    }
 
     public Client upgradeClient(Client client) {
         return bankEmployee.upgradeClient(client);

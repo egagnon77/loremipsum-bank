@@ -1,15 +1,15 @@
 package client.infrastructure.client;
 
+import static org.junit.Assert.assertEquals;
+
 import client.domain.model.Client;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class BankSystemUrlBuilderTest {
 
     private static final String A_CLIENT_NAME = "aClientName";
-    private static final String A_PRODUCT_ID = "aProductid/";
+    private static final Integer A_PRODUCT_ID = 1;
     private static final String A_BASE_URL = "aBaseUrl";
 
     private BankSystemUrlBuilder testedClass;
@@ -49,9 +49,8 @@ public class BankSystemUrlBuilderTest {
 
         String result = testedClass.buildSubscribeProductUrl(client, A_PRODUCT_ID);
 
-        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/products/" + A_PRODUCT_ID + "/subscribe", result);
+        assertEquals(A_BASE_URL + "/client/" + client.getName() + "/product/" + A_PRODUCT_ID + "/subscribe", result);
     }
-
 
 
 }
