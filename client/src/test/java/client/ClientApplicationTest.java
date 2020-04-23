@@ -64,13 +64,4 @@ public class ClientApplicationTest {
         testedClass.run(arg);
     }
 
-    @Test()
-    public void ifAnDataSourceBadResponseExceptionIsThrownByTheCommandLineParserThenAnExceptionIsLoggedAsAnError()
-        throws Exception {
-
-        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT}))
-            .thenThrow(new DataSourceBadResponseException(A_MESSAGE));
-        testedClass.run(AN_ARGUMENT);
-        verify(logger).error(A_MESSAGE);
-    }
 }

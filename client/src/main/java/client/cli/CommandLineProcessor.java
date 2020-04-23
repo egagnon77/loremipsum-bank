@@ -4,6 +4,7 @@ import client.domain.factory.ClientFactory;
 import client.domain.model.Client;
 import client.domain.service.ClientService;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,8 +28,8 @@ public class CommandLineProcessor {
         this.clientFactory = clientFactory;
     }
 
-    public void process(CommandLine commandLine) {
-        if (commandLine.hasOption(CliOptions.STATUS.getValue())) {
+    public void process(CommandLine commandLine) throws ParseException {
+         if (commandLine.hasOption(CliOptions.STATUS.getValue())) {
             processStatusClient(commandLine);
         } else if (commandLine.hasOption(CliOptions.AVAILABLE.getValue())) {
             processAvailableProducts(commandLine);
@@ -36,7 +37,9 @@ public class CommandLineProcessor {
             processSubscribe(commandLine);
         } else if (commandLine.hasOption(CliOptions.UNSUBSCRIBE.getValue())) {
             processUnsubscribe(commandLine);
-        }
+        } else {
+             throw new ParseException("Invalid command.");
+         }
     }
 
     private void processStatusClient(CommandLine commandLine) {

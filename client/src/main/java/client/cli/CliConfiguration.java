@@ -24,8 +24,8 @@ public class CliConfiguration {
         options.addOption(Option.builder().longOpt(CliOptions.STATUS.getValue()).desc(LIST_DESCRIPTION).build());
 
         options.addOption(Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).desc(AVAILABLE_DESCRIPTION).build());
-        options.addOption(Option.builder().longOpt(CliOptions.SUBSCRIBE.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build());
-        options.addOption(Option.builder().longOpt(CliOptions.UNSUBSCRIBE.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(UNSUBSCRIBE_DESCRIPTION).build());
+        options.addOption(Option.builder().longOpt(CliOptions.SUBSCRIBE.getValue()).argName(ARG_PRODUCT_ID).required(false).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build());
+        options.addOption(Option.builder().longOpt(CliOptions.UNSUBSCRIBE.getValue()).argName(ARG_PRODUCT_ID).required(false).hasArg(true).desc(UNSUBSCRIBE_DESCRIPTION).build());
 
         return options;
     }

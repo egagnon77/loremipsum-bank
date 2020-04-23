@@ -15,11 +15,13 @@ public class CliConfigurationTest {
     private static final String LIST_DESCRIPTION = "Liste tous les produits du client";
     private static final String AVAILABLE_DESCRIPTION = "Liste tous les produits auquel le client a accès";
     private static final String SUBSCRIBE_DESCRIPTION = "Souscrit à un produit";
+    private static final String UNSUBSCRIBE_DESCRIPTION = "Quitte un produit";
 
     private static final Option CLIENT_NAME_OPTION = Option.builder(CliOptionsValue.NAME.getValue()).argName(ARG_CLIENT_NAME).required(true).hasArg(true).build();
     private static final Option STATUS_OPTION = Option.builder().longOpt(CliOptions.STATUS.getValue()).desc(LIST_DESCRIPTION).build();
     private static final Option AVAILABLE_OPTION =  Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).desc(AVAILABLE_DESCRIPTION).build();
-    private static final Option SUBSCRIBE_OPTION = Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).argName(ARG_PRODUCT_ID).required(true).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build();
+    private static final Option SUBSCRIBE_OPTION = Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).argName(ARG_PRODUCT_ID).required(false).hasArg(true).desc(SUBSCRIBE_DESCRIPTION).build();
+    private static final Option UNSUBSCRIBE_OPTION = Option.builder().longOpt(CliOptions.AVAILABLE.getValue()).argName(ARG_PRODUCT_ID).required(false).hasArg(true).desc(UNSUBSCRIBE_DESCRIPTION).build();
     private CliConfiguration testedClass;
 
     @Before
@@ -50,7 +52,7 @@ public class CliConfigurationTest {
     }
 
     @Test
-    public void whenGettingOptions_thenOptionsMustContainsAAvailableOption() {
+    public void whenGettingOptions_thenOptionsMustContainsOnlyAAvailableOption() {
 
         Options result = testedClass.options();
 
@@ -78,13 +80,13 @@ public class CliConfigurationTest {
     }
 
     @Test
-    public void whenGettingOptions_thenOptionsMustContainsASubcribeOption() {
+    public void whenGettingOptions_thenOptionsMustContainsAnUnsubscribeOption() {
 
         Options result = testedClass.options();
 
         boolean optionFound = false;
         for (Option option : result.getOptions()) {
-            if (option.equals(SUBSCRIBE_OPTION)) {
+            if (option.equals(UNSUBSCRIBE_OPTION)) {
                 optionFound = true;
             }
         }
