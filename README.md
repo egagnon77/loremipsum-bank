@@ -1,17 +1,27 @@
 [![GitlabCI Build Status](https://gitlab.com/eric.c.gagnon/bank/badges/master/pipeline.svg)](https://gitlab.com/eric.c.gagnon/bank/-/commits/master)
 [![TravisCI Build Status](https://travis-ci.com/egagnon77/loremipsum-bank.svg?branch=master)](https://travis-ci.com/egagnon77/loremipsum-bank)
 
-# Bank
+# LoremIpsum Bank
 
 ## Reports
-[Rapport MVP](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrable1.pdf)
+* [Rapport MVP](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrable1.pdf)
+* [Rapport Final](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrableFinal.pdf)
 
 ## Mirror Repository
-[Github](https://github.com/egagnon77/loremipsum-bank)
+[LoremIpsum Bank on Github](https://github.com/egagnon77/loremipsum-bank)
 
 ## CI/CD
 * [Gitlab-CI](https://gitlab.com/eric.c.gagnon/bank/pipelines)
 * [Travis-CI](https://travis-ci.com/github/egagnon77/loremipsum-bank)
+
+# Docker Hub
+[Docker Images](https://hub.docker.com/r/loremipsumbank/server/tags)
+> * All **tags** and **latest** are related to Gitlab CI deployment.
+> * Tag **travis-latest** is related to Travis CI deployment.
+
+## Sonarqube Analysis
+* [Sonarqube analysis (From Gitlab-CI)](https://sonarcloud.io/dashboard?id=org.loremipsum%3Amgl7460-h20-bank)
+* [Sonarqube analysis (From Travis-CI)](https://sonarcloud.io/dashboard?id=loremipsum-bank)
 
 ## Prerequisites
 
@@ -30,32 +40,11 @@ sudo ./start-docker.sh
 ```
 > Bank server will run on: http://localhost:8081/api/bank/v1
 
-## V1 Release commands
-### As of release V1 only two commands are implemented:
+## Build Client and Employee 
 ```bash
-# Create a client
-./employee --add CLIENT_NAME
-
-# List client products
-./client -n CLIENT_NAME --status
+sudo mvn clean install
 ```
-
-### Launch employee module from command line
-#### On Linux
-```bash
-# Example
-./employee --list Test
-```
-
-#### On Windows
-Be sure to have Git Bash that will install the command-line shell
-You can launch the script employee that is at the root of the project folder
-In Windows cmd prompt or powershell you have to specify the .sh extension.
-
-```bash
-# Example
-employee.sh --list Test
-```
+> Use ```./client.sh``` and ```./employee.sh``` to launch command. The ```.sh``` is important to avoid conflict with the folders ./client and ./employee. 
 
 ## Developper's rules
 
@@ -63,7 +52,3 @@ employee.sh --list Test
 ```bash
 git commit -m "this is my commit message. Ref #1"
 ```
-
-## Sonarqube 
-* [Sonarqube analysis (From Gitlab-CI)](https://sonarcloud.io/dashboard?id=org.loremipsum%3Amgl7460-h20-bank)
-* [Sonarqube analysis (From Travis-CI)](https://sonarcloud.io/dashboard?id=loremipsum-bank)
