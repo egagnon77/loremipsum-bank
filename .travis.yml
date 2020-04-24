@@ -24,7 +24,7 @@ jobs:
       script:
         - docker build -t banktest/server:rc .
         - cd travis-docker
-        - docker-compose up --detach
+        - docker-compose up --detach --force-recreate --remove-orphans
         - cd ..
         - ./integration-tests.sh
 
