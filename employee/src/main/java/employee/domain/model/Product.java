@@ -6,7 +6,8 @@ public class Product implements Serializable {
 
     private Integer id;
     private String name;
-    private Integer category;
+    private Integer productLevel;
+    private Integer productType;
 
     public void setId(Integer id) {
         this.id = id;
@@ -16,16 +17,17 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setProductLevel(Integer productLevel) {
+        this.productLevel = productLevel;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", category=" + category +
-                '}';
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", product type=" + productType +
+            ", product level=" + productLevel +
+            '}';
     }
 }

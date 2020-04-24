@@ -116,10 +116,17 @@ public class ClientService {
             if (isAccept && ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus)) {
                 clientProductRepository.save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
             }
-
-            if (!isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
+            if (isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
                 clientProductRepository.deleteById(client.get(), product.get());
             }
+
+            if (!isAccept && ApprobationStatus.WAITING_FOR_DELETION.equals(approbationStatus)) {
+                clientProductRepository.save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
+            }
+            if (!isAccept && ApprobationStatus.WAITING_FOR_SUBSCRIPTION.equals(approbationStatus)) {
+                clientProductRepository.deleteById(client.get(), product.get());
+            }
+
         } else {
             throw new NotFoundException(ERROR_CLIENT_AND_PRODUCT_NOT_FOUND);
         }

@@ -1,11 +1,12 @@
 package employee;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import employee.cli.CommandLineProcessor;
+import employee.domain.exception.DataSourceBadResponseException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -64,12 +65,45 @@ public class EmployeeApplicationTest {
         testedClass.run(AN_ARGUMENT);
     }
 
-    @Test(expected = ParseException.class)
-    public void ifAnExceptionIsThrownByTheCommandLineParserThenAnExceptionShouldBeLogged()
-        throws Exception {
+    @Test()
+    public void ifAParseExceptionIsThrownByTheCommandLineParserThenAnExceptionShouldBeLogged() throws Exception {
 
         when(commandLineParser.parse(options, new String[]{AN_ARGUMENT})).thenThrow(new ParseException(A_MESSAGE));
-
         testedClass.run(AN_ARGUMENT);
+        verify(logger).error(A_MESSAGE);
     }
+
+    @Test()
+    public void ifADataSourceBadResponseExceptionIsThrownByTheCommandLineParserThenAnExceptionShouldBeLogged()
+        throws Exception {
+
+        when(commandLineParser.parse(options, new String[]{AN_ARGUMENT}))
+            .thenThrow(new DataSourceBadResponseException(A_MESSAGE));
+        testedClass.run(AN_ARGUMENT);
+        verify(logger).error(A_MESSAGE);
+    }
+
+    @Test()
+    public void givenEmptyArgumentWhenParsingThenExceptionShouldBeLogged() throws Exception {
+
+        String[] arg = new String[0];
+        testedClass.run(arg);
+        verify(logger).error("Empty arguments.");
+
+    }
+
+    @Test
+    public void whenExistCodeIsCalledThenDefaultValueShouldBeReturned() throws Exception {
+        assertEquals(0, testedClass.getExitCode());
+    }
+
+    @Test()
+    public void givenInvalidArgumentWhenLaunchingThenExceptionMustBeThrown() {
+        try {
+            testedClass.main(new String[]{"--"});
+        } catch (Exception ex) {
+            fail("Should not have thrown any exception");
+        }
+    }
+
 }

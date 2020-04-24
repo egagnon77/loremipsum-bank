@@ -2,7 +2,6 @@ package client.infrastructure.client;
 
 import client.domain.client.BankClient;
 import client.domain.exception.DataSourceBadResponseException;
-import client.domain.exception.NotFoundException;
 import client.domain.model.Client;
 import client.domain.model.Product;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class SpringWebBankClient implements BankClient {
             return Arrays.asList(response.getBody());
 
         } catch (HttpClientErrorException e) {
-            throw new NotFoundException(e.getMessage());
+            throw new DataSourceBadResponseException(e.getMessage());
         }
     }
 
@@ -48,7 +47,7 @@ public class SpringWebBankClient implements BankClient {
             return Arrays.asList(response.getBody());
 
         } catch (HttpClientErrorException e) {
-            throw new NotFoundException(e.getMessage());
+            throw new DataSourceBadResponseException(e.getMessage());
         }
     }
 

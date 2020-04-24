@@ -16,77 +16,77 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class WebBankEmployeeTest {
 
-  private static final String A_NAME = "aName";
-  private static final Integer AN_ID = 88;
+    private static final String A_NAME = "aName";
+    private static final Integer AN_ID = 88;
 
-  @Mock
-  private ResponseBuilder responseBuilder;
+    @Mock
+    private ResponseBuilder responseBuilder;
 
-  private AddClient addClient;
-  private Client client;
+    private AddClient addClient;
+    private Client client;
 
-  private WebBankEmployee testedClass;
+    private WebBankEmployee testedClass;
 
-  @Before
-  public void setUp() throws Exception {
-    testedClass = new WebBankEmployee(responseBuilder);
-  }
+    @Before
+    public void setUp() throws Exception {
+        testedClass = new WebBankEmployee(responseBuilder);
+    }
 
-  @Before
-  public void initClient() {
-    addClient = new AddClient();
-    addClient.setName(A_NAME);
-    client = new Client();
-    client.setName(A_NAME);
-  }
+    @Before
+    public void initClient() {
+        addClient = new AddClient();
+        addClient.setName(A_NAME);
+        client = new Client();
+        client.setName(A_NAME);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenAddClientFail_thenADataSourceBadResponseExceptionIsThrown() {
-    when(responseBuilder.addClient(any(AddClient.class))).thenThrow(Exception.class);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenAddClientFail_thenADataSourceBadResponseExceptionIsThrown() {
+        when(responseBuilder.addClient(any(AddClient.class))).thenThrow(Exception.class);
 
-    testedClass.addClient(addClient);
-  }
+        testedClass.addClient(addClient);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenGetProductsFail_thenADataSourceBadResponseExceptionIsThrown() {
-    when(responseBuilder.listProducts(any(Client.class))).thenThrow(Exception.class);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenGetProductsFail_thenADataSourceBadResponseExceptionIsThrown() {
+        when(responseBuilder.listProducts(any(Client.class))).thenThrow(Exception.class);
 
-    testedClass.getProducts(client);
-  }
+        testedClass.getProducts(client);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenUpgradeClientFail_thenADataSourceBadResponseExceptionIsThrown() {
-    when(responseBuilder.upgradeClient(any(Client.class))).thenThrow(Exception.class);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenUpgradeClientFail_thenADataSourceBadResponseExceptionIsThrown() {
+        when(responseBuilder.upgradeClient(any(Client.class))).thenThrow(Exception.class);
 
-    testedClass.upgradeClient(client);
-  }
+        testedClass.upgradeClient(client);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenDowngradeClientFail_thenADataSourceBadResponseExceptionIsThrown() {
-    when(responseBuilder.downgradeClient(any(Client.class))).thenThrow(Exception.class);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenDowngradeClientFail_thenADataSourceBadResponseExceptionIsThrown() {
+        when(responseBuilder.downgradeClient(any(Client.class))).thenThrow(Exception.class);
 
-    testedClass.downgradeClient(client);
-  }
+        testedClass.downgradeClient(client);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenAcceptProductFail_thenADataSourceBadResponseExceptionIsThrown() {
-    doThrow(Exception.class).when(responseBuilder).acceptProduct(AN_ID, A_NAME);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenAcceptProductFail_thenADataSourceBadResponseExceptionIsThrown() {
+        doThrow(Exception.class).when(responseBuilder).acceptProduct(AN_ID, A_NAME);
 
-    testedClass.acceptProduct(AN_ID, A_NAME);
-  }
+        testedClass.acceptProduct(AN_ID, A_NAME);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenRejectProductFail_thenADataSourceBadResponseExceptionIsThrown() {
-    doThrow(Exception.class).when(responseBuilder).rejectProduct(AN_ID, A_NAME);
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenRejectProductFail_thenADataSourceBadResponseExceptionIsThrown() {
+        doThrow(Exception.class).when(responseBuilder).rejectProduct(AN_ID, A_NAME);
 
-    testedClass.rejectProduct(AN_ID, A_NAME);
-  }
+        testedClass.rejectProduct(AN_ID, A_NAME);
+    }
 
-  @Test(expected = DataSourceBadResponseException.class)
-  public void whenTaskFail_thenADataSourceBadResponseExceptionIsThrown() {
-    doThrow(Exception.class).when(responseBuilder).task();
+    @Test(expected = DataSourceBadResponseException.class)
+    public void whenTaskFail_thenADataSourceBadResponseExceptionIsThrown() {
+        doThrow(Exception.class).when(responseBuilder).task();
 
-    testedClass.task();
-  }
+        testedClass.task();
+    }
 
 }

@@ -12,10 +12,8 @@ import employee.domain.model.AddClient;
 import employee.domain.model.Client;
 import employee.domain.model.Product;
 import employee.domain.service.EmployeeService;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
@@ -33,7 +31,6 @@ public class CommandLineProcessorTest {
     private static final String A_PRODUCT_NAME = "aProductName";
     private static final Integer A_PRODUCT_ID = 88;
     private static final String AN_INVALID_PRODUCT_ID = "invalideProductId";
-    private static final String THE_COMPLETED_MESSAGE = "Add Client '{}' Completed.";
     private static final String AN_EXCEPTION_MESSAGE = "myExceptionMessage";
 
     private AddClient addClient;
@@ -86,7 +83,7 @@ public class CommandLineProcessorTest {
 
         testedClass.process(commandLine);
 
-        verify(logger).info(THE_COMPLETED_MESSAGE, addClient.getName());
+        verify(logger).info("Add Client completed for: {}", addClient.getName());
     }
 
     @Test(expected = DataSourceBadResponseException.class)
@@ -115,7 +112,7 @@ public class CommandLineProcessorTest {
 
         testedClass.process(commandLine);
 
-        verify(logger).info(client.toString());
+        verify(logger).info("List products completed: {} ", client.toString());
     }
 
     @Test(expected = DataSourceBadResponseException.class)
@@ -149,7 +146,7 @@ public class CommandLineProcessorTest {
 
         testedClass.process(commandLine);
 
-        verify(logger).info(upgradedClient.toString());
+        verify(logger).info("Upgrade Client completed for: {}", upgradedClient.toString());
     }
 
     @Test(expected = DataSourceBadResponseException.class)
@@ -183,7 +180,7 @@ public class CommandLineProcessorTest {
 
         testedClass.process(commandLine);
 
-        verify(logger).info(downgradedClient.toString());
+        verify(logger).info("Downgrade Client completed for: {}", downgradedClient.toString());
     }
 
     @Test(expected = DataSourceBadResponseException.class)
@@ -224,7 +221,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = ParseException.class)
-    public void givenACommandLineWithAcceptOptionAndInvalidProductId_thenParsExeptionMustBeThrown() throws ParseException {
+    public void givenACommandLineWithAcceptOptionAndInvalidProductId_thenParsExeptionMustBeThrown()
+        throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.ACCEPT.getValue())).thenReturn(true);
@@ -252,7 +250,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = ParseException.class)
-    public void givenACommandLineWithRejectOptionAndInvalidProductId_thenParsExeptionMustBeThrown() throws ParseException {
+    public void givenACommandLineWithRejectOptionAndInvalidProductId_thenParsExeptionMustBeThrown()
+        throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.REJECT.getValue())).thenReturn(true);
@@ -278,7 +277,7 @@ public class CommandLineProcessorTest {
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();
-        product.setCategory(category);
+        product.setProductLevel(category);
         product.setId(id);
         product.setName(name);
         return product;
