@@ -8,6 +8,7 @@
 * [Rapport Final](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrableFinal.pdf)
 
 ### Pipeline Demo
+[Youtube video](https://www.youtube.com/watch?v=8SW6x9vqAQU)
 
 ## Mirror Repository
 [LoremIpsum Bank on Github](https://github.com/egagnon77/loremipsum-bank)
