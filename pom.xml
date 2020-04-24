@@ -24,6 +24,8 @@
         <sonar.organization>school-project-uqam</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.exclusions>**/Application.java,
+						  **/EmployeeApplication.java,
+						  **/ClientApplication.java,
                           **/infrastructure/entity/*.java,
                           **/client/domain/model/*.java,
                           **/employee/domain/model/*.java</sonar.exclusions>
