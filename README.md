@@ -7,6 +7,8 @@
 * [Rapport MVP](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrable1.pdf)
 * [Rapport Final](https://gitlab.com/eric.c.gagnon/bank/-/raw/master/report/RapportLivrableFinal.pdf)
 
+### Pipeline Demo
+
 ## Mirror Repository
 [LoremIpsum Bank on Github](https://github.com/egagnon77/loremipsum-bank)
 
