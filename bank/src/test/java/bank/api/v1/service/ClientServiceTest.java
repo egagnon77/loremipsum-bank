@@ -236,6 +236,21 @@ public class ClientServiceTest {
         verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
     }
 
+    @Test
+    public void ifAnApprobationStatusHasAWaitingForDeletion_whenAcceptManualProduct_thenThisClientProductIsDeleted() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.WAITING_FOR_DELETION);
+
+        testedClass.acceptManualProduct(A_NAME, A_PRODUCT_ID);
+
+        verify(clientProductRepository, times(1)).deleteById(client.get(), product.get());
+    }
+
     @Test(expected = NotFoundException.class)
     public void givenAClientThatDoNotExistInClientRepository_whenSubscribeProduct_thenANotFoundExceptionIsThrown() {
 
@@ -351,7 +366,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void ifAnApprobationStatusHasAWaitingForDeletion_whenRejectManualProduct_thenThisClientProductIsDeleteInClientProductRepository() {
+    public void ifAnApprobationStatusHasAWaitingForDeletion_whenRejectManualProduct_thenThisClientProductIsSetBackToSubscribe() {
 
         Optional<Client> client = Optional.of(new Client());
         Optional<Product> product = Optional.of(new Product());
@@ -362,8 +377,24 @@ public class ClientServiceTest {
 
         testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
 
+        verify(clientProductRepository, times(1)).save(client.get(), product.get(), ApprobationStatus.SUBSCRIBED);
+    }
+
+    @Test
+    public void ifAnApprobationStatusHasAWaitingForSubscription_whenRejectManualProduct_thenThisClientProductIsDeleted() {
+
+        Optional<Client> client = Optional.of(new Client());
+        Optional<Product> product = Optional.of(new Product());
+        when(clientRepository.findById(A_NAME)).thenReturn(client);
+        when(productRepository.findById(A_PRODUCT_ID)).thenReturn(product);
+        when(clientProductRepository.findById(client.get(), product.get()))
+            .thenReturn(ApprobationStatus.WAITING_FOR_SUBSCRIPTION);
+
+        testedClass.rejectManualProduct(A_NAME, A_PRODUCT_ID);
+
         verify(clientProductRepository, times(1)).deleteById(client.get(), product.get());
     }
+
 
     @Test
     public void ifNoClientInDatabase_thenAnEmptyListIsReturned_whenFindingClientsWaitingProductApprobation() {

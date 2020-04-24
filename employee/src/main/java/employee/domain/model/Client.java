@@ -24,10 +24,6 @@ public class Client {
         this.products = products;
     }
 
-    public Integer getProductLevel() {
-        return productLevel;
-    }
-
     public void setProductLevel(Integer productLevel) {
         this.productLevel = productLevel;
     }

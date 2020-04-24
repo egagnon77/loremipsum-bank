@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import client.domain.exception.DataSourceBadResponseException;
-import client.domain.exception.NotFoundException;
 import client.domain.model.Client;
 import client.domain.model.Product;
 import java.util.Arrays;
@@ -71,7 +70,7 @@ public class SpringWebBankClientTest {
         testedClass.getProducts(client);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = DataSourceBadResponseException.class)
     public void whenGetProductsFail_thenANotFoundExceptionMustBeThrown() {
         when(bankSystemUrlBuilder.buildGetProductsUrl(client)).thenReturn(A_GET_PRODUCTS_URL);
         when(restTemplate.getForEntity(A_GET_PRODUCTS_URL, Product[].class)).thenThrow(HttpClientErrorException.class);
@@ -91,7 +90,7 @@ public class SpringWebBankClientTest {
         assertEquals(Arrays.asList(products), result);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = DataSourceBadResponseException.class)
     public void whenGetAvailableProductsFail_thenANotFoundExceptionMustBeThrown() {
         when(bankSystemUrlBuilder.buildGetAvailableProductsUrl(client)).thenReturn(A_GET_PRODUCTS_URL);
         when(restTemplate.getForEntity(A_GET_PRODUCTS_URL, Product[].class)).thenThrow(HttpClientErrorException.class);

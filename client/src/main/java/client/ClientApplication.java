@@ -13,21 +13,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ExitCodeEvent;
+import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
-public class ClientApplication implements CommandLineRunner {
+public class ClientApplication implements CommandLineRunner, ExitCodeGenerator {
 
-    private static final int EXIT_FAILURE = 1;
+    private static final int EXIT_PARSE_FAILURE = 2;
+    private static final int EXIT_WEB_FAILURE = 3;
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientApplication.class);
     public static final String CMD_LINE_SYNTAX = "java -jar client.jar";
     private CommandLineParser commandLineParser;
     private CommandLineProcessor commandLineProcessor;
     private Options options;
     private Logger loggerNonStatique;
+    private Integer exitCode = 0;
+
 
     @Autowired
     public ClientApplication(
@@ -43,16 +51,18 @@ public class ClientApplication implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
-        try {
-            SpringApplication clientApplication = new SpringApplication(ClientApplication.class);
-            clientApplication.setAddCommandLineProperties(false);
-            clientApplication.setWebApplicationType(WebApplicationType.NONE);
+        SpringApplication clientApplication = new SpringApplication(ClientApplication.class);
+        clientApplication.setAddCommandLineProperties(false);
+        clientApplication.setWebApplicationType(WebApplicationType.NONE);
 
-            String[] cleanedArgs = client.cli.CommandLine.cleanArguments(args);
-            clientApplication.run(cleanedArgs);
+        String[] cleanedArgs = client.cli.CommandLine.cleanArguments(args);
+        clientApplication.setBannerMode(Banner.Mode.OFF);
+        clientApplication.setLogStartupInfo(false);
+
+        try {
+            System.exit(SpringApplication.exit(clientApplication.run(cleanedArgs)));
         } catch (Exception ex) {
-            LOGGER.error("Technical Error : {}", ex.getMessage());
-            System.exit(EXIT_FAILURE);
+            LOGGER.info("Technical error detected. Check if Bank is started.");
         }
     }
 
@@ -60,15 +70,35 @@ public class ClientApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         try {
             if (args.length == 0) {
-                throw new ParseException("Empty arguments.");
+                loggerNonStatique.error("Empty arguments.");
+                loggerNonStatique.info(getHelpFormatted());
+                exitCode = EXIT_PARSE_FAILURE;
             } else {
                 CommandLine commandLine = commandLineParser.parse(options, args);
                 commandLineProcessor.process(commandLine);
             }
 
+        } catch (DataSourceBadResponseException dataEx) {
+            loggerNonStatique.error(dataEx.getMessage());
+            exitCode = EXIT_WEB_FAILURE;
         } catch (ParseException parse) {
+            loggerNonStatique.error(parse.getMessage());
             loggerNonStatique.info(getHelpFormatted());
-            throw parse;
+            exitCode = EXIT_PARSE_FAILURE;
+        }
+
+    }
+
+    @Bean
+    ClientListener clientListenerBean() {
+        return new ClientListener();
+    }
+
+    private static class ClientListener {
+
+        @EventListener
+        public void exitEvent(ExitCodeEvent event) {
+            event.getExitCode();
         }
     }
 
@@ -93,5 +123,11 @@ public class ClientApplication implements CommandLineRunner {
         printWriter.flush();
 
         return out.toString();
+    }
+
+
+    @Override
+    public int getExitCode() {
+        return exitCode;
     }
 }

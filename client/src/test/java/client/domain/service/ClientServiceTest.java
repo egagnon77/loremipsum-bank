@@ -64,4 +64,15 @@ public class ClientServiceTest {
 
         verify(bankClient, times(1)).subscribeProduct(client, aProductId);
     }
+
+    @Test
+    public void givenAProductIdAndAClientName_whenUnsubscribeProduct_thenWeShouldCallBankEmployee() {
+
+        Integer aProductId = 88;
+        String aClientName = "aClientName";
+        Client client = new Client();
+        testedClass.unSubscribeProduct(client,aProductId);
+
+        verify(bankClient, times(1)).unSubscribeProduct(client, aProductId);
+    }
 }
