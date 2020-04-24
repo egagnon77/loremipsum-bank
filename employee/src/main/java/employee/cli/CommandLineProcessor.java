@@ -5,6 +5,8 @@ import employee.domain.model.AddClient;
 import employee.domain.model.Client;
 import employee.domain.service.EmployeeService;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +35,7 @@ public class CommandLineProcessor {
         this.logger = logger;
     }
 
-    public void process(CommandLine commandLine) {
+    public void process(CommandLine commandLine) throws ParseException {
         commandLineValidator.process(commandLine);
 
         if (commandLine.hasOption(CliOptions.ADD.getValue())) {
@@ -58,11 +60,17 @@ public class CommandLineProcessor {
         logger.info(clients.toString());
     }
 
-    private void processAcceptProduct(String productId, String clientName) {
+    private void processAcceptProduct(String productId, String clientName) throws ParseException {
+        if (!StringUtils.isNumeric(productId)) {
+            throw new ParseException("Product id is not a numeric value.");
+        }
         employeeService.acceptProduct(Integer.valueOf(productId), clientName);
     }
 
-    private void processRejectProduct(String productId, String clientName) {
+    private void processRejectProduct(String productId, String clientName) throws ParseException {
+        if (!StringUtils.isNumeric(productId)) {
+            throw new ParseException("Product id is not a numeric value.");
+        }
         employeeService.rejectProduct(Integer.valueOf(productId), clientName);
     }
 

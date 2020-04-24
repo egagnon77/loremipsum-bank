@@ -1,6 +1,7 @@
 package employee;
 
 import employee.cli.CommandLineProcessor;
+import employee.domain.exception.DataSourceBadResponseException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import org.apache.commons.cli.CommandLine;
@@ -68,6 +69,8 @@ public class EmployeeApplication implements CommandLineRunner {
                 CommandLine commandLine = commandLineParser.parse(options, args);
                 commandLineProcessor.process(commandLine);
             }
+        } catch (DataSourceBadResponseException data) {
+
         } catch (ParseException parse) {
             loggerNonStatique.info(getHelpFormatted());
             throw parse;

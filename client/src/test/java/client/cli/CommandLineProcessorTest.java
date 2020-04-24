@@ -27,6 +27,7 @@ public class CommandLineProcessorTest {
     private static final String A_PRODUCT_NAME = "aProductName";
     private static final String A_MESSAGE = "aMessage";
     private static final Integer A_PRODUCT_ID = 1;
+    private static final String AN_INVALID_PRODUCT_ID = "invalideProductId";
 
     @Mock
     private ClientFactory clientFactory;
@@ -114,6 +115,21 @@ public class CommandLineProcessorTest {
         verify(clientService).subscribeProduct(client, A_PRODUCT_ID);
     }
 
+    @Test(expected = ParseException.class)
+    public void givenACommandLineWithSubscribeOptionAndInvalidProductId_thenExceptionMustBeThrown()
+        throws ParseException {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.SUBSCRIBE.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.SUBSCRIBE.getValue())).thenReturn(AN_INVALID_PRODUCT_ID);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+
+        testedClass.process(commandLine);
+    }
+
     @Test
     public void givenACommandLineWithUnsubscribeOptionAndClientName_thenUnsubscribeProductMustBeInvoked()
         throws ParseException {
@@ -132,6 +148,21 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = ParseException.class)
+    public void givenACommandLineWithUnsubscribeOptionAndInvalidProductId_thenExceptionMustBeThrown()
+        throws ParseException {
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.UNSUBSCRIBE.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptionsValue.NAME.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptionsValue.NAME.getValue())).thenReturn(A_CLIENT_NAME);
+        when(commandLine.getOptionValue(CliOptions.SUBSCRIBE.getValue())).thenReturn(AN_INVALID_PRODUCT_ID);
+        Client client = new Client();
+        client.setName(A_CLIENT_NAME);
+        when(clientFactory.create(A_CLIENT_NAME)).thenReturn(client);
+
+        testedClass.process(commandLine);
+    }
+
+    @Test(expected = ParseException.class)
     public void givenACommandLineOnLyClientName_thenAParseExceptionShouldBeThrown()
         throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
@@ -144,7 +175,6 @@ public class CommandLineProcessorTest {
         testedClass.process(commandLine);
 
     }
-
 
     private Product createProduct(Integer category, Integer id, String name) {
         Product product = new Product();

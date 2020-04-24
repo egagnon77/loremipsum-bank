@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ public class CommandLineProcessorTest {
     private static final String A_CLIENT_NAME = "aClientName";
     private static final String A_PRODUCT_NAME = "aProductName";
     private static final Integer A_PRODUCT_ID = 88;
+    private static final String AN_INVALID_PRODUCT_ID = "invalideProductId";
     private static final String THE_COMPLETED_MESSAGE = "Add Client '{}' Completed.";
     private static final String AN_EXCEPTION_MESSAGE = "myExceptionMessage";
 
@@ -75,7 +77,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithAddOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+    public void givenACommandLineWithAddOption_whenProcess_thenLoggerShouldLogACompletedMessage()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.ADD.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptions.ADD.getValue())).thenReturn(A_CLIENT_NAME);
@@ -87,7 +90,7 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = DataSourceBadResponseException.class)
-    public void givenACommandLineWithAddOption_whenException_thenExceptionIsNotCatched() {
+    public void givenACommandLineWithAddOption_whenException_thenExceptionIsNotCatched() throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
 
@@ -100,7 +103,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithListOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+    public void givenACommandLineWithListOption_whenProcess_thenLoggerShouldLogACompletedMessage()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.LIST.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptions.LIST.getValue())).thenReturn(A_CLIENT_NAME);
@@ -115,7 +119,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = DataSourceBadResponseException.class)
-    public void givenACommandLineWithListOption_whenException_thenLoggerShouldNotCatchTheException() {
+    public void givenACommandLineWithListOption_whenException_thenLoggerShouldNotCatchTheException()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
 
         when(commandLine.hasOption(CliOptions.LIST.getValue())).thenReturn(true);
@@ -129,7 +134,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithUpgradeOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+    public void givenACommandLineWithUpgradeOption_whenProcess_thenLoggerShouldLogACompletedMessage()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.UPGRADE.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptions.UPGRADE.getValue())).thenReturn(A_CLIENT_NAME);
@@ -147,7 +153,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = DataSourceBadResponseException.class)
-    public void givenACommandLineWithUpgradeOption_whenException_thenLoggerShouldNotCatchTheException() {
+    public void givenACommandLineWithUpgradeOption_whenException_thenLoggerShouldNotCatchTheException()
+        throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.UPGRADE.getValue())).thenReturn(true);
@@ -161,7 +168,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test
-    public void givenACommandLineWithDowngradeOption_whenProcess_thenLoggerShouldLogACompletedMessage() {
+    public void givenACommandLineWithDowngradeOption_whenProcess_thenLoggerShouldLogACompletedMessage()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.DOWNGRADE.getValue())).thenReturn(true);
         when(commandLine.getOptionValue(CliOptions.DOWNGRADE.getValue())).thenReturn(A_CLIENT_NAME);
@@ -179,7 +187,8 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = DataSourceBadResponseException.class)
-    public void givenACommandLineWithDowngradeOption_whenException_thenLoggerShouldNotCatchTheException() {
+    public void givenACommandLineWithDowngradeOption_whenException_thenLoggerShouldNotCatchTheException()
+        throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.DOWNGRADE.getValue())).thenReturn(true);
@@ -193,14 +202,15 @@ public class CommandLineProcessorTest {
     }
 
     @Test(expected = CommandLineException.class)
-    public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldNotCatchException() {
+    public void givenACommandLineWithInvalidOption_whenException_thenLoggerShouldNotCatchException()
+        throws ParseException {
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         doThrow(new CommandLineException(AN_EXCEPTION_MESSAGE)).when(commandLineValidator).process(commandLine);
         testedClass.process(commandLine);
     }
 
     @Test
-    public void givenACommandLineWithAcceptOptionAndClientName_thenAcceptProductMustBeInvoked() {
+    public void givenACommandLineWithAcceptOptionAndClientName_thenAcceptProductMustBeInvoked() throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.ACCEPT.getValue())).thenReturn(true);
@@ -213,8 +223,22 @@ public class CommandLineProcessorTest {
         verify(employeeService).acceptProduct(A_PRODUCT_ID, A_CLIENT_NAME);
     }
 
+    @Test(expected = ParseException.class)
+    public void givenACommandLineWithAcceptOptionAndInvalidProductId_thenParsExeptionMustBeThrown() throws ParseException {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.ACCEPT.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptions.CLIENT.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.ACCEPT.getValue())).thenReturn(AN_INVALID_PRODUCT_ID);
+        when(commandLine.getOptionValue(CliOptions.CLIENT.getValue())).thenReturn(A_CLIENT_NAME);
+
+        testedClass.process(commandLine);
+
+        verify(employeeService).acceptProduct(A_PRODUCT_ID, A_CLIENT_NAME);
+    }
+
     @Test
-    public void givenACommandLineWithRejectOptionAndClientName_thenRejectProductMustBeInvoked() {
+    public void givenACommandLineWithRejectOptionAndClientName_thenRejectProductMustBeInvoked() throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.REJECT.getValue())).thenReturn(true);
@@ -227,8 +251,22 @@ public class CommandLineProcessorTest {
         verify(employeeService).rejectProduct(A_PRODUCT_ID, A_CLIENT_NAME);
     }
 
+    @Test(expected = ParseException.class)
+    public void givenACommandLineWithRejectOptionAndInvalidProductId_thenParsExeptionMustBeThrown() throws ParseException {
+
+        CommandLine commandLine = Mockito.mock(CommandLine.class);
+        when(commandLine.hasOption(CliOptions.REJECT.getValue())).thenReturn(true);
+        when(commandLine.hasOption(CliOptions.CLIENT.getValue())).thenReturn(true);
+        when(commandLine.getOptionValue(CliOptions.REJECT.getValue())).thenReturn(AN_INVALID_PRODUCT_ID);
+        when(commandLine.getOptionValue(CliOptions.CLIENT.getValue())).thenReturn(A_CLIENT_NAME);
+
+        testedClass.process(commandLine);
+
+        verify(employeeService).rejectProduct(A_PRODUCT_ID, A_CLIENT_NAME);
+    }
+
     @Test
-    public void givenACommandLineWithTaskOption_thenTaskMustBeInvoked() {
+    public void givenACommandLineWithTaskOption_thenTaskMustBeInvoked() throws ParseException {
 
         CommandLine commandLine = Mockito.mock(CommandLine.class);
         when(commandLine.hasOption(CliOptions.TASKS.getValue())).thenReturn(true);
