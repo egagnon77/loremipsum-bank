@@ -22,10 +22,10 @@ jobs:
     - stage: tests
       name: Integration Tests
       script:
+        - docker build -t banktest/server:rc .
         - cd travis-docker
         - docker-compose up --detach
         - cd ..
-        - mvn spring-boot:start -pl bank -Dspring-boot.run.profiles=dev
         - ./integration-tests.sh
 
     - stage: deploy
